@@ -11,98 +11,18 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="5000fs"></ZoomStartTime>
-      <ZoomEndTime time="13265001fs"></ZoomEndTime>
-      <Cursor1Time time="8000000fs"></Cursor1Time>
+      <ZoomStartTime time="2800000fs"></ZoomStartTime>
+      <ZoomEndTime time="18640001fs"></ZoomEndTime>
+      <Cursor1Time time="16000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="167"></NameColumnWidth>
-      <ValueColumnWidth column_width="76"></ValueColumnWidth>
+      <NameColumnWidth column_width="141"></NameColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="56" />
+   <WVObjectSize size="49" />
    <wvobject type="logic" fp_name="/tb/clk">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/rst">
-      <obj_property name="ElementShortName">rst</obj_property>
-      <obj_property name="ObjectShortName">rst</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/load_ser1">
-      <obj_property name="ElementShortName">load_ser1</obj_property>
-      <obj_property name="ObjectShortName">load_ser1</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/xmit_ser1">
-      <obj_property name="ElementShortName">xmit_ser1</obj_property>
-      <obj_property name="ObjectShortName">xmit_ser1</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/data1">
-      <obj_property name="ElementShortName">data1[31:0]</obj_property>
-      <obj_property name="ObjectShortName">data1[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/serial_gen1/load">
-      <obj_property name="ElementShortName">load</obj_property>
-      <obj_property name="ObjectShortName">load</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/serial_gen1/xmit">
-      <obj_property name="ElementShortName">xmit</obj_property>
-      <obj_property name="ObjectShortName">xmit</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/serial_gen1/clk">
-      <obj_property name="ElementShortName">clk</obj_property>
-      <obj_property name="ObjectShortName">clk</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/serial_gen1/rst">
-      <obj_property name="ElementShortName">rst</obj_property>
-      <obj_property name="ObjectShortName">rst</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/serial_gen1/data_in">
-      <obj_property name="ElementShortName">data_in[31:0]</obj_property>
-      <obj_property name="ObjectShortName">data_in[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/serial_gen1/data_out">
-      <obj_property name="ElementShortName">data_out</obj_property>
-      <obj_property name="ObjectShortName">data_out</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/serial_gen1/clk_out">
-      <obj_property name="ElementShortName">clk_out</obj_property>
-      <obj_property name="ObjectShortName">clk_out</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/serial_gen1/debug">
-      <obj_property name="ElementShortName">debug[31:0]</obj_property>
-      <obj_property name="ObjectShortName">debug[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/serial_gen1/debug2">
-      <obj_property name="ElementShortName">debug2[5:0]</obj_property>
-      <obj_property name="ObjectShortName">debug2[5:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/serial_gen1/data_reg">
-      <obj_property name="ElementShortName">data_reg[31:0]</obj_property>
-      <obj_property name="ObjectShortName">data_reg[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/serial_gen1/counter">
-      <obj_property name="ElementShortName">counter[6:0]</obj_property>
-      <obj_property name="ObjectShortName">counter[6:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/serial_gen1/clk_d">
-      <obj_property name="ElementShortName">clk_d</obj_property>
-      <obj_property name="ObjectShortName">clk_d</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/test_mux/Data_in">
-      <obj_property name="ElementShortName">Data_in</obj_property>
-      <obj_property name="ObjectShortName">Data_in</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/test_mux/sel">
-      <obj_property name="ElementShortName">sel[5:0]</obj_property>
-      <obj_property name="ObjectShortName">sel[5:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/test_mux/Data_out">
-      <obj_property name="ElementShortName">Data_out[31:0]</obj_property>
-      <obj_property name="ObjectShortName">Data_out[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/top/reg_rw">
-      <obj_property name="ElementShortName">reg_rw[1023:0]</obj_property>
-      <obj_property name="ObjectShortName">reg_rw[1023:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/top/clk200">
       <obj_property name="ElementShortName">clk200</obj_property>
@@ -153,12 +73,12 @@
       <obj_property name="ObjectShortName">rd_en</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/top/fifo_0/prog_empty_thresh">
-      <obj_property name="ElementShortName">prog_empty_thresh[14:0]</obj_property>
-      <obj_property name="ObjectShortName">prog_empty_thresh[14:0]</obj_property>
+      <obj_property name="ElementShortName">prog_empty_thresh[11:0]</obj_property>
+      <obj_property name="ObjectShortName">prog_empty_thresh[11:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/top/fifo_0/prog_full_thresh">
-      <obj_property name="ElementShortName">prog_full_thresh[14:0]</obj_property>
-      <obj_property name="ObjectShortName">prog_full_thresh[14:0]</obj_property>
+      <obj_property name="ElementShortName">prog_full_thresh[11:0]</obj_property>
+      <obj_property name="ObjectShortName">prog_full_thresh[11:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/top/fifo_0/dout">
       <obj_property name="ElementShortName">dout[63:0]</obj_property>
@@ -197,12 +117,12 @@
       <obj_property name="ObjectShortName">underflow</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/top/fifo_0/rd_data_count">
-      <obj_property name="ElementShortName">rd_data_count[14:0]</obj_property>
-      <obj_property name="ObjectShortName">rd_data_count[14:0]</obj_property>
+      <obj_property name="ElementShortName">rd_data_count[11:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_count[11:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/top/fifo_0/wr_data_count">
-      <obj_property name="ElementShortName">wr_data_count[14:0]</obj_property>
-      <obj_property name="ObjectShortName">wr_data_count[14:0]</obj_property>
+      <obj_property name="ElementShortName">wr_data_count[11:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_data_count[11:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/top/fifo_0/prog_full">
       <obj_property name="ElementShortName">prog_full</obj_property>
@@ -220,28 +140,80 @@
       <obj_property name="ElementShortName">rd_rst_busy</obj_property>
       <obj_property name="ObjectShortName">rd_rst_busy</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/top/fifo_0_write_os/Trigger">
-      <obj_property name="ElementShortName">Trigger</obj_property>
-      <obj_property name="ObjectShortName">Trigger</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/top/fifo_0_write_os/Pulse">
-      <obj_property name="ElementShortName">Pulse</obj_property>
-      <obj_property name="ObjectShortName">Pulse</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/top/fifo_0_read_os/Trigger">
-      <obj_property name="ElementShortName">Trigger</obj_property>
-      <obj_property name="ObjectShortName">Trigger</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/top/fifo_0_read_os/Pulse">
-      <obj_property name="ElementShortName">Pulse</obj_property>
-      <obj_property name="ObjectShortName">Pulse</obj_property>
+   <wvobject type="array" fp_name="/tb/top/reg_rw">
+      <obj_property name="ElementShortName">reg_rw[2047:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_rw[2047:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/top/reg_ro">
-      <obj_property name="ElementShortName">reg_ro[1023:0]</obj_property>
-      <obj_property name="ObjectShortName">reg_ro[1023:0]</obj_property>
+      <obj_property name="ElementShortName">reg_ro[2047:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_ro[2047:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/top/trig_ts">
       <obj_property name="ElementShortName">trig_ts[63:0]</obj_property>
       <obj_property name="ObjectShortName">trig_ts[63:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/clk_d">
+      <obj_property name="ElementShortName">clk_d</obj_property>
+      <obj_property name="ObjectShortName">clk_d</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/load">
+      <obj_property name="ElementShortName">load</obj_property>
+      <obj_property name="ObjectShortName">load</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/xmit">
+      <obj_property name="ElementShortName">xmit</obj_property>
+      <obj_property name="ObjectShortName">xmit</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen1/data_in">
+      <obj_property name="ElementShortName">data_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen1/data_reg">
+      <obj_property name="ElementShortName">data_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen1/counter">
+      <obj_property name="ElementShortName">counter[6:0]</obj_property>
+      <obj_property name="ObjectShortName">counter[6:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/clk_out">
+      <obj_property name="ElementShortName">clk_out</obj_property>
+      <obj_property name="ObjectShortName">clk_out</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift1/Clock">
+      <obj_property name="ElementShortName">Clock</obj_property>
+      <obj_property name="ObjectShortName">Clock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift1/Trigger">
+      <obj_property name="ElementShortName">Trigger</obj_property>
+      <obj_property name="ObjectShortName">Trigger</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift1/Pulse">
+      <obj_property name="ElementShortName">Pulse</obj_property>
+      <obj_property name="ObjectShortName">Pulse</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad_selDefData">
+      <obj_property name="ElementShortName">opad_selDefData</obj_property>
+      <obj_property name="ObjectShortName">opad_selDefData</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad_loadData">
+      <obj_property name="ElementShortName">opad_loadData</obj_property>
+      <obj_property name="ObjectShortName">opad_loadData</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad_CLKin">
+      <obj_property name="ElementShortName">opad_CLKin</obj_property>
+      <obj_property name="ObjectShortName">opad_CLKin</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad_DataIn">
+      <obj_property name="ElementShortName">opad_DataIn</obj_property>
+      <obj_property name="ObjectShortName">opad_DataIn</obj_property>
    </wvobject>
 </wave_config>

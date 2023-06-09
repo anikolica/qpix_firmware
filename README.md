@@ -73,7 +73,10 @@ This project uses Vivado 2020.1 and petalinux 2020.1 in a Linux environment (Ubu
 5. If a roo console does not appear, press the reset button on Z-turn and and stop the boot when the message `Hit any key to stop autoboot` appears. This will show the `Zynq` prompt. You may have to set the correct root partition in U-Boot with `setenv bootargs root=/dev/mmcblk1p2` and `saveenv`. Then `boot` will continue the boot process. 
 
 ### Running test scripts
-1. 
-
+1. Run `startup.py` to reset internal FPGA logic. (All user scripts are in `scripts/` and are preceded with `python3` at the command line.)
+2. Run `serial_reset.py` to assert selDefData and pulse loadData on both QPix serial interfaces.
+3. Run `kickstart_betamult.py` to set the two startup pads to logic high and keep then high.
+4. Run `serial_load.py [1|2] [data]` where `1|2` is the interface, and `data` is a 32 bit word in hex format (`0x12345678`). This will shift the word out of the Datain pin to QPix, along with 32 clock pulses on the CLKin pin, an then pulse loadData.
+ 
 ## Footnotes
 1. This is done by creating an app template as in the [PetaLinux Yocto documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips#PetaLinuxYoctoTips-CreatingApps(whichuseslibraries)inPetaLinuxProject)

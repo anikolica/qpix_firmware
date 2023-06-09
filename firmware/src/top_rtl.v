@@ -124,6 +124,8 @@ module top_rtl(
     
     // *** DECLARATIONS ***
     wire sys_rst;
+    
+    wire counter_reset;
     reg  [63:0] counter64 = 64'h0;
     reg  [63:0] trig_ts = 64'h0;
     reg  [63:0] reg_ts = 64'h0;
@@ -147,6 +149,23 @@ module top_rtl(
     reg  [15:0] fifo_event = 16'h00;
     reg  [15:0] fifo_reqread = 16'h00;
     
+    wire clk20k; // base clow clock for Qpix register interface
+    wire clk_shift;
+    wire clk_pulse;
+    wire clk_intrst;
+    wire rst1;
+    wire rst2;
+    wire load_ser1;
+    wire load_ser2;
+    wire xmit_ser1;
+    wire xmit_ser2;
+    wire shift_out1;
+    wire shift_out2;
+    wire loadData1;
+    wire loadData2;
+    wire [31:0] data1;
+    wire [31:0] data2;
+    
     // *** REGISTER MAP ***
     // ** R/W registers **
     // Reg 0 -- control register
@@ -165,19 +184,21 @@ module top_rtl(
     assign rst1         =       reg_rw[ 1 * 32 +  0];
     assign load_ser1    =       reg_rw[ 1 * 32 +  1];
     assign xmit_ser1    =       reg_rw[ 1 * 32 +  2];
-    assign opad_loadData =      reg_rw[ 1 * 32 +  8]; 
+    assign loadData1    =       reg_rw[ 1 * 32 +  8]; 
     assign opad_selDefData =    reg_rw[ 1 * 32 +  9];
     
     // Reg 2 - data2
-    assign data1        =       reg_rw[ 2 * 32 + 32 : 2 * 32 +  0];
+    assign data1        =       reg_rw[ 2 * 32 + 31 : 2 * 32 +  0];
      
     // Reg 3 - data2 control
     assign rst2         =       reg_rw[ 3 * 32 +  0];
     assign load_ser2    =       reg_rw[ 3 * 32 +  1];
     assign xmit_ser2    =       reg_rw[ 3 * 32 +  2];
+    assign loadData2     =      reg_rw[ 3 * 32 +  8]; 
+    assign opad2_selDefData =   reg_rw[ 3 * 32 +  9];
     
     // Reg 4 - data2
-    assign data2        =       reg_rw[ 4 * 32 + 32 : 4 * 32 +  0];
+    assign data2        =       reg_rw[ 4 * 32 + 31 : 4 * 32 +  0];
     
     // Reg 5 - trigger control
     assign TRIGGER =            reg_rw[ 5 * 32 +  0];
@@ -398,23 +419,92 @@ module top_rtl(
     // NOTE: DAC programming via PS
     
     // ** QPix register interface **
+    // clock dividers
+    clock_div 
+        `ifdef SIM
+            #(.DIVISOR(2)) // for Vivado simulation only
+        `else
+            #(.DIVISOR(2500)) // 50M/2500 = 20k
+        `endif
+            slowclk (
+       .clock_in(clk), 
+       .clock_out(clk20k)
+    );
+    clock_div 
+        `ifdef SIM
+            #(.DIVISOR(2*64))
+        `else
+            #(.DIVISOR(2500*64)) // see SR below ...
+        `endif
+            shiftclk (
+       .clock_in(clk), 
+       .clock_out(clk_shift)
+    );
+    clock_div 
+        `ifdef SIM
+            #(.DIVISOR(2*2))
+        `else
+            #(.DIVISOR(2500*2)) // see SR below ...
+        `endif
+            pulseclk (
+       .clock_in(clk), 
+       .clock_out(clk_pulse)
+    );
+    clock_div 
+        `ifdef SIM
+            #(.DIVISOR(2))
+        `else
+            #(.DIVISOR(250)) // see integrator reset below ...
+        `endif
+            reseteclk (
+       .clock_in(clk), 
+       .clock_out(clk_intrst)
+    );
+    
+    // Pulses for gating 32 slow clocks
+    oneshot shift1 (
+       .Clock(clk_shift),
+       .Trigger(xmit_ser1),
+       .Pulse(shift_out1)
+    );
+    oneshot shift2 (
+       .Clock(clk_shift),
+       .Trigger(xmit_ser2),
+       .Pulse(shift_out2)
+    );
+    oneshot load_pulse1 (
+       .Clock(clk_pulse),
+       .Trigger(loadData1),
+       .Pulse(opad_loadData) // 1/2x 20kHz = 100us pulse
+    );
+    oneshot load_pulse2 (
+       .Clock(clk_pulse),
+       .Trigger(loadData2),
+       .Pulse(opad2_loadData)
+    );
+    oneshot intrst1 (
+       .Clock(clk_intrst),
+       .Trigger(        ),
+       .Pulse(        )
+    );
+    
     // Parallel-in-serial-out for loading input register
-    // Need to add clock divider, and oneshot for exactly 32 pulses
+    // SR shifts out at 1/2 input clock = 10kHz
+    // That's why gating pulse is 64x 20kHz clocks = 32x 10k
     piso serial_gen1 (
         .load(load_ser1),
-        .xmit(xmit_ser1),
-        .clk(clk), // 50MHz
-        .rst(rst1),
+        .xmit(shift_out1),
+        .clk(clk20k),
+        .rst(rst1 || sys_rst),
         .data_in(data1),
         .data_out(opad_DataIn),
         .clk_out(opad_CLKin)
     );
-    
     piso serial_gen2 (
         .load(load_ser2),
-        .xmit(xmit_ser2),
-        .clk(clk), // 50MHz
-        .rst(rst2),
+        .xmit(shift_out2),
+        .clk(clk20k),
+        .rst(rst2 || sys_rst),
         .data_in(data2),
         .data_out(opad2_DataIn),
         .clk_out(opad2_CLKin)

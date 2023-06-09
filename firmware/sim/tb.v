@@ -23,37 +23,25 @@
 module tb(
 
     );
-
-    reg clk = 0;
-    reg rst = 0;
-    reg load_ser1 = 0;
-    reg xmit_ser1 = 0;
-    reg [31:0] data1 = 32'h1db6ff8b;
-    piso serial_gen1 (
-        .load(load_ser1),
-        .xmit(xmit_ser1),
-        .clk(clk),
-        .rst(rst),
-        .data_in(data1),
-        .data_out(),
-        .clk_out()
-    );
     
-    reg [5:0] test_mux_sel = 5'h00; 
+    /* reg [5:0] test_mux_sel = 5'h00; 
     demux1to32 test_mux (
         .Data_in(clk),
         .sel(test_mux_sel),
         .Data_out()
-    );
+    ); */
     
-    reg clk200 = 0;
+    reg clk = 1'b0;
+    reg clk200 = 1'b0;
     reg TRIGGER = 1'b0;
     reg [15:0] oLVDS = 16'h0;
-    reg [16*32-1:0] reg_rw = 1024'h0;
+    reg [64*32-1:0] reg_rw = 2048'h0;
+    
+    // Include SIM=1 in the defines in Vivado
+    // to get faster clock for serial interface
     top_rtl top (
         .clk(clk),
         .clk200(clk200),
-        .OSC_200MHz(      ),
         .oLVDS(oLVDS),
         .reg_rw(reg_rw)
     );
@@ -64,18 +52,8 @@ module tb(
     always #2.5 clk200 = ~clk200; // Event clock 200MHz
    
     initial begin
-        #20     rst = 1;
-        #75     rst = 0;
-
-        // Test 32-bit register load
-        #200    load_ser1 = 1;
-        #100    load_ser1 = 0;
-        
-        #200    xmit_ser1 = 1;
-        #1600   xmit_ser1 = 0;
-        
         // Test clock demux
-        #100    test_mux_sel = 5'h01;
+        /* #100    test_mux_sel = 5'h01;
         #100    test_mux_sel = 5'h02;
         #100    test_mux_sel = 5'h03;
         #100    test_mux_sel = 5'h04;
@@ -106,23 +84,45 @@ module tb(
         #100    test_mux_sel = 5'h1c;
         #100    test_mux_sel = 5'h1d;
         #100    test_mux_sel = 5'h1e;
-        #100    test_mux_sel = 5'h1f;
+        #100    test_mux_sel = 5'h1f; */
+        
+        #0      reg_rw[ 0 * 32 + 0] = 1'b1; // master reset
+        #500    reg_rw[ 0 * 32 + 0] = 1'b0;
         
         // Test FIFO
         #500    reg_rw[ 5 * 32 + 0] = 1'b1; // TRIGGER
-        #500    oLVDS[0] = 1'b1;
+        #500    oLVDS[0] = 1'b1; // Event2
         #10     oLVDS[0] = 1'b0;
         #500    oLVDS[0] = 1'b1;
         #10     oLVDS[0] = 1'b0;
         
-        #500    reg_rw[ 6 * 32 + 0] = 1'b1;
-        #100    reg_rw[ 6 * 32 + 0] = 1'b0;
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1; // Read FIFO0 twice
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0; 
         #500    reg_rw[ 6 * 32 + 0] = 1'b1;
         #100    reg_rw[ 6 * 32 + 0] = 1'b0;
         
-        #500    oLVDS[1] = 1'b1;
+        #500    oLVDS[1] = 1'b1; // More events
         #10     oLVDS[1] = 1'b0;
         #500    oLVDS[1] = 1'b1;
         #10     oLVDS[1] = 1'b0;
+        
+        // Test 32-bit register load
+        
+        #200    reg_rw[ 1 * 32 + 9] = 1'b1; // selDefData
+        #200    reg_rw[ 1 * 32 + 8] = 1'b1; // loadData sends 100us pulse
+        #200    reg_rw[ 1 * 32 + 8] = 1'b0; // loadData de-assert
+        #200    reg_rw[ 1 * 32 + 9] = 1'b0; // selDefData de-assert
+        
+        #200    reg_rw[ 2 * 32 + 31 : 2 * 32 +  0] = 32'h1db6ff8b; // data in our register
+        
+        #200    reg_rw[ 1 * 32 + 1] = 1'b1; // load data into SR
+        #200    reg_rw[ 1 * 32 + 1] = 1'b0; // must load SR de-assert before xmit
+        
+        #200    reg_rw[ 1 * 32 + 2] = 1'b1; // shift out with gated clock, takes a long time!
+        #6000   reg_rw[ 1 * 32 + 8] = 1'b1; // QPix loadData one-shot
+        
+        #200    reg_rw[ 1 * 32 + 8] = 1'b1; // loadData de-assert
+        #200    reg_rw[ 1 * 32 + 2] = 1'b0; // shift out de-assert
+        
     end
 endmodule
