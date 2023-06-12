@@ -106,8 +106,11 @@ module tb(
         #500    oLVDS[1] = 1'b1;
         #10     oLVDS[1] = 1'b0;
         
-        // Test 32-bit register load
+        // Kickstart beta-multipliers
+        #200    reg_rw[ 0 * 32 + 24] = 1'b1; // opad_startup
+        #200    reg_rw[ 0 * 32 + 25] = 1'b1; // opad_startup2
         
+        // Test 32-bit register load
         #200    reg_rw[ 1 * 32 + 9] = 1'b1; // selDefData
         #200    reg_rw[ 1 * 32 + 8] = 1'b1; // loadData sends 100us pulse
         #200    reg_rw[ 1 * 32 + 8] = 1'b0; // loadData de-assert
@@ -123,6 +126,16 @@ module tb(
         
         #200    reg_rw[ 1 * 32 + 8] = 1'b1; // loadData de-assert
         #200    reg_rw[ 1 * 32 + 2] = 1'b0; // shift out de-assert
+        
+        // External resets
+        #200    reg_rw[ 0 * 32 + 2] = 1'b1; // RST_EXT
+        #200    reg_rw[ 0 * 32 + 2] = 1'b0; // RST_EXT
+        #200    reg_rw[ 0 * 32 + 3] = 1'b1; // RST_EXT2
+        #200    reg_rw[ 0 * 32 + 3] = 1'b0; // RST_EXT2
+        
+        // Start replenishment clocks
+        #200    reg_rw[ 0 * 32 + 16] = 1'b1; // opad_CLK
+        #200    reg_rw[ 0 * 32 + 17] = 1'b1; // opad2_CLK
         
     end
 endmodule

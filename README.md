@@ -37,6 +37,7 @@ After a trigger, the user reads out the FIFO until empty, and will get a series 
 | petalinux/config/ | PetaLinux configuration files (not build products) |
 | petalinux/recipes/ | C/C++ code intended to be compiled into the PetaLinux distribution |
 | scripts/ | Python and shell scripts to use at runtime |
+| doc/ | Register map |
 
 ### Git Instructions
 This project uses Vivado 2020.1 and petalinux 2020.1 in a Linux environment (Ubuntu 16.04.6 LTS is used for development). Ensure you have the third party Z-turn [board definition files](https://github.com/q3k/zturn-stuff/tree/master/boards/board_files/zturn-7z020/2.1) added to your Vivado install. Ensure you have the [PetaLinux dependencies (p10)](https://docs.xilinx.com/v/u/2020.1-English/ug1144-petalinux-tools-reference-guide) installed on your system. 
@@ -77,6 +78,9 @@ This project uses Vivado 2020.1 and petalinux 2020.1 in a Linux environment (Ubu
 2. Run `serial_reset.py` to assert selDefData and pulse loadData on both QPix serial interfaces.
 3. Run `kickstart_betamult.py` to set the two startup pads to logic high and keep then high.
 4. Run `serial_load.py [1|2] [data]` where `1|2` is the interface, and `data` is a 32 bit word in hex format (`0x12345678`). This will shift the word out of the Datain pin to QPix, along with 32 clock pulses on the CLKin pin, an then pulse loadData.
+5. Run `rst_ext.py [1|2]` to send a 5us pulse on opad_RST_EXT or opad2_RST_EXT.
+6. Run `clock_enable.py [on|off]` to enable/disable a 50MHz clock to opad_CLK and opad2_CLK.
+7. 
  
 ## Footnotes
 1. This is done by creating an app template as in the [PetaLinux Yocto documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips#PetaLinuxYoctoTips-CreatingApps(whichuseslibraries)inPetaLinuxProject)

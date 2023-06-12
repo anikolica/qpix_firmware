@@ -114,17 +114,11 @@ module top_rtl(
                     oTP4})          // ... 1 ...
                                     // ... 0 = no output
     ); */
-    
-    // *** CLOCK BUFFERS ***
-    BUFG bufg1 (.O(      ), .I(OSC_200MHz));
-    OBUF obuf1 (.O(opad_CLK), .I(clk)); // 50MHz for 16 channels
-    OBUF obuf2 (.O(opad2_CLK), .I(clk));
-    assign fifo_rd_clock = clk;
-    assign fifo_wr_clock = clk200;
-    
+     
     // *** DECLARATIONS ***
-    wire sys_rst;
+    wire sys_rst; // Reset all logic
     
+    // 16 data input channel interface signals
     wire counter_reset;
     reg  [63:0] counter64 = 64'h0;
     reg  [63:0] trig_ts = 64'h0;
@@ -149,7 +143,8 @@ module top_rtl(
     reg  [15:0] fifo_event = 16'h00;
     reg  [15:0] fifo_reqread = 16'h00;
     
-    wire clk20k; // base clow clock for Qpix register interface
+    // Serial interface
+    wire clk20k; // base slow clock for Qpix register interface
     wire clk_shift;
     wire clk_pulse;
     wire clk_intrst;
@@ -166,17 +161,48 @@ module top_rtl(
     wire [31:0] data1;
     wire [31:0] data2;
     
+    // Special pads
+    wire pulse_rst_ext; // external reset
+    wire pulse_rst_ext2;
+    wire clk_repl_en; // replenishment clocks
+    wire clk2_repl_en;
+    
+    // *** CLOCK BUFFERS ***
+    BUFG bufg1 (.O(      ), .I(OSC_200MHz)); // not used 6/12/23
+    ODDR repl_clk (
+        .Q(opad_CLK), // Replenishment clock
+        .C(clk), // 50MHz
+        .CE(clk_repl_en),
+        .D1(1'b1),
+        .D2(1'b0),
+        .S(1'b0),
+        .R(1'b0)
+    );
+    ODDR repl_clk2 (
+        .Q(opad2_CLK), 
+        .C(clk), 
+        .CE(clk2_repl_en),
+        .D1(1'b1),
+        .D2(1'b0),
+        .S(1'b0),
+        .R(1'b0)
+    );
+    assign fifo_rd_clock = clk;
+    assign fifo_wr_clock = clk200;
+    
     // *** REGISTER MAP ***
     // ** R/W registers **
     // Reg 0 -- control register
     assign sys_rst =            reg_rw[ 0 * 32 +  0];
     assign opad_Ext_POR =       reg_rw[ 0 * 32 +  1];
-    assign opad_RST_EXT =       reg_rw[ 0 * 32 +  2];
-    assign opad2_RST_EXT =      reg_rw[ 0 * 32 +  3];
+    assign pulse_rst_ext =      reg_rw[ 0 * 32 +  2];
+    assign pulse_rst_ext2 =     reg_rw[ 0 * 32 +  3];
     assign opad_control =       reg_rw[ 0 * 32 +  8];
     assign opad2_control =      reg_rw[ 0 * 32 +  9];
-    assign opad_cal_control =   reg_rw[ 0 * 32 + 16];
-    assign opad2_cal_control =  reg_rw[ 0 * 32 + 17];
+    assign opad_cal_control =   reg_rw[ 0 * 32 + 10];
+    assign opad2_cal_control =  reg_rw[ 0 * 32 + 11];
+    assign clk_repl_en =        reg_rw[ 0 * 32 + 16];
+    assign clk2_repl_en =       reg_rw[ 0 * 32 + 17];
     assign opad_startup =       reg_rw[ 0 * 32 + 24];
     assign opad2_startup =      reg_rw[ 0 * 32 + 25];
     
@@ -482,10 +508,16 @@ module top_rtl(
        .Trigger(loadData2),
        .Pulse(opad2_loadData)
     );
+    
     oneshot intrst1 (
        .Clock(clk_intrst),
-       .Trigger(        ),
-       .Pulse(        )
+       .Trigger(pulse_rst_ext),
+       .Pulse(opad_RST_EXT) // 5us pulse out
+    );
+    oneshot intrst2 (
+       .Clock(clk_intrst),
+       .Trigger(pulse_rst_ext2),
+       .Pulse(opad2_RST_EXT)
     );
     
     // Parallel-in-serial-out for loading input register
