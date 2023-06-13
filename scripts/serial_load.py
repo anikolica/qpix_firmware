@@ -14,10 +14,10 @@ elif sys.argv[1] == '2':
     ctrl_addr = '0x43c0000c '
     data_addr = '0x43c00010 '
 else:
-    print ('Invalid serial interface'! )
+    print ('Invalid serial interface!')
 
 # Input data in 32-bit hext, e.g. 0x12345678
-data == sys.argv[2]
+data = sys.argv[2]
 
 print ('programming QPix interface ' + interface + ' with data: ' + data)
 os.system('poke ' + data_addr + data) # write data into internal reg
