@@ -464,7 +464,7 @@ module top_rtl(
         `endif
             shiftclk (
        .clock_in(clk), 
-       .clock_out(clk_shift)
+       .clock_out(clk_shift) // 64 clocks wide at 20kHz
     );
     clock_div 
         `ifdef SIM
@@ -474,7 +474,7 @@ module top_rtl(
         `endif
             pulseclk (
        .clock_in(clk), 
-       .clock_out(clk_pulse)
+       .clock_out(clk_pulse) // 100us pulse 
     );
     clock_div 
         `ifdef SIM
@@ -482,15 +482,42 @@ module top_rtl(
         `else
             #(.DIVISOR(250)) // see integrator reset below ...
         `endif
-            reseteclk (
+            resetclk (
        .clock_in(clk), 
-       .clock_out(clk_intrst)
+       .clock_out(clk_intrst) // 5us pulse
     );
     
-    // Pulses for gating 32 slow clocks
+    // Synchronize 100MHz register bits into 20kHz slow domain
+    reg xmit_ser1_synced, xmit_ser1_synced_0;
+    reg xmit_ser2_synced, xmit_ser2_synced_0;
+    reg load_ser1_synced, load_ser1_synced_0;
+    reg load_ser2_synced, load_ser2_synced_0;
+    reg rst1_synced, rst1_synced_0;
+    reg rst2_synced, rst2_synced_0;
+    reg [31:0] data1_synced_0, data1_synced;
+    reg [31:0] data2_synced_0, data2_synced;
+    always @ (posedge clk20k)
+    begin
+        xmit_ser1_synced_0 <= xmit_ser1;
+        xmit_ser1_synced <= xmit_ser1_synced_0; // double FF sync from 100MHz to 20kHz domain
+        xmit_ser2_synced_0 <= xmit_ser2;
+        xmit_ser2_synced <= xmit_ser2_synced_0;
+        load_ser1_synced_0 <= load_ser1;
+        load_ser1_synced <= load_ser1_synced_0;
+        load_ser2_synced_0 <= load_ser2;
+        load_ser2_synced <= load_ser2_synced_0;
+        rst1_synced_0 <= rst1;
+        rst1_synced <= rst1_synced_0;
+        rst2_synced_0 <= rst2;
+        rst2_synced <= rst2_synced_0;
+        data1_synced_0 <= data1;
+        data1_synced <= data1_synced_0;
+        data2_synced_0 <= data2;
+        data2_synced <= data2_synced_0;
+    end
     oneshot shift1 (
-       .Clock(clk_shift),
-       .Trigger(xmit_ser1),
+       .Clock(clk_shift), // 64x 20kHz clk = 32x 10kHz clk
+       .Trigger(xmit_ser1_synced),
        .Pulse(shift_out1)
     );
     oneshot shift2 (
@@ -524,20 +551,20 @@ module top_rtl(
     // SR shifts out at 1/2 input clock = 10kHz
     // That's why gating pulse is 64x 20kHz clocks = 32x 10k
     piso serial_gen1 (
-        .load(load_ser1),
+        .load(load_ser1_synced),
         .xmit(shift_out1),
         .clk(clk20k),
-        .rst(rst1 || sys_rst),
-        .data_in(data1),
+        .rst(rst1_synced || sys_rst),
+        .data_in(data1_synced),
         .data_out(opad_DataIn),
         .clk_out(opad_CLKin)
     );
     piso serial_gen2 (
-        .load(load_ser2),
+        .load(load_ser2_synced),
         .xmit(shift_out2),
         .clk(clk20k),
-        .rst(rst2 || sys_rst),
-        .data_in(data2),
+        .rst(rst2_synced || sys_rst),
+        .data_in(data2_synced),
         .data_out(opad2_DataIn),
         .clk_out(opad2_CLKin)
     );

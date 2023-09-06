@@ -1,6 +1,11 @@
 # Create clocks
 create_clock -period 5.000 -name OSC_200MHz [get_ports OSC_200MHz]
 
+create_clock -period 50000 -name clk20k [get_pins design_1_i/top_rtl_0/inst/slowclk/clock_out]
+create_clock -period 3200000 -name clk_shift [get_pins design_1_i/top_rtl_0/inst/shiftclk/clock_out_reg_0]
+create_clock -period 100000 -name clk_pulse [get_pins design_1_i/top_rtl_0/inst/pulseclk/clock_out_reg_0]
+create_clock -period 2500 -name clk_intrst [get_pins design_1_i/top_rtl_0/inst/resetclk/clock_out_reg_0]
+
 set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 

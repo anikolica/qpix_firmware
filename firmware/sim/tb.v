@@ -111,21 +111,35 @@ module tb(
         #200    reg_rw[ 0 * 32 + 25] = 1'b1; // opad_startup2
         
         // Test 32-bit register load
-        #200    reg_rw[ 1 * 32 + 9] = 1'b1; // selDefData
+        // Reset interfaces 1 and 2
+        #200    reg_rw[ 1 * 32 + 9] = 1'b1; // selDefData (not timed)
         #200    reg_rw[ 1 * 32 + 8] = 1'b1; // loadData sends 100us pulse
         #200    reg_rw[ 1 * 32 + 8] = 1'b0; // loadData de-assert
-        #200    reg_rw[ 1 * 32 + 9] = 1'b0; // selDefData de-assert
+        #200    reg_rw[ 1 * 32 + 9] = 1'b0; // selDefData de-assert, make 200000 if real-time
         
-        #200    reg_rw[ 2 * 32 + 31 : 2 * 32 +  0] = 32'h1db6ff8b; // data in our register
+        // Serial interface 1
+        #200    reg_rw[ 2 * 32 + 31 : 2 * 32 +  0] = 32'h00008000; // data in our register
         
         #200    reg_rw[ 1 * 32 + 1] = 1'b1; // load data into SR
-        #200    reg_rw[ 1 * 32 + 1] = 1'b0; // must load SR de-assert before xmit
+        #200    reg_rw[ 1 * 32 + 1] = 1'b0; // must load SR de-assert before xmit, make 200000 if real-time
         
         #200    reg_rw[ 1 * 32 + 2] = 1'b1; // shift out with gated clock, takes a long time!
-        #6000   reg_rw[ 1 * 32 + 8] = 1'b1; // QPix loadData one-shot
+        #600    reg_rw[ 1 * 32 + 8] = 1'b1; // QPix loadData one-shot, make 6000 if real-time
         
         #200    reg_rw[ 1 * 32 + 8] = 1'b1; // loadData de-assert
         #200    reg_rw[ 1 * 32 + 2] = 1'b0; // shift out de-assert
+        
+        // Serial interface 2
+        #200    reg_rw[ 4 * 32 + 31 : 4 * 32 +  0] = 32'h00008000; // data in our register
+        
+        #200    reg_rw[ 3 * 32 + 1] = 1'b1; // load data into SR
+        #200    reg_rw[ 3 * 32 + 1] = 1'b0; // must load SR de-assert before xmit, make 200000 if real-time
+        
+        #200    reg_rw[ 3 * 32 + 2] = 1'b1; // shift out with gated clock, takes a long time!
+        #600    reg_rw[ 3 * 32 + 8] = 1'b1; // QPix loadData one-shot, make 6000 if real-time
+        
+        #200    reg_rw[ 3 * 32 + 8] = 1'b1; // loadData de-assert
+        #200    reg_rw[ 3 * 32 + 2] = 1'b0; // shift out de-assert
         
         // External resets
         #200    reg_rw[ 0 * 32 + 2] = 1'b1; // RST_EXT
