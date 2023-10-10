@@ -73,11 +73,11 @@ This project uses Vivado 2020.1 and petalinux 2020.1 in a Linux environment (Ubu
 
 ### Running test scripts
 1. Run `python3 startup.py` to reset internal FPGA logic. (All user scripts are in `scripts/`.)
-2. Run `python3 serial_reset.py` to assert selDefData and pulse loadData on both QPix serial interfaces.
-3. Run `python3 kickstart_betamult.py` to set the two startup pads to logic high and keep then high.
-4. Run `python3 serial_load.py [1|2] [data]` where `1|2` is the interface, and `data` is a 32 bit word in hex format (`0x12345678`). This will shift the word out of the Datain pin to QPix, along with 32 clock pulses on the CLKin pin, an then pulse loadData.
-5. Run `python3 rst_ext.py [1|2]` to send a 5us pulse on opad_RST_EXT or opad2_RST_EXT.
-6. Run `python3 clock_enable.py [on|off]` to enable/disable a 50MHz clock to opad_CLK and opad2_CLK.
+2. Run `python3 Serial_Interface_rst.py` to assert selDefData and pulse loadData on both QPix serial interfaces.
+3. Run `python3 Kickstart.py` to set the two startup pads to logic high and keep then high.
+4. Run `python3 Serial_Interface.py [1|2] [data]` where `1|2` is the interface, and `data` is a 32 bit word in hex format (`0x12345678`). This will shift the word out of the Datain pin to QPix, along with 32 clock pulses on the CLKin pin, an then pulse loadData.
+5. Run `python3 Integrator_rst.py [1|2]` to send a 5us pulse on opad_RST_EXT or opad2_RST_EXT.
+6. Run `python3 Clock_50MHz.py [on|off]` to enable/disable a 50MHz clock to opad_CLK and opad2_CLK.
 7. 
  
 ## Footnotes
