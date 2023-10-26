@@ -79,6 +79,7 @@ This project uses Vivado 2020.1 and petalinux 2020.1 in a Linux environment (Ubu
 5. Run `python3 Serial_Interface.py [1|2] [data]` where `1|2` is the interface, and `data` is a 32 bit word in hex format (`0x12345678`). This will shift the word out of the Datain pin to QPix, along with 32 clock pulses on the CLKin pin, an then pulse loadData.
 6. Run `python3 Integrator_rst.py [1|2]` to send a 5us pulse on opad_RST_EXT or opad2_RST_EXT.
 7. Run `python3 Clock_50MHz.py [on|off]` to enable/disable a 50MHz clock to opad_CLK and opad2_CLK. 
+8. Run 'python3 Calibrate.py` to assert opad_RST_EXT1,2 high, send a 5us pulse on opad_cal_control1,2, and then deassert the reset pads 100ns after the cal pads deassert.
  
 ## Footnotes
 1. This is done by creating an app template as in the [PetaLinux Yocto documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips#PetaLinuxYoctoTips-CreatingApps(whichuseslibraries)inPetaLinuxProject)

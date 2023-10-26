@@ -161,6 +161,9 @@ module top_rtl(
     wire [31:0] data1;
     wire [31:0] data2;
     
+    // Calibration
+    wire cal_control_reg, cal_control_reg2;
+    
     // Special pads
     wire pulse_rst_ext; // external reset
     wire pulse_rst_ext2;
@@ -197,10 +200,11 @@ module top_rtl(
     assign opad_Ext_POR =       reg_rw[ 0 * 32 +  1];
     assign pulse_rst_ext =      reg_rw[ 0 * 32 +  2];
     assign pulse_rst_ext2 =     reg_rw[ 0 * 32 +  3];
+    assign calibrate =          reg_rw[ 0 * 32 +  4];
     assign opad_control =       reg_rw[ 0 * 32 +  8];
     assign opad2_control =      reg_rw[ 0 * 32 +  9];
-    assign opad_cal_control =   reg_rw[ 0 * 32 + 10];
-    assign opad2_cal_control =  reg_rw[ 0 * 32 + 11];
+    assign cal_control_reg =    reg_rw[ 0 * 32 + 10];
+    assign cal_control_reg2  =  reg_rw[ 0 * 32 + 11];
     assign clk_repl_en =        reg_rw[ 0 * 32 + 16];
     assign clk2_repl_en =       reg_rw[ 0 * 32 + 17];
     assign opad_startup =       reg_rw[ 0 * 32 + 24];
@@ -487,9 +491,7 @@ module top_rtl(
        .clock_out(clk_intrst) // 5us pulse
     );
     
-    // Synchronize 100MHz register bits into 20kHz slow domain
-    reg xmit_ser1_synced, xmit_ser1_synced_0;
-    reg xmit_ser2_synced, xmit_ser2_synced_0;
+    // Synchronize 50MHz register bits into 20kHz slow domain
     reg load_ser1_synced, load_ser1_synced_0;
     reg load_ser2_synced, load_ser2_synced_0;
     reg rst1_synced, rst1_synced_0;
@@ -498,10 +500,6 @@ module top_rtl(
     reg [31:0] data2_synced_0, data2_synced;
     always @ (posedge clk20k)
     begin
-        xmit_ser1_synced_0 <= xmit_ser1;
-        xmit_ser1_synced <= xmit_ser1_synced_0; // double FF sync from 100MHz to 20kHz domain
-        xmit_ser2_synced_0 <= xmit_ser2;
-        xmit_ser2_synced <= xmit_ser2_synced_0;
         load_ser1_synced_0 <= load_ser1;
         load_ser1_synced <= load_ser1_synced_0;
         load_ser2_synced_0 <= load_ser2;
@@ -515,6 +513,40 @@ module top_rtl(
         data2_synced_0 <= data2;
         data2_synced <= data2_synced_0;
     end
+    
+    // Synchronize 50MHz register bits into 20kHz/64 slow domain
+    reg xmit_ser1_synced, xmit_ser1_synced_0;
+    reg xmit_ser2_synced, xmit_ser2_synced_0;
+    always @ (posedge clk_shift)
+    begin
+        xmit_ser1_synced_0 <= xmit_ser1;
+        xmit_ser1_synced <= xmit_ser1_synced_0;
+        xmit_ser2_synced_0 <= xmit_ser2;
+        xmit_ser2_synced <= xmit_ser2_synced_0;
+    end
+    
+    // Synchronize 50MHz register bits into 20kHz/2 slow domain
+    reg loadData1_synced, loadData1_synced_0;
+    reg loadData2_synced, loadData2_synced_0;
+    always @ (clk_pulse)
+    begin
+        loadData1_synced_0 <= loadData1;
+        loadData1_synced <= loadData1_synced_0;
+        loadData2_synced_0 <= loadData2;
+        loadData2_synced <= loadData2_synced_0;
+    end
+    
+    // Synchronize 50MHz register bits into 20kHz*10 slow domain
+    reg pulse_rst_ext_synced, pulse_rst_ext_synced_0;
+    reg pulse_rst_ext2_synced, pulse_rst_ext2_synced_0;    
+    always @ (clk_intrst)
+    begin
+        pulse_rst_ext_synced_0 <= pulse_rst_ext;
+        pulse_rst_ext_synced <= pulse_rst_ext_synced_0;
+        pulse_rst_ext2_synced_0 <= pulse_rst_ext2;
+        pulse_rst_ext2_synced <= pulse_rst_ext2_synced_0;
+    end
+    
     oneshot shift1 (
        .Clock(clk_shift), // 64x 20kHz clk = 32x 10kHz clk
        .Trigger(xmit_ser1_synced),
@@ -522,29 +554,30 @@ module top_rtl(
     );
     oneshot shift2 (
        .Clock(clk_shift),
-       .Trigger(xmit_ser2),
+       .Trigger(xmit_ser2_synced),
        .Pulse(shift_out2)
     );
     oneshot load_pulse1 (
        .Clock(clk_pulse),
-       .Trigger(loadData1),
+       .Trigger(loadData1_synced),
        .Pulse(opad_loadData) // 1/2x 20kHz = 100us pulse
     );
     oneshot load_pulse2 (
        .Clock(clk_pulse),
-       .Trigger(loadData2),
+       .Trigger(loadData2_synced),
        .Pulse(opad2_loadData)
     );
     
+    wire opad_pulse, opad_pulse2;
     oneshot intrst1 (
        .Clock(clk_intrst),
-       .Trigger(pulse_rst_ext),
-       .Pulse(opad_RST_EXT) // 5us pulse out
+       .Trigger(pulse_rst_ext_synced),
+       .Pulse(opad_pulse) // 5us pulse out
     );
     oneshot intrst2 (
        .Clock(clk_intrst),
-       .Trigger(pulse_rst_ext2),
-       .Pulse(opad2_RST_EXT)
+       .Trigger(pulse_rst_ext2_synced),
+       .Pulse(opad_pulse2)
     );
     
     // Parallel-in-serial-out for loading input register
@@ -568,6 +601,52 @@ module top_rtl(
         .data_out(opad2_DataIn),
         .clk_out(opad2_CLKin)
     );
+    
+    // Calibration
+    // Synchronize 50MHz register bits into 20kHz*10 slow domain
+    reg calibrate_synced, calibrate_synced_0;
+    always @ (clk_intrst)
+    begin
+        calibrate_synced_0 <= calibrate;
+        calibrate_synced <= calibrate_synced_0;
+    end
+    // Generate a delayed (20kHz*3) pulse
+    reg calibrate_delayed = 0;
+    reg[1:0] counter = 2'b00;
+    always @ (posedge clk_intrst)
+    begin
+        if (counter == 2'b00)
+            calibrate_delayed <= 0;
+        if (calibrate_synced)
+            counter <= counter + 1; // count 15us
+        if(counter >= 2'b11)
+        begin
+            counter <= 2'b00;
+            calibrate_delayed <= 1; // pulse 5us after delay
+        end
+    end
+    // Stop opad_RSTx 100ns after falling edge of cal_controlx
+    reg calibrate_ext_rst = 0;
+    reg[7:0] counter = 8'h00;
+    always @ (posedge clk)
+    begin
+        if (calibrate_synced)
+        begin
+            calibrate_ext_rst <= 1; // rising edge at start of reg bit transition
+            counter <= counter + 1;
+        end
+        if(counter >= 8'hff)
+        begin
+            counter <= 8'h00;
+            calibrate_ext_rst <= 0; // falling edge at 5.1us (5us + 100ns)
+        end
+    end
+    // Pads an be controlled manually by register, or from the calibrate bit
+    assign opad_cal_control = cal_control_reg | calibrate_delayed;
+    assign opad2_cal_control = cal_control_reg2 | calibrate_delayed;
+    // Pads an be pulsed by reg bit, or from the calibrate bit
+    assign opad_RST_EXT = opad_pulse | (calibrate_synced && calibrate_ext_rst);
+    assign opad2_RST_EXT = opad_pulse2 | (calibrate_synced && calibrate_ext_rst);
     
     // Serial-in-parallel-out for reading readout register
     // Make a 32-clock one-shot, load into SIPO->register
