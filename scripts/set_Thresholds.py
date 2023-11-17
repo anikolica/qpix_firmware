@@ -5,9 +5,9 @@ import math
 
 # U74
 if sys.argv[1] == "TP":
-	dac_addr = "0x0c"
-elif sys.argv[1] == "VCOMP":
 	dac_addr = "0x0d"
+elif sys.argv[1] == "VCOMP":
+	dac_addr = "0x0c"
 else:
 	dac_addr = "0x00"
 	print("Invalid DAC specified! Choices are TP or VCOMP")
@@ -22,16 +22,16 @@ else:
 	print("Invalid channel specified! Choices are 1 or 2")
 
 # 10-bit DAC
-steps = 3.3/1024
+steps = 1.2/1024
 voltage = float(sys.argv[3])
 if (voltage < 0):
 	counts = 0
-	print ("Invalid voltage specified! Value should be 0 - 3.3V")
-elif (3.296 < voltage <= 3.3):
+	print ("Invalid voltage specified! Value should be 0 - 1.2V")
+elif (1.194 < voltage <= 1.2):
 	counts = 0x3ff
-elif (voltage > 3.3):
+elif (voltage > 1.2):
 	counts = 0x3ff
-	print ("Invalid voltage specified! Value should be 0 - 3.3V")
+	print ("Invalid voltage specified! Value should be 0 - 1.2V")
 else:
 	counts = math.floor(voltage/steps)
 
@@ -42,7 +42,7 @@ lsb = counts_formatted[4:6]
 ctrl_bits = "2"
 word = '0x' + lsb + ctrl_bits + msb
 
-command = 'i2cget -y 0 ' + dac_addr + ' ' + channel + ' ' + word + ' w'
+command = 'i2cset -y 0 ' + dac_addr + ' ' + channel + ' ' + word + ' w'
 print ("Sending command: " + command)
 i2c_raw = os.popen(command).read()
 
