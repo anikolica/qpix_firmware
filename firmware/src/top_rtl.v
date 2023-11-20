@@ -492,14 +492,24 @@ module top_rtl(
     );
     
     // Synchronize 50MHz register bits into 20kHz slow domain
+    reg xmit_ser1_synced, xmit_ser1_synced_0;
+    reg xmit_ser2_synced, xmit_ser2_synced_0;
     reg load_ser1_synced, load_ser1_synced_0;
     reg load_ser2_synced, load_ser2_synced_0;
     reg rst1_synced, rst1_synced_0;
     reg rst2_synced, rst2_synced_0;
     reg [31:0] data1_synced_0, data1_synced;
     reg [31:0] data2_synced_0, data2_synced;
+    reg loadData1_synced, loadData1_synced_0;
+    reg loadData2_synced, loadData2_synced_0;
+    reg pulse_rst_ext_synced, pulse_rst_ext_synced_0;
+    reg pulse_rst_ext2_synced, pulse_rst_ext2_synced_0; 
     always @ (posedge clk20k)
     begin
+        xmit_ser1_synced_0 <= xmit_ser1;
+        xmit_ser1_synced <= xmit_ser1_synced_0;
+        xmit_ser2_synced_0 <= xmit_ser2;
+        xmit_ser2_synced <= xmit_ser2_synced_0;
         load_ser1_synced_0 <= load_ser1;
         load_ser1_synced <= load_ser1_synced_0;
         load_ser2_synced_0 <= load_ser2;
@@ -512,35 +522,10 @@ module top_rtl(
         data1_synced <= data1_synced_0;
         data2_synced_0 <= data2;
         data2_synced <= data2_synced_0;
-    end
-    
-    // Synchronize 50MHz register bits into 20kHz/64 slow domain
-    reg xmit_ser1_synced, xmit_ser1_synced_0;
-    reg xmit_ser2_synced, xmit_ser2_synced_0;
-    always @ (posedge clk_shift)
-    begin
-        xmit_ser1_synced_0 <= xmit_ser1;
-        xmit_ser1_synced <= xmit_ser1_synced_0;
-        xmit_ser2_synced_0 <= xmit_ser2;
-        xmit_ser2_synced <= xmit_ser2_synced_0;
-    end
-    
-    // Synchronize 50MHz register bits into 20kHz/2 slow domain
-    reg loadData1_synced, loadData1_synced_0;
-    reg loadData2_synced, loadData2_synced_0;
-    always @ (clk_pulse)
-    begin
         loadData1_synced_0 <= loadData1;
         loadData1_synced <= loadData1_synced_0;
         loadData2_synced_0 <= loadData2;
         loadData2_synced <= loadData2_synced_0;
-    end
-    
-    // Synchronize 50MHz register bits into 20kHz*10 slow domain
-    reg pulse_rst_ext_synced, pulse_rst_ext_synced_0;
-    reg pulse_rst_ext2_synced, pulse_rst_ext2_synced_0;    
-    always @ (clk_intrst)
-    begin
         pulse_rst_ext_synced_0 <= pulse_rst_ext;
         pulse_rst_ext_synced <= pulse_rst_ext_synced_0;
         pulse_rst_ext2_synced_0 <= pulse_rst_ext2;
