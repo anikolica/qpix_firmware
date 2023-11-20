@@ -602,51 +602,35 @@ module top_rtl(
         .clk_out(opad2_CLKin)
     );
     
-    // Calibration
-    // Synchronize 50MHz register bits into 20kHz*10 slow domain
-    reg calibrate_synced, calibrate_synced_0;
-    always @ (clk_intrst)
-    begin
-        calibrate_synced_0 <= calibrate;
-        calibrate_synced <= calibrate_synced_0;
-    end
-    // Generate a delayed (20kHz*3) pulse
-    reg calibrate_delayed = 0;
-    reg[1:0] counter = 2'b00;
-    always @ (posedge clk_intrst)
-    begin
-        if (counter == 2'b00)
-            calibrate_delayed <= 0;
-        if (calibrate_synced)
-            counter <= counter + 1; // count 15us
-        if(counter >= 2'b11)
-        begin
-            counter <= 2'b00;
-            calibrate_delayed <= 1; // pulse 5us after delay
-        end
-    end
-    // Stop opad_RSTx 100ns after falling edge of cal_controlx
+    // Calibration -- stop opad_RSTx 100ns after falling edge of cal_controlx
     reg calibrate_ext_rst = 0;
-    reg[7:0] counter = 8'h00;
+    reg calibrate_cal_control = 0;
+    reg[31:0] counter50M = 32'h00000000;
     always @ (posedge clk)
     begin
-        if (calibrate_synced)
+        if (calibrate && counter50M == 0)
         begin
             calibrate_ext_rst <= 1; // rising edge at start of reg bit transition
-            counter <= counter + 1;
+            calibrate_cal_control <= 1;
+            counter50M <= counter50M + 1;
         end
-        if(counter >= 8'hff)
+        if (counter50M >= 8'hfa) // 250 counts, or 5us
+            calibrate_cal_control <= 0; // deassert only cal_control
+        if (counter50M >= 8'hff) // 255 counts, or 5.1us
+            calibrate_ext_rst <= 0; // falling edge of rst_ext only at 5us + 100ns
+        if (!calibrate)
         begin
-            counter <= 8'h00;
-            calibrate_ext_rst <= 0; // falling edge at 5.1us (5us + 100ns)
+            calibrate_ext_rst <= 0;
+            calibrate_cal_control <= 0;
+            counter50M <= 0; // reset
         end
     end
     // Pads an be controlled manually by register, or from the calibrate bit
-    assign opad_cal_control = cal_control_reg | calibrate_delayed;
-    assign opad2_cal_control = cal_control_reg2 | calibrate_delayed;
+    assign opad_cal_control = cal_control_reg | calibrate_cal_control;
+    assign opad2_cal_control = cal_control_reg2 | calibrate_cal_control;
     // Pads an be pulsed by reg bit, or from the calibrate bit
-    assign opad_RST_EXT = opad_pulse | (calibrate_synced && calibrate_ext_rst);
-    assign opad2_RST_EXT = opad_pulse2 | (calibrate_synced && calibrate_ext_rst);
+    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst;
+    assign opad2_RST_EXT = opad_pulse2 | calibrate_ext_rst;
     
     // Serial-in-parallel-out for reading readout register
     // Make a 32-clock one-shot, load into SIPO->register
