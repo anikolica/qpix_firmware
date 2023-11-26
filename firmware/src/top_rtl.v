@@ -201,6 +201,8 @@ module top_rtl(
     assign pulse_rst_ext =      reg_rw[ 0 * 32 +  2];
     assign pulse_rst_ext2 =     reg_rw[ 0 * 32 +  3];
     assign calibrate =          reg_rw[ 0 * 32 +  4];
+    assign rst_ext_reg =        reg_rw[ 0 * 32 +  5];
+    assign rst_ext2_reg =       reg_rw[ 0 * 32 +  6];
     assign opad_control =       reg_rw[ 0 * 32 +  8];
     assign opad2_control =      reg_rw[ 0 * 32 +  9];
     assign cal_control_reg =    reg_rw[ 0 * 32 + 10];
@@ -618,8 +620,8 @@ module top_rtl(
     assign opad_cal_control = cal_control_reg | calibrate_cal_control;
     assign opad2_cal_control = cal_control_reg2 | calibrate_cal_control;
     // Pads an be pulsed by reg bit, or from the calibrate bit
-    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst;
-    assign opad2_RST_EXT = opad2_pulse | calibrate_ext_rst;
+    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst | rst_ext_reg;
+    assign opad2_RST_EXT = opad2_pulse | calibrate_ext_rst | rst_ext2_reg;
     
     // One-shots for test pulses
     //oTP1

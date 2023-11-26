@@ -141,11 +141,17 @@ module tb(
         #200    reg_rw[ 3 * 32 + 8] = 1'b1; // loadData de-assert
         #200    reg_rw[ 3 * 32 + 2] = 1'b0; // shift out de-assert
         
-        // External resets
+        // External resets (pulses)
         #4000   reg_rw[ 0 * 32 + 2] = 1'b1; // RST_EXT
         #200    reg_rw[ 0 * 32 + 2] = 1'b0; // RST_EXT
         #200    reg_rw[ 0 * 32 + 3] = 1'b1; // RST_EXT2
         #200    reg_rw[ 0 * 32 + 3] = 1'b0; // RST_EXT2
+        
+        // External resets (manual reg write)
+        #200    reg_rw[ 0 * 32 + 5] = 1'b1; // RST_EXT
+        #200    reg_rw[ 0 * 32 + 5] = 1'b0; 
+        #200    reg_rw[ 0 * 32 + 6] = 1'b1; // RST_EXT2
+        #200    reg_rw[ 0 * 32 + 6] = 1'b0;
         
         // Calibrate
         #1000   reg_rw[ 0 * 32 + 4] = 1'b1;
