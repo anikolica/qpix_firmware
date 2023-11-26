@@ -118,7 +118,7 @@ module tb(
         #200    reg_rw[ 1 * 32 + 9] = 1'b0; // selDefData de-assert, make 200000 if real-time
         
         // Serial interface 1
-        #200    reg_rw[ 2 * 32 + 31 : 2 * 32 +  0] = 32'h00008000; // data in our register
+        #200    reg_rw[ 2 * 32 + 31 : 2 * 32 +  0] = 32'h12345678; // data in our register
         
         #200    reg_rw[ 1 * 32 + 1] = 1'b1; // load data into SR
         #200    reg_rw[ 1 * 32 + 1] = 1'b0; // must load SR de-assert before xmit, make 200000 if real-time
@@ -130,7 +130,7 @@ module tb(
         #200    reg_rw[ 1 * 32 + 2] = 1'b0; // shift out de-assert
         
         // Serial interface 2
-        #200    reg_rw[ 4 * 32 + 31 : 4 * 32 +  0] = 32'h00008000; // data in our register
+        #200    reg_rw[ 4 * 32 + 31 : 4 * 32 +  0] = 32'ha0a0a0af; // data in our register
         
         #200    reg_rw[ 3 * 32 + 1] = 1'b1; // load data into SR
         #200    reg_rw[ 3 * 32 + 1] = 1'b0; // must load SR de-assert before xmit, make 200000 if real-time
@@ -142,10 +142,14 @@ module tb(
         #200    reg_rw[ 3 * 32 + 2] = 1'b0; // shift out de-assert
         
         // External resets
-        #200    reg_rw[ 0 * 32 + 2] = 1'b1; // RST_EXT
+        #4000   reg_rw[ 0 * 32 + 2] = 1'b1; // RST_EXT
         #200    reg_rw[ 0 * 32 + 2] = 1'b0; // RST_EXT
         #200    reg_rw[ 0 * 32 + 3] = 1'b1; // RST_EXT2
         #200    reg_rw[ 0 * 32 + 3] = 1'b0; // RST_EXT2
+        
+        // Calibrate
+        #1000   reg_rw[ 0 * 32 + 4] = 1'b1;
+        #6000   reg_rw[ 0 * 32 + 4] = 1'b0;
         
         // Start replenishment clocks
         #200    reg_rw[ 0 * 32 + 16] = 1'b1; // opad_CLK

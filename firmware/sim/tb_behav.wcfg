@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="16000001fs"></ZoomEndTime>
-      <Cursor1Time time="16000000fs"></Cursor1Time>
+      <ZoomEndTime time="15000001fs"></ZoomEndTime>
+      <Cursor1Time time="15000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="129"></NameColumnWidth>
-      <ValueColumnWidth column_width="66"></ValueColumnWidth>
+      <NameColumnWidth column_width="191"></NameColumnWidth>
+      <ValueColumnWidth column_width="68"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="55" />
+   <WVObjectSize size="104" />
    <wvobject type="logic" fp_name="/tb/clk">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -224,6 +224,14 @@
       <obj_property name="ElementShortName">opad_DataIn</obj_property>
       <obj_property name="ObjectShortName">opad_DataIn</obj_property>
    </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad2_CLKin">
+      <obj_property name="ElementShortName">opad2_CLKin</obj_property>
+      <obj_property name="ObjectShortName">opad2_CLKin</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad2_DataIn">
+      <obj_property name="ElementShortName">opad2_DataIn</obj_property>
+      <obj_property name="ObjectShortName">opad2_DataIn</obj_property>
+   </wvobject>
    <wvobject type="logic" fp_name="/tb/top/opad_RST_EXT">
       <obj_property name="ElementShortName">opad_RST_EXT</obj_property>
       <obj_property name="ObjectShortName">opad_RST_EXT</obj_property>
@@ -232,6 +240,26 @@
       <obj_property name="ElementShortName">opad2_RST_EXT</obj_property>
       <obj_property name="ObjectShortName">opad2_RST_EXT</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/tb/top/counter50M">
+      <obj_property name="ElementShortName">counter50M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">counter50M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/calibrate_ext_rst">
+      <obj_property name="ElementShortName">calibrate_ext_rst</obj_property>
+      <obj_property name="ObjectShortName">calibrate_ext_rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/calibrate_cal_control">
+      <obj_property name="ElementShortName">calibrate_cal_control</obj_property>
+      <obj_property name="ObjectShortName">calibrate_cal_control</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad_cal_control">
+      <obj_property name="ElementShortName">opad_cal_control</obj_property>
+      <obj_property name="ObjectShortName">opad_cal_control</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad2_cal_control">
+      <obj_property name="ElementShortName">opad2_cal_control</obj_property>
+      <obj_property name="ObjectShortName">opad2_cal_control</obj_property>
+   </wvobject>
    <wvobject type="logic" fp_name="/tb/top/opad_CLK">
       <obj_property name="ElementShortName">opad_CLK</obj_property>
       <obj_property name="ObjectShortName">opad_CLK</obj_property>
@@ -239,5 +267,173 @@
    <wvobject type="logic" fp_name="/tb/top/opad2_CLK">
       <obj_property name="ElementShortName">opad2_CLK</obj_property>
       <obj_property name="ObjectShortName">opad2_CLK</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/slowclk/clock_out">
+      <obj_property name="ElementShortName">clock_out</obj_property>
+      <obj_property name="ObjectShortName">clock_out</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shiftclk/clock_out">
+      <obj_property name="ElementShortName">clock_out</obj_property>
+      <obj_property name="ObjectShortName">clock_out</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/pulseclk/clock_out">
+      <obj_property name="ElementShortName">clock_out</obj_property>
+      <obj_property name="ObjectShortName">clock_out</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/load">
+      <obj_property name="ElementShortName">load</obj_property>
+      <obj_property name="ObjectShortName">load</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/xmit">
+      <obj_property name="ElementShortName">xmit</obj_property>
+      <obj_property name="ObjectShortName">xmit</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen1/data_in">
+      <obj_property name="ElementShortName">data_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/data_out">
+      <obj_property name="ElementShortName">data_out</obj_property>
+      <obj_property name="ObjectShortName">data_out</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/clk_out">
+      <obj_property name="ElementShortName">clk_out</obj_property>
+      <obj_property name="ObjectShortName">clk_out</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen1/debug">
+      <obj_property name="ElementShortName">debug[31:0]</obj_property>
+      <obj_property name="ObjectShortName">debug[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen1/debug2">
+      <obj_property name="ElementShortName">debug2[5:0]</obj_property>
+      <obj_property name="ObjectShortName">debug2[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen1/data_reg">
+      <obj_property name="ElementShortName">data_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen1/counter">
+      <obj_property name="ElementShortName">counter[6:0]</obj_property>
+      <obj_property name="ObjectShortName">counter[6:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen1/clk_d">
+      <obj_property name="ElementShortName">clk_d</obj_property>
+      <obj_property name="ObjectShortName">clk_d</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen2/load">
+      <obj_property name="ElementShortName">load</obj_property>
+      <obj_property name="ObjectShortName">load</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen2/xmit">
+      <obj_property name="ElementShortName">xmit</obj_property>
+      <obj_property name="ObjectShortName">xmit</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen2/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen2/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen2/data_in">
+      <obj_property name="ElementShortName">data_in[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen2/data_out">
+      <obj_property name="ElementShortName">data_out</obj_property>
+      <obj_property name="ObjectShortName">data_out</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen2/clk_out">
+      <obj_property name="ElementShortName">clk_out</obj_property>
+      <obj_property name="ObjectShortName">clk_out</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen2/debug">
+      <obj_property name="ElementShortName">debug[31:0]</obj_property>
+      <obj_property name="ObjectShortName">debug[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen2/debug2">
+      <obj_property name="ElementShortName">debug2[5:0]</obj_property>
+      <obj_property name="ObjectShortName">debug2[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen2/data_reg">
+      <obj_property name="ElementShortName">data_reg[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_reg[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/serial_gen2/counter">
+      <obj_property name="ElementShortName">counter[6:0]</obj_property>
+      <obj_property name="ObjectShortName">counter[6:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/serial_gen2/clk_d">
+      <obj_property name="ElementShortName">clk_d</obj_property>
+      <obj_property name="ObjectShortName">clk_d</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/load_pulse1/Trigger">
+      <obj_property name="ElementShortName">Trigger</obj_property>
+      <obj_property name="ObjectShortName">Trigger</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/load_pulse1/Clock">
+      <obj_property name="ElementShortName">Clock</obj_property>
+      <obj_property name="ObjectShortName">Clock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/load_pulse1/Pulse">
+      <obj_property name="ElementShortName">Pulse</obj_property>
+      <obj_property name="ObjectShortName">Pulse</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/load_pulse1/QA">
+      <obj_property name="ElementShortName">QA</obj_property>
+      <obj_property name="ObjectShortName">QA</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/load_pulse1/QB">
+      <obj_property name="ElementShortName">QB</obj_property>
+      <obj_property name="ObjectShortName">QB</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift1/Trigger">
+      <obj_property name="ElementShortName">Trigger</obj_property>
+      <obj_property name="ObjectShortName">Trigger</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift1/Clock">
+      <obj_property name="ElementShortName">Clock</obj_property>
+      <obj_property name="ObjectShortName">Clock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift1/Pulse">
+      <obj_property name="ElementShortName">Pulse</obj_property>
+      <obj_property name="ObjectShortName">Pulse</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift1/QA">
+      <obj_property name="ElementShortName">QA</obj_property>
+      <obj_property name="ObjectShortName">QA</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift1/QB">
+      <obj_property name="ElementShortName">QB</obj_property>
+      <obj_property name="ObjectShortName">QB</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift2/Trigger">
+      <obj_property name="ElementShortName">Trigger</obj_property>
+      <obj_property name="ObjectShortName">Trigger</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift2/Clock">
+      <obj_property name="ElementShortName">Clock</obj_property>
+      <obj_property name="ObjectShortName">Clock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift2/Pulse">
+      <obj_property name="ElementShortName">Pulse</obj_property>
+      <obj_property name="ObjectShortName">Pulse</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift2/QA">
+      <obj_property name="ElementShortName">QA</obj_property>
+      <obj_property name="ObjectShortName">QA</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/shift2/QB">
+      <obj_property name="ElementShortName">QB</obj_property>
+      <obj_property name="ObjectShortName">QB</obj_property>
    </wvobject>
 </wave_config>
