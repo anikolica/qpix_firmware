@@ -1,4 +1,3 @@
-
 # QPix Tester Firmware
 
 ## Maintainer
@@ -70,6 +69,70 @@ This project uses Vivado 2020.1 and petalinux 2020.1 in a Linux environment (Ubu
 3. Copy the file `rootfs.tar.gz` to the `ROOT` partition. `gunzip` and then `tar -xvf` the file to uncompress the entire contents.
 4. Install the SD card into the Z-turn. Ensure jumper settings are set to boot from SD. After the QPix carrier PCB is turned on, the 5V to Z-turn will power it on and start the boot process (LEDs will go on). After this, connect a mini USB cable to the front panel UART connector (not JTAG connector), and open a connection to the COM port that comes up at 115kbaud.
 5. If a roo console does not appear, press the reset button on Z-turn and and stop the boot when the message `Hit any key to stop autoboot` appears. This will show the `Zynq` prompt. You may have to set the correct root partition in U-Boot with `setenv bootargs root=/dev/mmcblk1p2` and `saveenv`. Then `boot` will continue the boot process. 
+
+### Register reads and writes
+At the root prompt, registers can be manually written using `poke [addr] [data]` from the table below. For example `poke 0x43c00000 0x00000020` will assert opad\_EXT\_RST. Test scripts (below) initiate sequences of register writes.
+
+1. Control registers (R/W)
+
+| reg. no. | AXI addr. | bit(s) | name | description |
+| ------ | ------ | ------ | ------ | ------ |
+| 0 | 0x43c00000 | [25:24] | opad2_startup, opad_startup | asserts pads |
+| 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables |
+| 0 | 0x43c00000 |  [11:10] | opad2_control, opad_control | asserts pads |
+| 0 | 0x43c00000 |  [9:8] | opad2_cal_control, opad_cal_control | asserts pads |
+| 0 | 0x43c00000 |  [6:5] | rst_ext2, rst_ext | asserts pads |
+| 0 | 0x43c00000 |  [4] | calibrate | asserts both RST_EXT and cal_control pads, de-asserts RST_EXT and then de-asserts cal_control 100ns after |
+| 0 | 0x43c00000 |  [3:2] | pulse_rst_ext2, pulse_rst_ext | sends 5us pulse on pads |
+| 0 | 0x43c00000 |  [1] | opad_ext_POR | asserts pad |
+| 0 | 0x43c00000 |  [0] | sys_rst | resets internal FPGA logic |
+| - | - | - | - | - |
+| 1 | 0x43c00004 |  [9] | opad_selDefData | asserts pad |
+| 1 | 0x43c00004 |  [8] | load_data | sends 100us pulse on pad |
+| 1 | 0x43c00004 |  [2] | xmit | shift data out to pad | 
+| 1 | 0x43c00004 |  [1] | load | load 32-bit data word from AXI reg to FPGA shift reg |
+| 1 | 0x43c00004 |  [0] | rst | reset FPGA shift reg |
+| - | - | - | - | - |
+| 2 | 0x43c00008 |  [31:0] | data | 32-bit data to send to QPix |
+| - | - | - | - | - |
+| 3 | 0x43c0000c |  [9] | opad2_selDefData | asserts pad |
+| 3 | 0x43c0000c |  [8] | load_data2 | sends 100us pulse on pad |
+| 3 | 0x43c0000c |  [2] | xmit2 | shift data out to pad | 
+| 3 | 0x43c0000c |  [1] | load2 | load 32-bit data word from AXI reg to FPGA shift reg |
+| 3 | 0x43c0000c |  [0] | rst2 | reset FPGA shift reg |
+| - | - | - | - | - |
+| 4 | 0x43c00010 |  [31:0] | data2[31:0] | 32-bit data to send to QPix |
+| - | - | - | - | - |
+| 5 | 0x43c00014 |  [1] | counter_reset | reset FPGA 64-bit counter |
+| 5 | 0x43c00014 |  [0] | trigger | assert pad |  
+| - | - | - | - | - |
+| 6 | 0x43c00018 |  [15:0] | read_fifo[15:0] | trigger read of one of 16 FPGA FIFOs holding timestamped QPix pulse output |
+
+2. Read only registers
+
+| reg. no. | AXI addr. | bit(s) | name | description |
+| ------ | ------ | ------ | ------ | ------ |
+| 64 | 0x43c00100 | [31:0] | trig_ts[63:32] | high bits of 64-bit timestamp when trigger was issued |
+| - | - | - | - | - |
+| 65 | 0x43c00104 | [31:0] | trig_ts[31:0] | low bits of 64-bit timestamp when trigger was issued |
+| - | - | - | - | - |
+| 66 | 0x43c00108 | [31:0] | event_ts[63:32] | current FIFO word, high bits of 64-bit event timestamp from port 0 |
+| - | - | - | - | - |
+| 67 | 0x43c0010c | [31:0] | event_ts[31:0] | current FIFO word, low bits of 64-bit event timestamp from port 0 |
+| - | - | - | - | - |
+| - | - | - | - | (continue thru reg 97 for ports 2-15) |
+| - | - | - | - | - |
+| 109 | 0x43c001b4 | [10] | wr_rst_busy | Port 0 FIFO writing |
+| 109 | 0x43c001b4 | [9] | almost_full | Port 0 FIFO almost full |
+| 109 | 0x43c001b4 | [8] | full | Port 0 FIFO full |
+| 109 | 0x43c001b4 | [2] | rd_rst_busy | Port 0 FIFO reading |
+| 109 | 0x43c001b4 | [1] | almost_empty | Port 0 FIFO almost full |
+| 109 | 0x43c001b4 | [0] | empty | Port 0 FIFO full |
+| - | - | - | - | - |
+| - | - | - | - | (continue thru reg 124 for ports 2-15) |
+| - | - | - | - | - |
+| 127 | 0x43c001fc | [31:0] | `0xdeadbeef` | test word |
+
 
 ### Running test scripts
 1. Run `python3 startup.py` to reset internal FPGA logic. (All user scripts are in `scripts/`.)
