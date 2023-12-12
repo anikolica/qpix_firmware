@@ -81,6 +81,7 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables |
 | 0 | 0x43c00000 |  [11:10] | opad2_control, opad_control | asserts pads |
 | 0 | 0x43c00000 |  [9:8] | opad2_cal_control, opad_cal_control | asserts pads |
+| 0 | 0x43c00000 |  [7] | rst_and_trig | asserts both RST_EXT pads for 5us, then sends TRIGGER on falling edge of de-assert |
 | 0 | 0x43c00000 |  [6:5] | rst_ext2, rst_ext | asserts pads |
 | 0 | 0x43c00000 |  [4] | calibrate | asserts both RST_EXT and cal_control pads, de-asserts RST_EXT and then de-asserts cal_control 100ns after |
 | 0 | 0x43c00000 |  [3:2] | pulse_rst_ext2, pulse_rst_ext | sends 5us pulse on pads |
@@ -143,6 +144,8 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 6. Run `python3 Integrator_rst.py [1|2]` to send a 5us pulse on opad_RST_EXT or opad2_RST_EXT.
 7. Run `python3 Clock_50MHz.py [on|off]` to enable/disable a 50MHz clock to opad_CLK and opad2_CLK. 
 8. Run `python3 Calibrate.py` to assert opad_RST_EXT1,2 high, send a 5us pulse on opad_cal_control1,2, and then deassert the reset pads 100ns after the cal pads deassert.
+9. Run `python3 hold_reset.py [1|2] [on|off]` to assert opad_RST_EXT1,2 high or low.
+10. Run `python3 send_trigger.py` to assert opad_RST_EXT1,2 for 5us, then send TRIGGER on the falling edge of reset de-assert.
  
 ## Footnotes
 1. This is done by creating an app template as in the [PetaLinux Yocto documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips#PetaLinuxYoctoTips-CreatingApps(whichuseslibraries)inPetaLinuxProject)
