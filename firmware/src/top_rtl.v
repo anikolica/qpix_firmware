@@ -203,6 +203,7 @@ module top_rtl(
     assign calibrate =          reg_rw[ 0 * 32 +  4];
     assign rst_ext_reg =        reg_rw[ 0 * 32 +  5];
     assign rst_ext2_reg =       reg_rw[ 0 * 32 +  6];
+    assign rst_and_trig =       reg_rw[ 0 * 32 +  7];
     assign opad_control =       reg_rw[ 0 * 32 +  8];
     assign opad2_control =      reg_rw[ 0 * 32 +  9];
     assign cal_control_reg =    reg_rw[ 0 * 32 + 10];
@@ -233,7 +234,7 @@ module top_rtl(
     assign data2        =       reg_rw[ 4 * 32 + 31 : 4 * 32 +  0];
     
     // Reg 5 - trigger control
-    assign TRIGGER =            reg_rw[ 5 * 32 +  0];
+    assign TRIGGER_pad =        reg_rw[ 5 * 32 +  0];
     assign counter_reset =      reg_rw[ 5 * 32 +  1];
     
     // Reg 6 - FIFO control
@@ -493,7 +494,7 @@ module top_rtl(
        .clock_out(clk_intrst) // 5us pulse
     );
     
-    // Synchronize 100MHz register bits into 20kHz slow domain
+    // Synchronize 50MHz register bits into 20kHz slow domain
     reg xmit_ser1_synced, xmit_ser1_synced_0;
     reg xmit_ser2_synced, xmit_ser2_synced_0;
     reg load_ser1_synced, load_ser1_synced_0;
@@ -616,12 +617,37 @@ module top_rtl(
         counter50M <= counter50M + 1;
     end
     
+    // Reset and trigger -- opad_RSTx for 5us, then TRIGGER for longish time
+    reg rst_then_trig = 1'b0;
+    reg trig_after_rst = 1'b0;
+    reg[31:0] counter50M_2 = 32'h00000000;
+    always @ (posedge clk)
+    begin
+     if (rst_and_trig && counter50M_2 == 0)
+         rst_then_trig <= 1;
+     if (counter50M_2 >= 32'h000000fa) // 250 counts, or 5us
+     begin
+         rst_then_trig <= 0; // deassert opad_rst
+         trig_after_rst <= 1; // assert TRIGGER (external ARB)
+     end
+     if (!rst_and_trig)
+     begin
+         rst_then_trig <= 0;
+         trig_after_rst <= 0; 
+         counter50M_2 <= 0; // reset
+     end
+     else
+        counter50M_2 <= counter50M_2 + 1;
+    end
+    
     // Pads an be controlled manually by register, or from the calibrate bit
     assign opad_cal_control = cal_control_reg | calibrate_cal_control;
     assign opad2_cal_control = cal_control_reg2 | calibrate_cal_control;
     // Pads an be pulsed by reg bit, or from the calibrate bit
-    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst | rst_ext_reg;
-    assign opad2_RST_EXT = opad2_pulse | calibrate_ext_rst | rst_ext2_reg;
+    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst | rst_then_trig | rst_ext_reg;
+    assign opad2_RST_EXT = opad2_pulse | calibrate_ext_rst | rst_then_trig | rst_ext2_reg;
+    // pad can be set to a level, or long pulsed  by the reset-and-trigger routine
+    assign TRIGGER = TRIGGER_pad | trig_after_rst; 
     
     // One-shots for test pulses
     //oTP1
@@ -661,7 +687,7 @@ module top_rtl(
         end
     end
     
-    always @ (posedge TRIGGER) // Always synchrnous with 50MHz
+    always @ (posedge TRIGGER_pad) // Always synchronous with 50MHz
     begin
         trig_ts <= counter64; // Store the time we sent external trigger
     end

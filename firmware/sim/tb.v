@@ -106,6 +106,8 @@ module tb(
         #500    oLVDS[1] = 1'b1;
         #10     oLVDS[1] = 1'b0;
         
+        #500    reg_rw[ 5 * 32 + 0] = 1'b0; // TRIGGER off
+        
         // Kickstart beta-multipliers
         #200    reg_rw[ 0 * 32 + 24] = 1'b1; // opad_startup
         #200    reg_rw[ 0 * 32 + 25] = 1'b1; // opad_startup2
@@ -156,6 +158,10 @@ module tb(
         // Calibrate
         #1000   reg_rw[ 0 * 32 + 4] = 1'b1;
         #6000   reg_rw[ 0 * 32 + 4] = 1'b0;
+        
+        // Reset and trigger
+        #1000   reg_rw[ 0 * 32 + 7] = 1'b1;
+        #6000   reg_rw[ 0 * 32 + 7] = 1'b0;
         
         // Start replenishment clocks
         #200    reg_rw[ 0 * 32 + 16] = 1'b1; // opad_CLK
