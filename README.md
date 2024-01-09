@@ -48,7 +48,7 @@ This project uses Vivado 2020.1 and petalinux 2020.1 in a Linux environment (Ubu
 
 
 ### Simulation
-1. The rudimentary simulation is run in Vivado by clicking **Run Simulation - Run Behavioral Simulation** and then running for 8000ns from the top toolbar. An example of serial reigster write, one FIFO event write and read, is provided.
+1. The rudimentary simulation is run in Vivado by clicking **Run Simulation - Run Behavioral Simulation** and then running for 40us from the top toolbar. An example of serial reigster write, one FIFO event write and read, is provided.
 
 ### Building PetaLinux and software
 1. First, from Vivado: **File - Export - Export Hardware - Fixed - Include Bitstream** and export a file called *qpix_tester.xsa* to the `qpix_tester/` directory.
@@ -136,6 +136,7 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 
 
 ### Running test scripts
+NOTE: these scripts are for demonstration only, and may overwrite previously written register values. To add: bitmasking.
 1. Run `python3 startup.py` to reset internal FPGA logic. (All user scripts are in `scripts/`.)
 2. Run `python3 Kickstart.py` to set the two startup pads to logic high and keep then high.
 3. Run `python3 set_Thresholds.py [TP|VCOMP] [1|2] [voltage]` to program the 4 DAC channels from 0 - 3.3V.
