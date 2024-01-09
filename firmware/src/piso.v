@@ -27,7 +27,7 @@ module piso (
     output reg data_out,
     output reg clk_out,
     output [31:0] debug,
-    output [5:0] debug2);
+    output [6:0] debug2);
   
     // PISO register array to load and shift data
     reg [31:0] data_reg;
@@ -50,12 +50,15 @@ module piso (
         else begin 
             if (load) begin // Load the data to the PISO register array and reset the serial data out register
                 {data_reg, data_out} <= {data_in, 1'b0};
-                counter <= 6'h00;
+                //data_reg <= data_in;
+                counter <= 7'h00;
             end
             else if (xmit) begin // Shift the loaded data 1 bit LEFT (MSB first) into the serial data out register
-                if (counter < 64) begin
+                if (counter < 7'h40) begin
                     if (counter % 2 == 0) begin // change data on rising (even) edge
                         {data_out, data_reg} <= {data_reg[31:0], 1'b0};
+                        //data_out <= data_reg[31];
+                        //data_reg <= {data_reg[30:0], 1'b0};
                         clk_d <= ~clk_d;
                         counter <= counter + 1;
                     end
@@ -67,7 +70,7 @@ module piso (
                 else begin // stop clock if out of bits
                     clk_d <= 1'b0;
                     data_out <= 1'b0;
-                    counter <= 6'h40;
+                    counter <= 7'h40;
                 end
             end
             else begin // line quiet otherwise
