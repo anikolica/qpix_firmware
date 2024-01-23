@@ -90,6 +90,9 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | - | - | - | - | - |
 | 1 | 0x43c00004 |  [9] | opad_selDefData | asserts pad |
 | 1 | 0x43c00004 |  [8] | load_data | sends 100us pulse on pad |
+| 1 | 0x43c00004 |  [6] | read_data | 32 pulses |
+| 1 | 0x43c00004 |  [5] | pulse_opad_CLKin2 | 5us pulse |
+| 1 | 0x43c00004 |  [4] | opad_serialOutCnt | assert pad |
 | 1 | 0x43c00004 |  [2] | xmit | shift data out to pad | 
 | 1 | 0x43c00004 |  [1] | load | load 32-bit data word from AXI reg to FPGA shift reg |
 | 1 | 0x43c00004 |  [0] | rst | reset FPGA shift reg |
@@ -98,6 +101,9 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | - | - | - | - | - |
 | 3 | 0x43c0000c |  [9] | opad2_selDefData | asserts pad |
 | 3 | 0x43c0000c |  [8] | load_data2 | sends 100us pulse on pad |
+| 3 | 0x43c00004 |  [6] | read_data2 | 32 pulses |
+| 3 | 0x43c00004 |  [5] | pulse_opad2_CLKin2 | 5us pulse |
+| 3 | 0x43c00004 |  [4] | opad2_serialOutCnt | assert pad |
 | 3 | 0x43c0000c |  [2] | xmit2 | shift data out to pad | 
 | 3 | 0x43c0000c |  [1] | load2 | load 32-bit data word from AXI reg to FPGA shift reg |
 | 3 | 0x43c0000c |  [0] | rst2 | reset FPGA shift reg |
@@ -147,6 +153,7 @@ NOTE: these scripts are for demonstration only, and may overwrite previously wri
 8. Run `python3 Calibrate.py` to assert opad_RST_EXT1,2 high, send a 5us pulse on opad_cal_control1,2, and then deassert the reset pads 100ns after the cal pads deassert.
 9. Run `python3 hold_reset.py [1|2] [on|off]` to assert opad_RST_EXT1,2 high or low.
 10. Run `python3 send_trigger.py` to assert opad_RST_EXT1,2 for 5us, then send TRIGGER on the falling edge of reset de-assert.
+11. Run `ReadLatchedData.py [1|2]` to asset opad[1|2]_SerialOutCnt, then pulse opad[1|2]_CLKin2 for 5us and deassert SerialOutCnt, then send 32 pulses on CLKin2. The data can be read out of opad[1|2]_DataOut2 on the scope.
  
 ## Footnotes
 1. This is done by creating an app template as in the [PetaLinux Yocto documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips#PetaLinuxYoctoTips-CreatingApps(whichuseslibraries)inPetaLinuxProject)
