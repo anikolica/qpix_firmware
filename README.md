@@ -79,8 +79,8 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | ------ | ------ | ------ | ------ | ------ |
 | 0 | 0x43c00000 | [25:24] | opad2_startup, opad_startup | asserts pads |
 | 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables |
-| 0 | 0x43c00000 |  [11:10] | opad2_control, opad_control | asserts pads |
-| 0 | 0x43c00000 |  [9:8] | opad2_cal_control, opad_cal_control | asserts pads |
+| 0 | 0x43c00000 |  [11:10] | opad2_cal_control, opad_cal_control | asserts pads |
+| 0 | 0x43c00000 |  [9:8] | opad2_control, opad_control | asserts pads |
 | 0 | 0x43c00000 |  [7] | rst_and_trig | asserts both RST_EXT pads for 5us, then sends TRIGGER on falling edge of de-assert |
 | 0 | 0x43c00000 |  [6:5] | rst_ext2, rst_ext | asserts pads |
 | 0 | 0x43c00000 |  [4] | calibrate | asserts both RST_EXT and cal_control pads, de-asserts RST_EXT and then de-asserts cal_control 100ns after |
