@@ -163,6 +163,20 @@ module tb(
         #1000   reg_rw[ 0 * 32 + 7] = 1'b1;
         #6000   reg_rw[ 0 * 32 + 7] = 1'b0;
         
+        // Readback routine
+        #200    reg_rw[ 1 * 32 + 4] = 1'b1; // serialOutCnt
+        #200    reg_rw[ 1 * 32 + 5] = 1'b1; // pulse CLKin2
+        #200    reg_rw[ 1 * 32 + 4] = 1'b0; 
+        #200    reg_rw[ 1 * 32 + 5] = 1'b0;
+        #600    reg_rw[ 1 * 32 + 6] = 1'b1; // 32 pulse CLKin2
+        #200    reg_rw[ 1 * 32 + 6] = 1'b0;
+        #200    reg_rw[ 3 * 32 + 4] = 1'b1; // serialOutCnt2
+        #200    reg_rw[ 3 * 32 + 5] = 1'b1; // pulse CLKin2
+        #200    reg_rw[ 3 * 32 + 4] = 1'b0; 
+        #200    reg_rw[ 3 * 32 + 5] = 1'b0;
+        #600    reg_rw[ 3 * 32 + 6] = 1'b1; // 32 pulse CLKin2
+        #200    reg_rw[ 3 * 32 + 6] = 1'b0;
+        
         // Start replenishment clocks
         #200    reg_rw[ 0 * 32 + 16] = 1'b1; // opad_CLK
         #200    reg_rw[ 0 * 32 + 17] = 1'b1; // opad2_CLK

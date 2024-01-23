@@ -160,6 +160,10 @@ module top_rtl(
     wire loadData2;
     wire [31:0] data1;
     wire [31:0] data2;
+    wire pulse_opad_CLKin2;
+    wire pulse_opad2_CLKin2;
+    wire read_data;
+    wire read_data2;
     
     // Calibration
     wire cal_control_reg, cal_control_reg2;
@@ -217,6 +221,9 @@ module top_rtl(
     assign rst1         =       reg_rw[ 1 * 32 +  0];
     assign load_ser1    =       reg_rw[ 1 * 32 +  1];
     assign xmit_ser1    =       reg_rw[ 1 * 32 +  2];
+    assign opad_serialOutCnt =  reg_rw[ 1 * 32 +  4];
+    assign pulse_opad_CLKin2 =  reg_rw[ 1 * 32 +  5];
+    assign read_data =          reg_rw[ 1 * 32 +  6];
     assign loadData1    =       reg_rw[ 1 * 32 +  8]; 
     assign opad_selDefData =    reg_rw[ 1 * 32 +  9];
     
@@ -227,6 +234,9 @@ module top_rtl(
     assign rst2         =       reg_rw[ 3 * 32 +  0];
     assign load_ser2    =       reg_rw[ 3 * 32 +  1];
     assign xmit_ser2    =       reg_rw[ 3 * 32 +  2];
+    assign opad2_serialOutCnt = reg_rw[ 3 * 32 +  4];
+    assign pulse_opad2_CLKin2 = reg_rw[ 3 * 32 +  5];
+    assign read_data2 =         reg_rw[ 3 * 32 +  6];
     assign loadData2     =      reg_rw[ 3 * 32 +  8]; 
     assign opad2_selDefData =   reg_rw[ 3 * 32 +  9];
     
@@ -497,6 +507,8 @@ module top_rtl(
     // Synchronize 50MHz register bits into 20kHz slow domain
     reg xmit_ser1_synced, xmit_ser1_synced_0;
     reg xmit_ser2_synced, xmit_ser2_synced_0;
+    reg read_data_synced, read_data_synced_0;
+    reg read_data2_synced, read_data2_synced_0;
     reg load_ser1_synced, load_ser1_synced_0;
     reg load_ser2_synced, load_ser2_synced_0;
     reg rst1_synced, rst1_synced_0;
@@ -509,6 +521,10 @@ module top_rtl(
         xmit_ser1_synced <= xmit_ser1_synced_0;
         xmit_ser2_synced_0 <= xmit_ser2;
         xmit_ser2_synced <= xmit_ser2_synced_0;
+        read_data_synced_0 <= read_data;
+        read_data_synced <= read_data_synced_0;
+        read_data2_synced_0 <= read_data2;
+        read_data2_synced <= read_data2_synced_0;
         load_ser1_synced_0 <= load_ser1;
         load_ser1_synced <= load_ser1_synced_0;
         load_ser2_synced_0 <= load_ser2;
@@ -579,14 +595,55 @@ module top_rtl(
     
     // Serial-in-parallel-out for reading readout register
     // Make a 32-clock one-shot, load into SIPO->register
-    //opad_CLKin2
-    //opad_serialOutCnt
     //opad_DataOut1
     //opad_DataOut2
-    //opad2_CLKin2
-    //opad2_serialOutCnt
     //opad2_DataOut1
     //opad2_DataOut2
+    wire opad_CLKin2_pulse_out, opad2_CLKin2_pulse_out;
+    oneshot CLKin2_pulser (
+       .Clock(clk_intrst),
+       .Trigger(pulse_opad_CLKin2),
+       .Pulse(opad_CLKin2_pulse_out) // 5us pulse out
+    );
+    oneshot CLKin2_pulser2 (
+       .Clock(clk_intrst),
+       .Trigger(pulse_opad2_CLKin2),
+       .Pulse(opad2_CLKin2_pulse_out)
+    );
+    wire os_to_piso_clkin2, os_to_piso2_clkin2;
+    wire opad_CLKin2_pulse32_out, opad2_CLKin2_pulse32_out;
+    oneshot shift1_read (
+       .Clock(clk_shift), // 64x 20kHz clk = 32x 10kHz clk
+       .Trigger(read_data_synced),
+       .Pulse(os_to_piso_clkin2)
+    );
+    oneshot shift2_read (
+       .Clock(clk_shift), // 64x 20kHz clk = 32x 10kHz clk
+       .Trigger(read_data2_synced),
+       .Pulse(os_to_piso2_clkin2)
+    );
+    // PISO only used here for 32-pulse train
+    piso serial_gen1_read (
+        .load(),
+        .xmit(os_to_piso_clkin2),
+        .clk(clk20k),
+        .rst(rst1_synced || sys_rst),
+        .data_in(),
+        .data_out(),
+        .clk_out(opad_CLKin2_pulse32_out)
+    );
+    piso serial_gen2_read (
+        .load(),
+        .xmit(os_to_piso2_clkin2),
+        .clk(clk20k),
+        .rst(rst2_synced || sys_rst),
+        .data_in(),
+        .data_out(),
+        .clk_out(opad2_CLKin2_pulse32_out)
+    );
+    
+    assign opad_CLKin2 = opad_CLKin2_pulse_out | opad_CLKin2_pulse32_out; 
+    assign opad2_CLKin2 = opad2_CLKin2_pulse_out | opad2_CLKin2_pulse32_out;
     
     // Count replenishments during deltaT toggle
     //opad_deltaT
