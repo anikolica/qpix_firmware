@@ -153,7 +153,7 @@ NOTE: these scripts are for demonstration only, and may overwrite previously wri
 8. Run `python3 Calibrate.py` to assert opad_RST_EXT1,2 high, send a 5us pulse on opad_cal_control1,2, and then deassert the reset pads 100ns after the cal pads deassert.
 9. Run `python3 hold_reset.py [1|2] [on|off]` to assert opad_RST_EXT1,2 high or low.
 10. Run `python3 send_trigger.py` to assert opad_RST_EXT1,2 for 5us, then send TRIGGER on the falling edge of reset de-assert.
-11. Run `ReadLatchedData.py [1|2]` to asset opad[1|2]_SerialOutCnt, then pulse opad[1|2]_CLKin2 for 5us and deassert SerialOutCnt, then send 32 pulses on CLKin2. The data can be read out of opad[1|2]_DataOut2 on the scope.
+11. Run `ReadLatchedData.py [1|2]` pulses opad[1|2]_CLKin2 for 5us, asserts opad[1|2]_SerialOutCnt, then sends 32 pulses on CLKin2, finally deasserts SerialOutCnt. The data can be read out of opad[1|2]_DataOut2 on the scope.
  
 ## Footnotes
 1. This is done by creating an app template as in the [PetaLinux Yocto documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips#PetaLinuxYoctoTips-CreatingApps(whichuseslibraries)inPetaLinuxProject)
