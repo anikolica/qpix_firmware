@@ -4,7 +4,7 @@ import time
 
 print ('Resetting serial interfaces')
 
-os.system('poke 0x43c00004 0x00000100') # bit 8
+os.system('poke 0x43c00004 0x00000200') # bit 8
 print ('Asserting opad_selDefData')
 time.sleep(0.5)
 
@@ -16,7 +16,7 @@ os.system('poke 0x43c00004 0x00000000')
 print ('De-asserting opad_selDefData')
 time.sleep(0.5)
 
-os.system('poke 0x43c0000c 0x00000100') # repeat on interface #2
+os.system('poke 0x43c0000c 0x00000200') # repeat on interface #2
 print ('Asserting opad2_selDefData')
 time.sleep(0.5)
 

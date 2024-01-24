@@ -24,17 +24,17 @@ os.system('poke ' + data_addr + data) # write data into internal reg
 print ('Loading internal reg')
 time.sleep(0.5)
 
-os.system('poke ' + ctrl_addr + '0x00000002') # bit 1 
+os.system('poke ' + ctrl_addr + '0x00000002') # bit 1
 print ('Loading data into FGPA shift register')
 time.sleep(0.5)
 os.system('poke ' + ctrl_addr + '0x00000000') # de-assert bit 1
 time.sleep(0.5)
 
-os.system('poke ' + ctrl_addr + '0x00000004') # bit 2 
+os.system('poke ' + ctrl_addr + '0x00000004') # bit 2
 print ('Shift out to QPix with gated clock')
-time.sleep(0.5)
+time.sleep(0.01)
 
-os.system('poke ' + ctrl_addr + '0x00000010') # bit 8
+os.system('poke ' + ctrl_addr + '0x00000100') # bit 8
 print ('Shift out to QPix with gated clock')
 time.sleep(0.5)
 os.system('poke ' + ctrl_addr + '0x00000000') # de-assert bits 2,8
