@@ -171,6 +171,8 @@ module top_rtl(
     // Special pads
     wire pulse_rst_ext; // external reset
     wire pulse_rst_ext2;
+    wire pulse_control;
+    wire pulse2_control;
     wire clk_repl_en; // replenishment clocks
     wire clk2_repl_en;
     
@@ -208,10 +210,12 @@ module top_rtl(
     assign rst_ext_reg =        reg_rw[ 0 * 32 +  5];
     assign rst_ext2_reg =       reg_rw[ 0 * 32 +  6];
     assign rst_and_trig =       reg_rw[ 0 * 32 +  7];
-    assign opad_control =       reg_rw[ 0 * 32 +  8];
-    assign opad2_control =      reg_rw[ 0 * 32 +  9];
+    assign opad_control_reg =   reg_rw[ 0 * 32 +  8];
+    assign opad2_control_reg =  reg_rw[ 0 * 32 +  9];
     assign cal_control_reg =    reg_rw[ 0 * 32 + 10];
     assign cal_control_reg2 =   reg_rw[ 0 * 32 + 11];
+    assign pulse_control =      reg_rw[ 0 * 32 + 12];
+    assign pulse2_control =     reg_rw[ 0 * 32 + 13];
     assign clk_repl_en =        reg_rw[ 0 * 32 + 16];
     assign clk2_repl_en =       reg_rw[ 0 * 32 + 17];
     assign opad_startup =       reg_rw[ 0 * 32 + 24];
@@ -558,6 +562,21 @@ module top_rtl(
        .Trigger(loadData2),
        .Pulse(opad2_loadData)
     );
+    
+    wire pulse_control_out, pulse2_control_out;
+    oneshot ctrl_pulse (
+       .Clock(clk_intrst),
+       .Trigger(pulse_control),
+       .Pulse(pulse_control_out) // 5us pulse out
+    );
+    oneshot ctrl2_pulse (
+       .Clock(clk_intrst),
+       .Trigger(pulse2_control),
+       .Pulse(pulse2_control_out)
+    );
+    
+    assign opad_control = opad_control_reg | pulse_control_out;
+    assign opad2_control = opad2_control_reg | pulse2_control_out;
     
     wire opad_pulse, opad2_pulse;
     oneshot intrst1 (

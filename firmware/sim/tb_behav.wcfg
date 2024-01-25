@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="81000001fs"></ZoomEndTime>
-      <Cursor1Time time="81000000fs"></Cursor1Time>
+      <ZoomEndTime time="41000001fs"></ZoomEndTime>
+      <Cursor1Time time="0fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="185"></NameColumnWidth>
+      <NameColumnWidth column_width="181"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="108" />
+   <WVObjectSize size="110" />
    <wvobject type="logic" fp_name="/tb/clk">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -451,5 +451,13 @@
    <wvobject type="logic" fp_name="/tb/top/opad2_CLKin2">
       <obj_property name="ElementShortName">opad2_CLKin2</obj_property>
       <obj_property name="ObjectShortName">opad2_CLKin2</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad_control">
+      <obj_property name="ElementShortName">opad_control</obj_property>
+      <obj_property name="ObjectShortName">opad_control</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/top/opad2_control">
+      <obj_property name="ElementShortName">opad2_control</obj_property>
+      <obj_property name="ObjectShortName">opad2_control</obj_property>
    </wvobject>
 </wave_config>
