@@ -48,7 +48,7 @@ This project uses Vivado 2020.1 and petalinux 2020.1 in a Linux environment (Ubu
 
 
 ### Simulation
-1. The rudimentary simulation is run in Vivado by clicking **Run Simulation - Run Behavioral Simulation** and then running for 40us from the top toolbar. An example of serial reigster write, one FIFO event write and read, is provided.
+1. The rudimentary simulation is run in Vivado by clicking **Run Simulation - Run Behavioral Simulation** and then running for 50us from the top toolbar. An example of serial reigster write, one FIFO event write and read, is provided.
 
 ### Building PetaLinux and software
 1. First, from Vivado: **File - Export - Export Hardware - Fixed - Include Bitstream** and export a file called *qpix_tester.xsa* to the `qpix_tester/` directory.
@@ -79,6 +79,7 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | ------ | ------ | ------ | ------ | ------ |
 | 0 | 0x43c00000 | [25:24] | opad2_startup, opad_startup | asserts pads |
 | 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables |
+| 0 | 0x43c00000 |  [13:12] | pulse2_control, pulse_control | sends 5us pulse on pads |
 | 0 | 0x43c00000 |  [11:10] | opad2_cal_control, opad_cal_control | asserts pads |
 | 0 | 0x43c00000 |  [9:8] | opad2_control, opad_control | asserts pads |
 | 0 | 0x43c00000 |  [7] | rst_and_trig | asserts both RST_EXT pads for 5us, then sends TRIGGER on falling edge of de-assert |
