@@ -35,6 +35,7 @@ module tb(
     reg clk200 = 1'b0;
     reg TRIGGER = 1'b0;
     reg [15:0] oLVDS = 16'h0;
+    reg opad_deltaT = 1'b0;
     reg [64*32-1:0] reg_rw = 2048'h0;
     
     // Include SIM=1 in the defines in Vivado
@@ -43,6 +44,7 @@ module tb(
         .clk(clk),
         .clk200(clk200),
         .oLVDS(oLVDS),
+        .opad_deltaT(opad_deltaT),
         .reg_rw(reg_rw)
     );
     
@@ -91,17 +93,29 @@ module tb(
         
         // Test FIFO
         #500    reg_rw[ 5 * 32 + 0] = 1'b1; // TRIGGER
-        #500    oLVDS[0] = 1'b1; // Event2
+        #0      opad_deltaT = 1'b1;
+        #500    oLVDS[0] = 1'b1; // Events
         #10     oLVDS[0] = 1'b0;
         #500    oLVDS[0] = 1'b1;
         #10     oLVDS[0] = 1'b0;
+        #200    oLVDS[0] = 1'b1; // More events
+        #10     oLVDS[0] = 1'b0;
+        #100    oLVDS[0] = 1'b1;
+        #10     oLVDS[0] = 1'b0;
         
-        #500    reg_rw[ 6 * 32 + 0] = 1'b1; // Read FIFO0 twice
-        #100    reg_rw[ 6 * 32 + 0] = 1'b0; 
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1; // Read FIFO0 five times
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0; // 5th read should not issue
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1;
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0;
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1;
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0;
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1;
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0;
         #500    reg_rw[ 6 * 32 + 0] = 1'b1;
         #100    reg_rw[ 6 * 32 + 0] = 1'b0;
         
-        #500    oLVDS[1] = 1'b1; // More events
+        #10     opad_deltaT = 1'b0;
+        #500    oLVDS[1] = 1'b1; // More events on second channel
         #10     oLVDS[1] = 1'b0;
         #500    oLVDS[1] = 1'b1;
         #10     oLVDS[1] = 1'b0;

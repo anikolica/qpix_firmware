@@ -768,10 +768,14 @@ module top_rtl(
         trig_ts <= counter64; // Store the time we sent external trigger
     end
     
+    reg deltaT_synced_0;
+    reg deltaT_synced;
     reg [15:0] oLVDS_synced;
     reg [15:0] oLVDS_synced_0;
     always @ (posedge clk200)
     begin
+        deltaT_synced_0 <= opad_deltaT;
+        deltaT_synced <= deltaT_synced_0;
         oLVDS_synced_0 <= oLVDS;
         oLVDS_synced <= oLVDS_synced_0; // double FF sync into 200MHz domain
     end
@@ -782,7 +786,7 @@ module top_rtl(
         begin
             always @ (posedge clk200)
             begin
-                if (oLVDS_synced[i] && !fifo_full[i])
+                if (oLVDS_synced[i] && !fifo_full[i] && deltaT_synced)
                    fifo_event[i] <= 1; // ... trigger a one-shot to write the timestamp
                 else
                    fifo_event[i] <= 0;
