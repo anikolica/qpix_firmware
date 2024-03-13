@@ -216,6 +216,7 @@ module top_rtl(
     assign cal_control_reg2 =   reg_rw[ 0 * 32 + 11];
     assign pulse_control =      reg_rw[ 0 * 32 + 12];
     assign pulse2_control =     reg_rw[ 0 * 32 + 13];
+    assign arb_trig =           reg_rw[ 0 * 32 + 14];
     assign clk_repl_en =        reg_rw[ 0 * 32 + 16];
     assign clk2_repl_en =       reg_rw[ 0 * 32 + 17];
     assign opad_startup =       reg_rw[ 0 * 32 + 24];
@@ -716,14 +717,36 @@ module top_rtl(
         counter50M_2 <= counter50M_2 + 1;
     end
     
+    // For triggering arbitrary function generator
+    reg rst_then_trig_arb = 1'b0;
+    reg trig_after_rst_arb = 1'b0;
+    reg[31:0] counter50M_3 = 32'h00000000;
+    always @ (posedge clk)
+    begin
+     if (arb_trig && counter50M_3 == 0) // hold RST_EXT1,2 when this reg bit set
+         rst_then_trig_arb <= 1;
+     if (counter50M_3 >= 32'h000000fa) // 250 counts, or 5us
+         trig_after_rst_arb <= 1; // assert TRIGGER (external ARB)
+     if (counter50M_3 >= 32'h000002ee) // 750 counts, or 15us
+         rst_then_trig_arb <= 0; // de-assert resets after a safe time 
+     if (!arb_trig)
+     begin
+         rst_then_trig_arb <= 0; // reset everybody
+         trig_after_rst_arb <= 0; 
+         counter50M_3 <= 0; 
+     end
+     else
+        counter50M_3 <= counter50M_3 + 1;
+    end    
+    
     // Pads an be controlled manually by register, or from the calibrate bit
     assign opad_cal_control = cal_control_reg | calibrate_cal_control;
     assign opad2_cal_control = cal_control_reg2 | calibrate_cal_control;
     // Pads an be pulsed by reg bit, or from the calibrate bit
-    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst | rst_then_trig | rst_ext_reg;
-    assign opad2_RST_EXT = opad2_pulse | calibrate_ext_rst | rst_then_trig | rst_ext2_reg;
+    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst | rst_then_trig | rst_then_trig_arb | rst_ext_reg;
+    assign opad2_RST_EXT = opad2_pulse | calibrate_ext_rst | rst_then_trig | rst_then_trig_arb | rst_ext2_reg;
     // pad can be set to a level, or long pulsed  by the reset-and-trigger routine
-    assign TRIGGER = TRIGGER_pad | trig_after_rst; 
+    assign TRIGGER = TRIGGER_pad | trig_after_rst | trig_after_rst_arb; 
     
     // One-shots for test pulses
     //oTP1
