@@ -79,6 +79,7 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | ------ | ------ | ------ | ------ | ------ |
 | 0 | 0x43c00000 | [25:24] | opad2_startup, opad_startup | asserts pads |
 | 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables |
+| 0 | 0x43c00000 |  [14] | arb_trig | asserts reset pads for 5us,  triggers arbitrary function generator, then releases resets after 15us |
 | 0 | 0x43c00000 |  [13:12] | pulse2_control, pulse_control | sends 5us pulse on pads |
 | 0 | 0x43c00000 |  [11:10] | opad2_cal_control, opad_cal_control | asserts pads |
 | 0 | 0x43c00000 |  [9:8] | opad2_control, opad_control | asserts pads |
@@ -155,6 +156,8 @@ NOTE: these scripts are for demonstration only, and may overwrite previously wri
 9. Run `python3 hold_reset.py [1|2] [on|off]` to assert opad_RST_EXT1,2 high or low.
 10. Run `python3 send_trigger.py` to assert opad_RST_EXT1,2 for 5us, then send TRIGGER on the falling edge of reset de-assert.
 11. Run `ReadLatchedData.py [1|2]` pulses opad[1|2]_CLKin2 for 5us, asserts opad[1|2]_SerialOutCnt, then sends 32 pulses on CLKin2, finally deasserts SerialOutCnt. The data can be read out of opad[1|2]_DataOut2 on the scope.
+12. Run `python3 trig_and_read_FIFO_all_ch.py` to do a Calibrate routine, but then read the contents of all ch0-15 FIFOs, and display total number of edges detected for each channel.
+13. Run `python3 trig_and_read_FIFO_all_ch[x].py` to do a Calibrate routine, but then read the contents of a particulat channel's FIFO. These scripts display detailed information about the FIFO status bits on each read, and also display all timestamps read out from the FIFO (timestamps are arbitrary 200MHz clock ticks since startup).
  
 ## Footnotes
 1. This is done by creating an app template as in the [PetaLinux Yocto documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips#PetaLinuxYoctoTips-CreatingApps(whichuseslibraries)inPetaLinuxProject)
