@@ -1022,7 +1022,7 @@ module top_rtl(
       .dout(fifo_dout_6),
       .rd_en(fifo_rd_en[6]),
       .rd_rst_busy(fifo_rd_rst_busy[6]),
-      .empty(fifo_empty[06]),
+      .empty(fifo_empty[6]),
       .almost_empty(fifo_almost_empty[6]),
       .valid(),
       .underflow(),
@@ -1092,7 +1092,7 @@ module top_rtl(
       
       .wr_clk(clk200),
       .din(fifo_data_in_9),
-      .wr_en(fifo_wr_en[0]),
+      .wr_en(fifo_wr_en[9]),
       .wr_rst_busy(fifo_wr_rst_busy[9]),
       .full(fifo_full[9]),
       .almost_full(fifo_almost_full[9]),

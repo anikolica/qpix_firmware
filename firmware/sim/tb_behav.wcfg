@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="30150001fs"></ZoomEndTime>
-      <Cursor1Time time="1000000fs"></Cursor1Time>
+      <ZoomStartTime time="3130000fs"></ZoomStartTime>
+      <ZoomEndTime time="18410001fs"></ZoomEndTime>
+      <Cursor1Time time="6130000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="173"></NameColumnWidth>
+      <NameColumnWidth column_width="169"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="112" />
+   <WVObjectSize size="130" />
    <wvobject type="logic" fp_name="/tb/clk">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -467,5 +467,93 @@
    <wvobject type="logic" fp_name="/tb/top/opad2_control">
       <obj_property name="ElementShortName">opad2_control</obj_property>
       <obj_property name="ObjectShortName">opad2_control</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/oLVDS">
+      <obj_property name="ElementShortName">oLVDS[15:0]</obj_property>
+      <obj_property name="ObjectShortName">oLVDS[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_read">
+      <obj_property name="ElementShortName">fifo_read[15:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_read[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_0">
+      <obj_property name="ElementShortName">fifo_dout_0[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_0[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_1">
+      <obj_property name="ElementShortName">fifo_dout_1[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_1[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_2">
+      <obj_property name="ElementShortName">fifo_dout_2[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_2[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_3">
+      <obj_property name="ElementShortName">fifo_dout_3[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_3[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_4">
+      <obj_property name="ElementShortName">fifo_dout_4[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_4[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_5">
+      <obj_property name="ElementShortName">fifo_dout_5[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_5[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_6">
+      <obj_property name="ElementShortName">fifo_dout_6[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_6[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_7">
+      <obj_property name="ElementShortName">fifo_dout_7[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_7[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_8">
+      <obj_property name="ElementShortName">fifo_dout_8[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_8[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_9">
+      <obj_property name="ElementShortName">fifo_dout_9[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_9[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_10">
+      <obj_property name="ElementShortName">fifo_dout_10[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_10[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_11">
+      <obj_property name="ElementShortName">fifo_dout_11[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_11[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_12">
+      <obj_property name="ElementShortName">fifo_dout_12[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_12[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_13">
+      <obj_property name="ElementShortName">fifo_dout_13[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_13[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_14">
+      <obj_property name="ElementShortName">fifo_dout_14[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_14[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/top/fifo_dout_15">
+      <obj_property name="ElementShortName">fifo_dout_15[63:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout_15[63:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
 </wave_config>
