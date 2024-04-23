@@ -168,6 +168,9 @@ module top_rtl(
     // Calibration
     wire cal_control_reg, cal_control_reg2;
     
+    // Window sampling
+    wire [15:0] window_wait, window_width;
+    
     // Special pads
     wire pulse_rst_ext; // external reset
     wire pulse_rst_ext2;
@@ -217,6 +220,7 @@ module top_rtl(
     assign pulse_control =      reg_rw[ 0 * 32 + 12];
     assign pulse2_control =     reg_rw[ 0 * 32 + 13];
     assign arb_trig =           reg_rw[ 0 * 32 + 14];
+    assign window_trig =        reg_rw[ 0 * 32 + 15];
     assign clk_repl_en =        reg_rw[ 0 * 32 + 16];
     assign clk2_repl_en =       reg_rw[ 0 * 32 + 17];
     assign opad_startup =       reg_rw[ 0 * 32 + 24];
@@ -255,7 +259,11 @@ module top_rtl(
     // Reg 6 - FIFO control
     assign fifo_read =          reg_rw[ 6 * 32 +  15 : 6 * 32 +  0];
     
-    // Reg 7 thru 31 not connected
+    // Reg 7 - Programmable sampling control
+    assign window_width =       reg_rw[ 7 * 32 +  15 : 7 * 32 +   0];
+    assign window_wait =        reg_rw[ 7 * 32 +  31 : 7 * 32 +  16];
+    
+    // Reg 8 thru 31 not connected
     
     // ** R/O registers **
     // Reg 64,65 - trigger timestamp
@@ -739,14 +747,48 @@ module top_rtl(
         counter50M_3 <= counter50M_3 + 1;
     end    
     
+    // Window trigger -- opad_RSTx for 5us, then TRIGGER, then sample for user-defined time
+    reg sample_window_valid = 1'b0;
+    reg rst_for_windowsample = 1'b0;
+    reg trig_for_windowsample = 1'b0;
+    reg[31:0] counter50M_4 = 32'h00000000;
+    always @ (posedge clk)
+    begin
+     if (window_trig && counter50M_4 == 0)
+     begin
+         sample_window_valid <= 0;
+         rst_for_windowsample <= 1;
+         trig_for_windowsample <= 0;
+     end
+     if (counter50M_4 >= 32'h000000fa) // 250 counts, or 5us
+     begin
+         rst_for_windowsample <= 0; // deassert opad_rst
+         trig_for_windowsample <= 1; // assert TRIGGER (external ARB)
+     end
+     if (counter50M_4 >= 32'h000001f4) // 500 counts, or 10us
+         trig_for_windowsample <= 0; // de-assert TRIGGER
+     if (counter50M_4 >= (32'h000001f4 + window_wait)) // user-defined time from reg 7
+         sample_window_valid <= 1; // start sample window to enable FIFO writes
+     if (counter50M_4 >= (32'h000001f4 + window_wait + window_width)) // user-defined time from reg 7
+        sample_window_valid <= 0; // stop sampling
+     if (!window_trig) // reset everybody
+     begin
+         sample_window_valid <= 0;
+         rst_for_windowsample <= 0;
+         trig_for_windowsample <= 0;
+     end
+     else
+        counter50M_4 <= counter50M_4 + 1;
+    end
+    
     // Pads an be controlled manually by register, or from the calibrate bit
     assign opad_cal_control = cal_control_reg | calibrate_cal_control;
     assign opad2_cal_control = cal_control_reg2 | calibrate_cal_control;
     // Pads an be pulsed by reg bit, or from the calibrate bit
-    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst | rst_then_trig | rst_then_trig_arb | rst_ext_reg;
-    assign opad2_RST_EXT = opad2_pulse | calibrate_ext_rst | rst_then_trig | rst_then_trig_arb | rst_ext2_reg;
+    assign opad_RST_EXT = opad_pulse | calibrate_ext_rst | rst_then_trig | rst_then_trig_arb | rst_ext_reg | rst_for_windowsample;
+    assign opad2_RST_EXT = opad2_pulse | calibrate_ext_rst | rst_then_trig | rst_then_trig_arb | rst_ext2_reg | rst_for_windowsample;
     // pad can be set to a level, or long pulsed  by the reset-and-trigger routine
-    assign TRIGGER = TRIGGER_pad | trig_after_rst | trig_after_rst_arb; 
+    assign TRIGGER = TRIGGER_pad | trig_after_rst | trig_after_rst_arb | trig_for_windowsample; 
     
     // One-shots for test pulses
     //oTP1
@@ -809,7 +851,7 @@ module top_rtl(
         begin
             always @ (posedge clk200)
             begin
-                if (oLVDS_synced[i] && !fifo_full[i] && deltaT_synced)
+                if (oLVDS_synced[i] && !fifo_full[i] && (deltaT_synced | sample_window_valid))
                    fifo_event[i] <= 1; // ... trigger a one-shot to write the timestamp
                 else
                    fifo_event[i] <= 0;

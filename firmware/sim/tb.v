@@ -183,6 +183,27 @@ module tb(
         #100    reg_rw[ 6 * 32 + 15] = 1'b0;
         
         #500    reg_rw[ 5 * 32 + 0] = 1'b0; // TRIGGER off
+        #0      opad_deltaT = 1'b0;
+        
+        // Test window sampling
+        #500    reg_rw[ 0 * 32 + 15] = 1'b1; // trigger a reset and TRIGGER
+        #0      reg_rw[ 7 * 32 + 15 :  7 * 32 +  0] = 16'h0064; // 100 counts = 2us
+        #0      reg_rw[ 7 * 32 + 31 :  7 * 32 + 16] = 16'h0064; // 100 counts = 2us
+        #12000  oLVDS[0] = 1'b1; // Events
+        #10     oLVDS[0] = 1'b0;
+        #500    oLVDS[0] = 1'b1;
+        #10     oLVDS[0] = 1'b0;
+        #500    oLVDS[0] = 1'b1;
+        #10     oLVDS[0] = 1'b0;
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1; // Read FIFO0 four times
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0; // 4th read should not issue
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1;
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0;
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1;
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0;
+        #500    reg_rw[ 6 * 32 + 0] = 1'b1;
+        #100    reg_rw[ 6 * 32 + 0] = 1'b0;
+        #0      reg_rw[ 0 * 32 + 15] = 1'b0;
         
         // Kickstart beta-multipliers
         #200    reg_rw[ 0 * 32 + 24] = 1'b1; // opad_startup
