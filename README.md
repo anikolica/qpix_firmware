@@ -79,6 +79,7 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | ------ | ------ | ------ | ------ | ------ |
 | 0 | 0x43c00000 | [25:24] | opad2_startup, opad_startup | asserts pads |
 | 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables |
+| 0 | 0x43c00000 |  [15] | window_trig | asserts reset pads for 5us,  triggers arbitrary function generator, waits user-programmable time, then samples data for user-programmable time (in reg 7) |
 | 0 | 0x43c00000 |  [14] | arb_trig | asserts reset pads for 5us,  triggers arbitrary function generator, then releases resets after 15us |
 | 0 | 0x43c00000 |  [13:12] | pulse2_control, pulse_control | sends 5us pulse on pads |
 | 0 | 0x43c00000 |  [11:10] | opad2_cal_control, opad_cal_control | asserts pads |
@@ -116,6 +117,9 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | 5 | 0x43c00014 |  [0] | trigger | assert pad |  
 | - | - | - | - | - |
 | 6 | 0x43c00018 |  [15:0] | read_fifo[15:0] | trigger read of one of 16 FPGA FIFOs holding timestamped QPix pulse output |
+| - | - | - | - | - |
+| 7 | 0x43c0001c |  [15:0] | window_width[15:0] | number of 50MHz clock ticks to sample data for (reg 0 [15]) |
+| 7 | 0x43c0001c |  [31:16] | window_wait[15:0] | number of 50MHz clock ticks to wait before sampling data (reg 0 [15]) |
 
 2. Read only registers
 
