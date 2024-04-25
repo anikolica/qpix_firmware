@@ -174,7 +174,7 @@ set files [list \
  [file normalize "${origin_dir}/ip/In_channel_FIFO_v0/In_channel_FIFO_v0.xci"]\
  [file normalize "${origin_dir}/src/piso.v"]\
  [file normalize "${origin_dir}/src/oneshot.vhd"]\
- [file normalize "${origin_dir}/top_rtl.v"]\
+ [file normalize "${origin_dir}/src/top_rtl.v"]\
  [file normalize "${origin_dir}/src/design_1_wrapper.v"]\
  [file normalize "${origin_dir}/src/demux1to32.v"]\
  [file normalize "${origin_dir}/src/clock_div.v" ]\
