@@ -776,6 +776,7 @@ module top_rtl(
          sample_window_valid <= 0;
          rst_for_windowsample <= 0;
          trig_for_windowsample <= 0;
+         counter50M_4 <= 0;
      end
      else
         counter50M_4 <= counter50M_4 + 1;
