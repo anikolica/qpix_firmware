@@ -61,8 +61,8 @@ In_channel_FIFO_v0 your_instance_name (
   .din(din),                              // input wire [63 : 0] din
   .wr_en(wr_en),                          // input wire wr_en
   .rd_en(rd_en),                          // input wire rd_en
-  .prog_empty_thresh(prog_empty_thresh),  // input wire [14 : 0] prog_empty_thresh
-  .prog_full_thresh(prog_full_thresh),    // input wire [14 : 0] prog_full_thresh
+  .prog_empty_thresh(prog_empty_thresh),  // input wire [11 : 0] prog_empty_thresh
+  .prog_full_thresh(prog_full_thresh),    // input wire [11 : 0] prog_full_thresh
   .dout(dout),                            // output wire [63 : 0] dout
   .full(full),                            // output wire full
   .almost_full(almost_full),              // output wire almost_full
@@ -72,8 +72,8 @@ In_channel_FIFO_v0 your_instance_name (
   .almost_empty(almost_empty),            // output wire almost_empty
   .valid(valid),                          // output wire valid
   .underflow(underflow),                  // output wire underflow
-  .rd_data_count(rd_data_count),          // output wire [14 : 0] rd_data_count
-  .wr_data_count(wr_data_count),          // output wire [14 : 0] wr_data_count
+  .rd_data_count(rd_data_count),          // output wire [11 : 0] rd_data_count
+  .wr_data_count(wr_data_count),          // output wire [11 : 0] wr_data_count
   .prog_full(prog_full),                  // output wire prog_full
   .prog_empty(prog_empty),                // output wire prog_empty
   .wr_rst_busy(wr_rst_busy),              // output wire wr_rst_busy

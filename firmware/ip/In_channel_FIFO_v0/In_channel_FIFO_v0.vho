@@ -60,8 +60,8 @@ COMPONENT In_channel_FIFO_v0
     din : IN STD_LOGIC_VECTOR(63 DOWNTO 0);
     wr_en : IN STD_LOGIC;
     rd_en : IN STD_LOGIC;
-    prog_empty_thresh : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    prog_full_thresh : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
+    prog_empty_thresh : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+    prog_full_thresh : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
     dout : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
     full : OUT STD_LOGIC;
     almost_full : OUT STD_LOGIC;
@@ -71,8 +71,8 @@ COMPONENT In_channel_FIFO_v0
     almost_empty : OUT STD_LOGIC;
     valid : OUT STD_LOGIC;
     underflow : OUT STD_LOGIC;
-    rd_data_count : OUT STD_LOGIC_VECTOR(14 DOWNTO 0);
-    wr_data_count : OUT STD_LOGIC_VECTOR(14 DOWNTO 0);
+    rd_data_count : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+    wr_data_count : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
     prog_full : OUT STD_LOGIC;
     prog_empty : OUT STD_LOGIC;
     wr_rst_busy : OUT STD_LOGIC;
