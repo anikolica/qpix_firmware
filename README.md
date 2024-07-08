@@ -8,7 +8,7 @@ Adrian Nikolica (nikolica@hep.upenn.edu)
 
 * Adrian Nikolica
 * Nandor Dressnandt
-* 
+*  
 
 ## Documentation
 
