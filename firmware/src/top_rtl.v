@@ -171,6 +171,9 @@ module top_rtl(
     // Window sampling
     wire [15:0] window_wait, window_width;
     
+    // Programmable reset
+    wire [15:0] reset_width, rst_cal_gap;
+    
     // Special pads
     wire pulse_rst_ext; // external reset
     wire pulse_rst_ext2;
@@ -263,7 +266,11 @@ module top_rtl(
     assign window_width =       reg_rw[ 7 * 32 +  15 : 7 * 32 +   0];
     assign window_wait =        reg_rw[ 7 * 32 +  31 : 7 * 32 +  16];
     
-    // Reg 8 thru 31 not connected
+    // Reg 8 - Programmable reset control
+    assign reset_width =        reg_rw[ 8 * 32 +  15 : 8 * 32 +   0];
+    assign rst_cal_gap =        reg_rw[ 8 * 32 +  31 : 8 * 32 +  16];
+    
+    // Reg 9 thru 31 not connected
     
     // ** R/O registers **
     // Reg 64,65 - trigger timestamp
@@ -586,19 +593,7 @@ module top_rtl(
     
     assign opad_control = opad_control_reg | pulse_control_out;
     assign opad2_control = opad2_control_reg | pulse2_control_out;
-    
-    wire opad_pulse, opad2_pulse;
-    oneshot intrst1 (
-       .Clock(clk_intrst),
-       .Trigger(pulse_rst_ext),
-       .Pulse(opad_pulse) // 5us pulse out
-    );
-    oneshot intrst2 (
-       .Clock(clk_intrst),
-       .Trigger(pulse_rst_ext2),
-       .Pulse(opad2_pulse)
-    );
-    
+      
     // Parallel-in-serial-out for loading input register
     // SR shifts out at 1/2 input clock = 10kHz
     // That's why gating pulse is 64x 20kHz clocks = 32x 10k
@@ -688,10 +683,11 @@ module top_rtl(
          calibrate_ext_rst <= 1; // rising edge at start of reg bit transition
          calibrate_cal_control <= 1;
      end
-     if (counter50M >= 32'h000000fa) // 250 counts, or 5us
+     if (counter50M >= reset_width) // in this case, we use the same reset_width 
+                                    // for both RST_EXT amd cal_control
          calibrate_cal_control <= 0; // deassert only cal_control
-     if (counter50M >= 32'h000000ff) // 255 counts, or 5.1us
-         calibrate_ext_rst <= 0; // falling edge of rst_ext only at 5us + 100ns
+     if (counter50M >= reset_width + rst_cal_gap)
+         calibrate_ext_rst <= 0; // falling edge of rst_ext only, after gap time
      if (!calibrate)
      begin
          calibrate_ext_rst <= 0;
@@ -710,7 +706,7 @@ module top_rtl(
     begin
      if (rst_and_trig && counter50M_2 == 0)
          rst_then_trig <= 1;
-     if (counter50M_2 >= 32'h000000fa) // 250 counts, or 5us
+     if (counter50M_2 >= reset_width) // nominally 250 counts, or 5us
      begin
          rst_then_trig <= 0; // deassert opad_rst
          trig_after_rst <= 1; // assert TRIGGER (external ARB)
@@ -718,7 +714,7 @@ module top_rtl(
      if (!rst_and_trig)
      begin
          rst_then_trig <= 0;
-         trig_after_rst <= 0; 
+         trig_after_rst <= 0; // only de-assert trigger on reg bit clear 
          counter50M_2 <= 0; // reset
      end
      else
@@ -733,9 +729,9 @@ module top_rtl(
     begin
      if (arb_trig && counter50M_3 == 0) // hold RST_EXT1,2 when this reg bit set
          rst_then_trig_arb <= 1;
-     if (counter50M_3 >= 32'h000000fa) // 250 counts, or 5us
+     if (counter50M_3 >= reset_width) // nominally 250 counts, or 5us
          trig_after_rst_arb <= 1; // assert TRIGGER (external ARB)
-     if (counter50M_3 >= 32'h000002ee) // 750 counts, or 15us
+     if (counter50M_3 >= (reset_width + 32'h000001f4)) // another 500 counts, or +10us
          rst_then_trig_arb <= 0; // de-assert resets after a safe time 
      if (!arb_trig)
      begin
@@ -760,26 +756,52 @@ module top_rtl(
          rst_for_windowsample <= 1;
          trig_for_windowsample <= 0;
      end
-     if (counter50M_4 >= 32'h000000fa) // 250 counts, or 5us
+     if (counter50M_4 >= reset_width) // nominally 250 counts, or 5us
      begin
          rst_for_windowsample <= 0; // deassert opad_rst
          trig_for_windowsample <= 1; // assert TRIGGER (external ARB)
      end
-     if (counter50M_4 >= 32'h000001f4) // 500 counts, or 10us
-         trig_for_windowsample <= 0; // de-assert TRIGGER
-     if (counter50M_4 >= (32'h000001f4 + window_wait)) // user-defined time from reg 7
+     if (counter50M_4 >= (reset_width + window_wait)) // user-defined time from reg 7
          sample_window_valid <= 1; // start sample window to enable FIFO writes
-     if (counter50M_4 >= (32'h000001f4 + window_wait + window_width)) // user-defined time from reg 7
+     if (counter50M_4 >= (reset_width + window_wait + window_width)) // user-defined time from reg 7
         sample_window_valid <= 0; // stop sampling
      if (!window_trig) // reset everybody
      begin
          sample_window_valid <= 0;
          rst_for_windowsample <= 0;
-         trig_for_windowsample <= 0;
+         trig_for_windowsample <= 0; // only de-assert trigger on reg bit clear
          counter50M_4 <= 0;
      end
      else
         counter50M_4 <= counter50M_4 + 1;
+    end
+    
+    // Generate reset pulses
+    // Previously used one-shots, but changed to programmable width
+    reg opad_pulse, opad2_pulse;
+    reg[31:0] counter50M_5 = 32'h00000000;
+    always @ (posedge clk)
+    begin
+     if (pulse_rst_ext && counter50M_5 == 0)
+        opad_pulse <= 1;
+     if (counter50M_5 >= reset_width) // nominally 250 counts, or 5us
+        opad_pulse <= 0;
+     if (!pulse_rst_ext)
+        counter50M_5 <= 32'h00000000;
+     else
+        counter50M_5 <= counter50M_5 + 1;
+    end
+    reg[31:0] counter50M_6 = 32'h00000000;
+    always @ (posedge clk)
+    begin
+     if (pulse_rst_ext2 && counter50M_6 == 0)
+        opad2_pulse <= 1;
+     if (counter50M_6 >= reset_width) // nominally 250 counts, or 5us
+        opad2_pulse <= 0;
+     if (!pulse_rst_ext2)
+        counter50M_6 <= 32'h00000000;
+     else
+        counter50M_6 <= counter50M_6 + 1;
     end
     
     // Pads an be controlled manually by register, or from the calibrate bit
@@ -851,6 +873,9 @@ module top_rtl(
         for (i = 0; i < 16; i = i + 1)
         begin
             always @ (posedge clk200)
+            // NOTE: (deltaT_synced | sample_window_valid) only works here because they are mutually exclusive
+            // i.e. using the window sampling routine, deltaT is ignored, and using the normal sampling routine
+            // does not generate the sample_window_valid signal.
             begin
                 if (oLVDS_synced[i] && !fifo_full[i] && (deltaT_synced | sample_window_valid))
                    fifo_event[i] <= 1; // ... trigger a one-shot to write the timestamp
