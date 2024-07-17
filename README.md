@@ -80,17 +80,17 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | ------ | ------ | ------ | ------ | ------ |
 | 0 | 0x43c00000 | [25:24] | opad2_startup, opad_startup | asserts pads |
 | 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables |
-| 0 | 0x43c00000 |  [15] | window_trig | asserts reset pads for 5us,  triggers arbitrary function generator, waits user-programmable time, then samples data for user-programmable time (in reg 7) |
-| 0 | 0x43c00000 |  [14] | arb_trig | asserts reset pads for 5us,  triggers arbitrary function generator, then releases resets after 15us |
+| 0 | 0x43c00000 |  [15] | window_trig | asserts reset pads for programmable time (in reg 8),  triggers arbitrary function generator, waits user-programmable time then samples data for user-programmable time (in reg 7) |
+| 0 | 0x43c00000 |  [14] | arb_trig | asserts reset pads for programmable time (in reg 8),  triggers arbitrary function generator, then releases resets 10us later |
 | 0 | 0x43c00000 |  [13:12] | pulse2_control, pulse_control | sends 5us pulse on pads |
 | 0 | 0x43c00000 |  [11:10] | opad2_cal_control, opad_cal_control | asserts pads |
 | 0 | 0x43c00000 |  [9:8] | opad2_control, opad_control | asserts pads |
-| 0 | 0x43c00000 |  [7] | rst_and_trig | asserts both RST_EXT pads for 5us, then sends TRIGGER on falling edge of de-assert |
+| 0 | 0x43c00000 |  [7] | rst_and_trig | asserts both RST_EXT pads for programmable time (in reg 8), then sends TRIGGER on falling edge of de-assert |
 | 0 | 0x43c00000 |  [6:5] | rst_ext2, rst_ext | asserts pads |
-| 0 | 0x43c00000 |  [4] | calibrate | asserts both RST_EXT and cal_control pads, de-asserts RST_EXT and then de-asserts cal_control 100ns after |
-| 0 | 0x43c00000 |  [3:2] | pulse_rst_ext2, pulse_rst_ext | sends 5us pulse on pads |
+| 0 | 0x43c00000 |  [4] | calibrate | asserts both RST_EXT and cal_control pads for programmable time (in reg 8), de-asserts RST_EXT and then de-asserts cal_control user programmable time later (in reg 8) |
+| 0 | 0x43c00000 |  [3:2] | pulse_rst_ext2, pulse_rst_ext | sends programmable time (in reg 8) pulse on pads |
 | 0 | 0x43c00000 |  [1] | opad_ext_POR | asserts pad |
-| 0 | 0x43c00000 |  [0] | sys_rst | resets internal FPGA logic |
+| 0 | 0x43c00000 |  [0] | sys_rst | resets some internal FPGA logic (QPix serial programming and data FIFOs) |
 | - | - | - | - | - |
 | 1 | 0x43c00004 |  [9] | opad_selDefData | asserts pad |
 | 1 | 0x43c00004 |  [8] | load_data | sends 100us pulse on pad |
@@ -121,6 +121,9 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | - | - | - | - | - |
 | 7 | 0x43c0001c |  [15:0] | window_width[15:0] | number of 50MHz clock ticks to sample data for (reg 0 [15]) |
 | 7 | 0x43c0001c |  [31:16] | window_wait[15:0] | number of 50MHz clock ticks to wait before sampling data (reg 0 [15]) |
+| - | - | - | - | - |
+| 8 | 0x43c00020 |  [15:0] | reset_width[15:0] | number of 50MHz clock ticks to set width of RST_EXT pulses |
+| 8 | 0x43c00020 |  [32:16] | rst_cal_gap[15:0] | number of 50MHz clock ticks to wait after RST_EXT falling edge to deassert cal_control (in calibrate routing, reg 0[4]) |
 
 2. Read only registers
 
