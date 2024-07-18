@@ -15,4 +15,6 @@ else:
 print ('Pulsing RST_EXT' + interface)
 os.system('poke 0x43c00000 ' + data)
 time.sleep(0.5)
-os.system('poke 0x43c00000 0x00000000')
+# resets some internal FPGA logic (QPix serial programming and data FIFOs)
+os.system('poke 0x43c00000 0x00000000') 
+
