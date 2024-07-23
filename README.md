@@ -35,6 +35,7 @@ After a triggered event, the FIFO can be read out until empty, and the output is
 | petalinux/config/ | PetaLinux configuration files (not build products) |
 | petalinux/recipes/ | C/C++ code intended to be compiled into the PetaLinux distribution |
 | scripts/ | Python and shell scripts to use at runtime |
+| data_processing/ | Example scripts for interpreting collected timestamp data from FIFOs |
 | doc/ | Register map |
 
 ### Git Instructions
@@ -166,6 +167,9 @@ NOTE: these scripts are for demonstration only, and may overwrite previously wri
 11. Run `ReadLatchedData.py [1|2]` pulses opad[1|2]_CLKin2 for 5us, asserts opad[1|2]_SerialOutCnt, then sends 32 pulses on CLKin2, finally deasserts SerialOutCnt. The data can be read out of opad[1|2]_DataOut2 on the scope.
 12. Run `python3 trig_and_read_FIFO_all_ch.py` to do a Calibrate routine, but then read the contents of all ch0-15 FIFOs, and display total number of edges detected for each channel.
 13. Run `python3 trig_and_read_FIFO_all_ch[x].py` to do a Calibrate routine, but then read the contents of a particulat channel's FIFO. These scripts display detailed information about the FIFO status bits on each read, and also display all timestamps read out from the FIFO (timestamps are arbitrary 200MHz clock ticks since startup).
+
+### Interpreting data
+The 64-bit timestamps from the FIFOs can be collected to a file and interpreted. The plot_qpix_data_example.ipynb is a Python Jupyter notebooks which illustrated this. QPix data is in a .csv file which is read in by the Python script. An oscilloscope capture from the same data acquisition is also in .csv, for comparison. The script considers each timestamp a data edge, and plots this. In the scope data, an edge is marked when the voltage goes above a threshold (i.e. a rising edge pulse is present). These two data sets are plotted to demonstrate reconstruction of events.
  
 ## Footnotes
 1. This is done by creating an app template as in the [PetaLinux Yocto documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842475/PetaLinux+Yocto+Tips#PetaLinuxYoctoTips-CreatingApps(whichuseslibraries)inPetaLinuxProject)
