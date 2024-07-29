@@ -262,15 +262,17 @@ module top_rtl(
     // Reg 6 - FIFO control
     assign fifo_read =          reg_rw[ 6 * 32 +  15 : 6 * 32 +  0];
     
-    // Reg 7 - Programmable sampling control
-    assign window_width =       reg_rw[ 7 * 32 +  15 : 7 * 32 +   0];
-    assign window_wait =        reg_rw[ 7 * 32 +  31 : 7 * 32 +  16];
-    
+    // Reg 7  - Programmable sampling control #1
+    assign window_width =       reg_rw[ 7 * 32 +  31 : 7 * 32 +   0];
+   
     // Reg 8 - Programmable reset control
     assign reset_width =        reg_rw[ 8 * 32 +  15 : 8 * 32 +   0];
     assign rst_cal_gap =        reg_rw[ 8 * 32 +  31 : 8 * 32 +  16];
     
-    // Reg 9 thru 31 not connected
+    // Reg 9 - Programmable sampling control #2
+    assign window_wait =        reg_rw[ 9 * 32 +  16 : 9 * 32 +   0];
+    
+    // Reg 10 thru 31 not connected
     
     // ** R/O registers **
     // Reg 64,65 - trigger timestamp
@@ -346,6 +348,7 @@ module top_rtl(
     // Reg 109 - FIFO 0 status
     assign reg_ro[45 * 32 +  0] = fifo_empty[0];
     assign reg_ro[45 * 32 +  1] = fifo_almost_empty[0];
+
     assign reg_ro[45 * 32 +  2] = fifo_rd_rst_busy[0];
     //assign reg_ro[45 * 32 +  4] = fifo_full[0];
     //assign reg_ro[45 * 32 +  5] = fifo_almost_full[0];
@@ -747,7 +750,7 @@ module top_rtl(
     reg sample_window_valid = 1'b0;
     reg rst_for_windowsample = 1'b0;
     reg trig_for_windowsample = 1'b0;
-    reg[31:0] counter50M_4 = 32'h00000000;
+    reg[63:0] counter50M_4 = 64'h00000000; // 64 bits to account for 32-bit window_width
     always @ (posedge clk)
     begin
      if (window_trig && counter50M_4 == 0)
@@ -761,9 +764,9 @@ module top_rtl(
          rst_for_windowsample <= 0; // deassert opad_rst
          trig_for_windowsample <= 1; // assert TRIGGER (external ARB)
      end
-     if (counter50M_4 >= (reset_width + window_wait)) // user-defined time from reg 7
+     if (counter50M_4 >= (reset_width + window_wait)) // user-defined time from reg 9
          sample_window_valid <= 1; // start sample window to enable FIFO writes
-     if (counter50M_4 >= (reset_width + window_wait + window_width)) // user-defined time from reg 7
+     if (counter50M_4 >= (reset_width + window_wait + window_width)) // user-defined time from reg 7,9
         sample_window_valid <= 0; // stop sampling
      if (!window_trig) // reset everybody
      begin
