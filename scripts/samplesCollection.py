@@ -109,9 +109,8 @@ def read_ch_fifo(read_bit, ts_hi_reg, ts_lo_reg):
 def channelSimulation(c, i):
         """
         This function takes inputs c and i where c is the channel (list) and i is the number of the channel (int) and; 
-        1) Simulates the current input for c
-        2) Counts the number of calibration counts/resets in c
-        3) Appends the number of counts to channelCounts for c
+        1) Counts the number of calibration counts/resets in c
+        2) Appends the number of counts to channelCounts for c
         """
        
         ch = c[0]
