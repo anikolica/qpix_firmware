@@ -27,6 +27,7 @@ if  (testNum == 0 or testNum == None):
 print(f'Running DECIMAL {decimalNum} :')
 decimalNum -= 1
 
+# Programming the serial interface to a replenCur bit (this one is 31)
 os.system('python3 Serial_Interface.py  1  0xF5B6FFC6')
 os.system('python3 Serial_Interface.py  2  0xF5B6FFC6')
 
