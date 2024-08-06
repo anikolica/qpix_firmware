@@ -109,9 +109,8 @@ def read_ch_fifo(read_bit, ts_hi_reg, ts_lo_reg):
 def channelSimulation(c, i):
         """
         This function takes inputs c and i where c is the channel (list) and i is the number of the channel (int) and; 
-        1) Simulates the current input for c
-        2) Counts the number of calibration counts/resets in c
-        3) Appends the number of counts to channelCounts for c
+        1) Counts the number of calibration counts/resets in c
+        2) Appends the number of counts to channelCounts for c
         """
        
         ch = c[0]
@@ -144,7 +143,8 @@ notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 # Reset the system and simulate
 for j in range(testNum):
-    os.system('poke 0x43c0001c 0x01f40c85') # set delays and window widths
+    os.system('poke 0x43c0001c 0x00000c85') # set window width to 64 us
+    os.system('poke 0x43c00024 0x000001f4') # set delay to 10us
     print ('System Reset')
     os.system('poke 0x43c00000 0x00000001') #system reset
     os.system('poke 0x43c00000 0x00000000') #channel reset 
@@ -160,7 +160,7 @@ for j in range(testNum):
             cht = channels[i]
             channelSimulation(cht, i)
 
-# Commeted lines below are used to write raw data values of the returned arrays into a file
+# Commented lines below are used to write raw data values of the returned arrays into a file
 # if only interested in averages and standard deviations, you can ignore
 
 #f = open("dataBasket1.txt", "w+")

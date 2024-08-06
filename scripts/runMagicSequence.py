@@ -28,7 +28,7 @@ os.system('python3 Integrator_rst_fix.py 1')
 
 os.system('python3 Calibrate.py')
 
-# Calibration mode, ring osc on slow, ALL channel enabled (decimal 17)
+# Calibration mode, ring osc on slow, ALL channel enabled (decimal 21)
 os.system('python3 Serial_Interface.py  1  0x55B6FFC6')
 os.system('python3 Serial_Interface.py  2  0x55B6FFC6')
 
