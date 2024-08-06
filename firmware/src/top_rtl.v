@@ -59,8 +59,8 @@ module top_rtl(
     input  opad2_DataOut2,
     output opad_CLK,
     output opad2_CLK,
-    output oTP1,
-    output oTP2,
+    //output oTP1,
+    //output oTP2,
     output oTP3,
     output oTP4,
     

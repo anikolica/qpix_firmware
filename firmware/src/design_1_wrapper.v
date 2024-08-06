@@ -36,8 +36,10 @@ module design_1_wrapper
     OSC_200MHz,
     TRIGGER,
     oLVDS,
-    oTP1,
-    oTP2,
+    //oTP1,
+    //oTP2,
+    i2c0_sda_io,
+    i2c0_scl_io,
     oTP3,
     oTP4,
     opad2_CLK,
@@ -95,8 +97,10 @@ module design_1_wrapper
   input OSC_200MHz;
   output TRIGGER;
   input [15:0]oLVDS;
-  output oTP1;
-  output oTP2;
+  //output oTP1;
+  //output oTP2;
+  inout i2c0_sda_io;
+  inout i2c0_scl_io;
   output oTP3;
   output oTP4;
   output opad2_CLK;
@@ -158,6 +162,14 @@ module design_1_wrapper
   wire FPGA_I2C_sda_io;
   wire FPGA_I2C_sda_o;
   wire FPGA_I2C_sda_t;
+  wire i2c0_scl_i;
+  wire i2c0_scl_io;
+  wire i2c0_scl_o;
+  wire i2c0_scl_t;
+  wire i2c0_sda_i;
+  wire i2c0_sda_io;
+  wire i2c0_sda_o;
+  wire i2c0_sda_t;
   wire OSC_200MHz;
   wire TRIGGER;
   wire [15:0]oLVDS;
@@ -205,6 +217,16 @@ module design_1_wrapper
         .IO(FPGA_I2C_sda_io),
         .O(FPGA_I2C_sda_i),
         .T(FPGA_I2C_sda_t));
+  IOBUF i2c0_scl_iobuf
+       (.I(i2c0_scl_o),
+        .IO(i2c0_scl_io),
+        .O(i2c0_scl_i),
+        .T(i2c0_scl_t));
+  IOBUF i2c0_sda_iobuf
+       (.I(i2c0_sda_o),
+        .IO(i2c0_sda_io),
+        .O(i2c0_sda_i),
+        .T(i2c0_sda_t));      
   design_1 design_1_i
        (.DDR_addr(DDR_addr),
         .DDR_ba(DDR_ba),
@@ -236,8 +258,14 @@ module design_1_wrapper
         .OSC_200MHz(OSC_200MHz),
         .TRIGGER(TRIGGER),
         .oLVDS(oLVDS),
-        .oTP1(oTP1),
-        .oTP2(oTP2),
+        //.oTP1(oTP1),
+        //.oTP2(oTP2),
+        .i2c0_scl_i(i2c0_scl_i),
+        .i2c0_scl_o(i2c0_scl_o),
+        .i2c0_scl_t(i2c0_scl_t),
+        .i2c0_sda_i(i2c0_sda_i),
+        .i2c0_sda_o(i2c0_sda_o),
+        .i2c0_sda_t(i2c0_sda_t),
         .oTP3(oTP3),
         .oTP4(oTP4),
         .opad2_CLK(opad2_CLK),
