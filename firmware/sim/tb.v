@@ -186,10 +186,10 @@ module tb(
         #0      opad_deltaT = 1'b0;
         
         // Test window sampling
-        #0      reg_rw[ 7 * 32 + 15 :  7 * 32 +  0] = 16'h0064; // 100 counts = 2us
-        #0      reg_rw[ 7 * 32 + 31 :  7 * 32 + 16] = 16'h0064; // 100 counts = 2us
-        #0      reg_rw[ 8 * 32 +  15 : 8 * 32 +   0] = 16'h00fa; // 250 counts, 5us
-        #0      reg_rw[ 8 * 32 +  31 : 8 * 32 +  16] = 16'h0005; // 5 counts, 100ns
+        #0      reg_rw[ 7 * 32 + 31 :  7 * 32 +  0] = 32'h00000064; // window width, 100 counts = 2us
+        #0      reg_rw[ 8 * 32 +  15 : 8 * 32 +   0] = 16'h00fa; // reset width, 250 counts, 5us
+        #0      reg_rw[ 8 * 32 +  31 : 8 * 32 +  16] = 16'h0005; // reset cal gap, 5 counts, 100ns
+        #0      reg_rw[ 9 * 32 + 15 :  9 * 32 +  0] = 16'h0064; // window wait, 100 counts = 2us
         #500    reg_rw[ 0 * 32 + 15] = 1'b1; // trigger a reset and TRIGGER
         #7000   oLVDS[0] = 1'b1; // Events
         #10     oLVDS[0] = 1'b0;

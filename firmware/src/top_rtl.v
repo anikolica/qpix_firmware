@@ -169,7 +169,8 @@ module top_rtl(
     wire cal_control_reg, cal_control_reg2;
     
     // Window sampling
-    wire [15:0] window_wait, window_width;
+    wire [15:0] window_wait;
+    wire [32:0] window_width;
     
     // Programmable reset
     wire [15:0] reset_width, rst_cal_gap;
@@ -750,7 +751,7 @@ module top_rtl(
     reg sample_window_valid = 1'b0;
     reg rst_for_windowsample = 1'b0;
     reg trig_for_windowsample = 1'b0;
-    reg[63:0] counter50M_4 = 64'h00000000; // 64 bits to account for 32-bit window_width
+    reg[63:0] counter50M_4 = 64'h0000000000000000; // 64 bits to account for 32-bit window_width
     always @ (posedge clk)
     begin
      if (window_trig && counter50M_4 == 0)
