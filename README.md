@@ -120,11 +120,12 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | - | - | - | - | - |
 | 6 | 0x43c00018 |  [15:0] | read_fifo[15:0] | trigger read of one of 16 FPGA FIFOs holding timestamped QPix pulse output |
 | - | - | - | - | - |
-| 7 | 0x43c0001c |  [15:0] | window_width[15:0] | number of 50MHz clock ticks to sample data for (reg 0 [15]) |
-| 7 | 0x43c0001c |  [31:16] | window_wait[15:0] | number of 50MHz clock ticks to wait before sampling data (reg 0 [15]) |
+| 7 | 0x43c0001c |  [31:0] | window_width[31:0] | number of 50MHz clock ticks to sample data for (reg 0 [15]) |
 | - | - | - | - | - |
 | 8 | 0x43c00020 |  [15:0] | reset_width[15:0] | number of 50MHz clock ticks to set width of RST_EXT pulses |
 | 8 | 0x43c00020 |  [32:16] | rst_cal_gap[15:0] | number of 50MHz clock ticks to wait after RST_EXT falling edge to deassert cal_control (in calibrate routing, reg 0[4]) |
+| - | - | - | - | - |
+| 9 | 0x43c00024 |  [15:0] | window_wait[15:0] | number of 50MHz clock ticks to wait before sampling data (reg 0 [15]) |
 
 2. Read only registers
 
