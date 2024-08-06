@@ -190,6 +190,7 @@ module tb(
         #0      reg_rw[ 8 * 32 +  15 : 8 * 32 +   0] = 16'h00fa; // reset width, 250 counts, 5us
         #0      reg_rw[ 8 * 32 +  31 : 8 * 32 +  16] = 16'h0005; // reset cal gap, 5 counts, 100ns
         #0      reg_rw[ 9 * 32 + 15 :  9 * 32 +  0] = 16'h0064; // window wait, 100 counts = 2us
+        #0      reg_rw[ 9 * 32 + 31] = 1'b1; // select window_sample_valid
         #500    reg_rw[ 0 * 32 + 15] = 1'b1; // trigger a reset and TRIGGER
         #7000   oLVDS[0] = 1'b1; // Events
         #10     oLVDS[0] = 1'b0;

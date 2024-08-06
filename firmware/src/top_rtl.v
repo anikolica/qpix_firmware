@@ -171,6 +171,7 @@ module top_rtl(
     // Window sampling
     wire [15:0] window_wait;
     wire [32:0] window_width;
+    wire sample_valid;
     
     // Programmable reset
     wire [15:0] reset_width, rst_cal_gap;
@@ -271,6 +272,7 @@ module top_rtl(
     assign rst_cal_gap =        reg_rw[ 8 * 32 +  31 : 8 * 32 +  16];
     
     // Reg 9 - Programmable sampling control #2
+    assign sample_select =      reg_rw[ 9 * 32 +  31];
     assign window_wait =        reg_rw[ 9 * 32 +  16 : 9 * 32 +   0];
     
     // Reg 10 thru 31 not connected
@@ -872,16 +874,15 @@ module top_rtl(
         oLVDS_synced <= oLVDS_synced_0; // double FF sync into 200MHz domain
     end
     
+    assign sample_valid = sample_select ? sample_window_valid : deltaT_synced; 
+    
     genvar i; 
     generate
         for (i = 0; i < 16; i = i + 1)
         begin
             always @ (posedge clk200)
-            // NOTE: (deltaT_synced | sample_window_valid) only works here because they are mutually exclusive
-            // i.e. using the window sampling routine, deltaT is ignored, and using the normal sampling routine
-            // does not generate the sample_window_valid signal.
             begin
-                if (oLVDS_synced[i] && !fifo_full[i] && (deltaT_synced | sample_window_valid))
+                if (oLVDS_synced[i] && !fifo_full[i] && sample_valid)
                    fifo_event[i] <= 1; // ... trigger a one-shot to write the timestamp
                 else
                    fifo_event[i] <= 0;
