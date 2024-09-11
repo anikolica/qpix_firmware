@@ -30,7 +30,7 @@ def read_ch_fifo(read_bit, ts_hi_reg, ts_lo_reg):
 
 
 
-# Set RST width etc -ncd
+# Set RST width etc -ncd 
 #os.system('poke 0x43c00020 0x000003E8') # REG8[15:0] RST Width=20us
 os.system('poke 0x43c00020 0x000001F4') # REG8[15:0] RST Width=10us
 #os.system('poke 0x43c00020 0x000000FA') # REG8[15:0] RST Width=5us
