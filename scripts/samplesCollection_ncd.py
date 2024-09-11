@@ -114,7 +114,7 @@ def channelSimulation(c, i):
         """
        
         ch = c[0]
-        fifo_status_sreg = c[1]
+        fifo_status_reg = c[1]
         ts_hi_reg = c[2]
         ts_lo_reg = c[3]
         data = []
@@ -143,12 +143,13 @@ notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 # Reset the system and simulate
 for j in range(testNum):
-    os.system('poke 0x43c0001c 0x00000c85') # set window width to 64 us
-    os.system('poke 0x43c00024 0x000001f4') # set delay to 10us
+    os.system('poke 0x43c0001c 0x00000c85') # set window widths 64us
+    #os.system('poke 0x43c0001c 0x001E8480') # set window widths 40ms
+    os.system('poke 0x43c00024 0x800001f4') # set delays 10us 
     print ('System Reset')
-    os.system('poke 0x43c00000 0x00000001') #system reset FPGA 
-    os.system('poke 0x43c00000 0x00000000') #channel reset FPGA 
-    os.system('poke 0x43c00000 0x00008000') # window_trig
+    os.system('poke 0x43c00000 0x00000001') #system reset
+    os.system('poke 0x43c00000 0x00000000') #channel reset 
+    os.system('poke 0x43c00000 0x00008000')
     time.sleep(0.1)
     os.system('poke 0x43c00000 0x00000000') 
     print('Attempting readout')
@@ -163,10 +164,10 @@ for j in range(testNum):
 # Commented lines below are used to write raw data values of the returned arrays into a file
 # if only interested in averages and standard deviations, you can ignore
 
-#f = open("dataBasket1.txt", "w+")
+f = open("dataBasket1.txt", "w+")
 
 # fix up output formatting -ncd
-print("CHANNEL, Count Array, Avg Count, Std Dev")
+print("Channel, Count Array, Avg Stdev")
 
 for k in range(16):
     # skip certain channels
@@ -174,15 +175,17 @@ for k in range(16):
         nope = 0
     # Return data at end of all runs
     else:
-        print("Count Array, Avg Count, Std Dev for: " + str(k))
-        print(channelCounts[k], end =" ")
-        print(avgArr(channelCounts[k]), end =" ")
-        print(stdDev(channelCounts[k]))
-        #use = ','.join(map(str,channelCounts[k]))
-        #f.write(use + '\n')
-        print( "%s %s %s %s"%(str(k),channelCounts[k],avgArr(channelCounts[k]),stdDev(channelCounts[k]) )  
+    #    print("Count Array, Avg Count, Std Dev for: " + str(k))
+    #    print(channelCounts[k], end =" ")
+    #    print(avgArr(channelCounts[k]), end =" ")
+    #    print(stdDev(channelCounts[k]))
+        use = ','.join(map(str,channelCounts[k]))
+        f.write(use + '\n')
+     #   
+        print( "%6s %15s %4.2f %4.2f"%(str(k),channelCounts[k],avgArr(channelCounts[k]),stdDev(channelCounts[k]) ) )
+    #   print(f"{str(k) : <20 }{ channelCounts[k] : <20} {avgArr(channelCounts[k]) : <10 } {stdDev(channelCounts[k]) : <10 }" )
 
 
-#f.close
+f.close
 print("Done Writing!")
 

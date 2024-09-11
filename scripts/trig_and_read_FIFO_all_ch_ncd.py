@@ -19,19 +19,19 @@ def read_ch_status(fifo_status_reg):
 def read_ch_fifo(read_bit, ts_hi_reg, ts_lo_reg):
 	#print ('Reading FIFO')
 	os.system('poke 0x43c00018 ' + str(hex(1 << read_bit)))
-	os.system('poke 0x43c00018 0x00000000')11
+	os.system('poke 0x43c00018 0x00000000')
 	fifo_ts_hi = os.popen('peek ' + ts_hi_reg).read()
 	fifo_ts_lo = os.popen('peek ' + ts_lo_reg).read()
 	fifo_ts = (int(fifo_ts_hi, 16) << 32) + int(fifo_ts_lo, 16)
 	#print ('FIFO word (timestamp) is: ' + str(fifo_ts))
-	return fifo_ts1
+	return fifo_ts
 
 print ('System Reset')
 os.system('poke 0x43c00000 0x00000001')
 os.system('poke 0x43c00000 0x00000000')
 
-print ('Running calibration')
-os.system('python3 Calibrate_ncd.py')   # -ncd
+print ('Running calibration_ncd')
+os.system('python3 Calibrate_ncd.py')
 time.sleep(0.1)
 
 print('Attempting readout')
@@ -43,7 +43,7 @@ for [ch, fifo_status_reg, ts_hi_reg, ts_lo_reg] in [[0, '0x43c001b4', '0x43c0010
                                                    [5, '0x43c001c8', '0x43c00130', '0x43c00134'],
                                                    [6, '0x43c001cc', '0x43c00138', '0x43c0013c'],
                                                    [7, '0x43c001d0', '0x43c00140', '0x43c00144'],
-                                                  1 [8, '0x43c001d4', '0x43c00148', '0x43c0014c'],
+                                                   [8, '0x43c001d4', '0x43c00148', '0x43c0014c'],
                                                    [9, '0x43c001d8', '0x43c00150', '0x43c00154'],
                                                    [10, '0x43c001dc', '0x43c00158', '0x43c0015c'],
                                                    [11, '0x43c001e0', '0x43c00160', '0x43c00164'],
@@ -61,6 +61,6 @@ for [ch, fifo_status_reg, ts_hi_reg, ts_lo_reg] in [[0, '0x43c001b4', '0x43c0010
             counter = counter+1;
         print('Channel ' + str(ch) + ' calibration counts are: ' + str(counter))
         #print('All the data is: ')
-        #for i in range(0, len(data)):1
+        #for i in range(0, len(data)):
         #   print(data[i])
 
