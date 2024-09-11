@@ -4,7 +4,7 @@ import time
 import math
 
 vref = 1.6
-vset = 0.8
+vset = 0.0
 
 dac_addr = "0x48"
 

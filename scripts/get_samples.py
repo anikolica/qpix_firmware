@@ -27,6 +27,7 @@ def read_ch_fifo(read_bit, ts_hi_reg, ts_lo_reg):
 	return fifo_ts
 
 os.system('poke 0x43c0001c 0x00000cb2') # no delay, sample for 65us
+os.system('poke 0x43c00024 0x80000000') # sample_selet high - ignores deltaT
 
 print ('System Reset')
 os.system('poke 0x43c00000 0x00000001')
