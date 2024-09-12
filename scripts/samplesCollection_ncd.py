@@ -139,20 +139,37 @@ if  (testNum == 0 or testNum == None):
     testNum = 1
 
 # If you don't want to check a channel, add to this list
-notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+#notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+notWorking = [0,1,2,3,4,5,6,7,8] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-# Reset the system and simulate
+winWidth = 64e-6
+width_Hex = hex( int(winWidth/20e-9) )
+print("width_Hex = ", width_Hex)
+print("winWidth = ", winWidth)
+ 
+
+# Set window delay and width, reset system, and simulate
 for j in range(testNum):
-    os.system('poke 0x43c0001c 0x00000c85') # set window widths 64us
-    #os.system('poke 0x43c0001c 0x001E8480') # set window widths 40ms
-    os.system('poke 0x43c00024 0x800001f4') # set delays 10us 
+    # AWG decending staircase freq: 14KHz --> 65us
+    #                               4KHz  --> 200us
+    #                               2KHz --> 400us
+    #  etc...
+#    os.system('poke 0x43c0001c 0x00000CB2') # set window widths 65us
+#    os.system('poke 0x43c0001c 0x00002710') # set window widths 200us
+#    os.system('poke 0x43c0001c 0x00004E20') # set window widths 400us
+#    os.system('poke 0x43c0001c 0x001E8480') # set window widths 40ms
+    os.system('poke 0x43c0001c "' + width_Hex + '" ') # set window widths 
+
+    os.system('poke 0x43c00024 0x800001F4') # REG9[31]=1 (Ignore detalT -ncd);  Set delays 10us 
     print ('System Reset')
     os.system('poke 0x43c00000 0x00000001') #system reset
     os.system('poke 0x43c00000 0x00000000') #channel reset 
-    os.system('poke 0x43c00000 0x00008000')
+    os.system('poke 0x43c00000 0x00008000') # REG0[15]=1 Start sampling swquence
     time.sleep(0.1)
-    os.system('poke 0x43c00000 0x00000000') 
-    print('Attempting readout')
+    os.system('poke 0x43c00000 0x00000000') # REG0[15]=0 Reset the bit for next time 
+
+    print('Attempting readout', "Window width = ", int("0x00002710", 16)  )
+    print("Run: " , j+1 , " of " , testNum  )
     # Runs readout for each channel
     for i in range(16):
         if i == i in notWorking: 

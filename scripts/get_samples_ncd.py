@@ -37,7 +37,7 @@ os.system('poke 0x43c00020 0x000001F4') # REG8[15:0] RST Width=10us
 
 # Disable monitoring the calibration 'deltaT' ;And set window_wait=0 REG9[15:0]
 #os.system('poke 0x43c00024 0x80000000') # REG9[31]=1  Sample_selet high - ignores deltaT -ncd
-os.system('poke 0x43c00024 0x800001FA') # REG9[31]=1   delay=10us -ncd
+os.system('poke 0x43c00024 0x800001F4') # REG9[31]=1   delay=10us -ncd
 
 # set sample window width
 os.system('poke 0x43c0001C 0x00000CB2') # REG7[31:0] ; Sample window width 65us 
