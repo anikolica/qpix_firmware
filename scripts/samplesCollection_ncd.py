@@ -142,7 +142,8 @@ if  (testNum == 0 or testNum == None):
 #notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 notWorking = [0,1,2,3,4,5,6,7,8] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-winWidth = 64e-6
+#winWidth = 64e-6
+winWidth = 1.8e-3
 width_Hex = hex( int(winWidth/20e-9) )
 print("width_Hex = ", width_Hex)
 print("winWidth = ", winWidth)
@@ -168,7 +169,7 @@ for j in range(testNum):
     time.sleep(0.1)
     os.system('poke 0x43c00000 0x00000000') # REG0[15]=0 Reset the bit for next time 
 
-    print('Attempting readout', "Window width = ", int("0x00002710", 16)  )
+    print( "   Window width = ", winWidth, [width_Hex] )
     print("Run: " , j+1 , " of " , testNum  )
     # Runs readout for each channel
     for i in range(16):
@@ -184,7 +185,7 @@ for j in range(testNum):
 f = open("dataBasket1.txt", "w+")
 
 # fix up output formatting -ncd
-print("Channel, Count Array, Avg Stdev")
+print("\nChannel, Count Array,     Avg    Stdev")
 
 for k in range(16):
     # skip certain channels
@@ -199,7 +200,7 @@ for k in range(16):
         use = ','.join(map(str,channelCounts[k]))
         f.write(use + '\n')
      #   
-        print( "%6s %15s %4.2f %4.2f"%(str(k),channelCounts[k],avgArr(channelCounts[k]),stdDev(channelCounts[k]) ) )
+        print( "%-9s %-15s %-6.2f %-6.2f"%(str(k),channelCounts[k],avgArr(channelCounts[k]),stdDev(channelCounts[k]) ) )
     #   print(f"{str(k) : <20 }{ channelCounts[k] : <20} {avgArr(channelCounts[k]) : <10 } {stdDev(channelCounts[k]) : <10 }" )
 
 
