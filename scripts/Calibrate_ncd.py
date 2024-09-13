@@ -3,7 +3,7 @@ import sys
 import time
 
 # Set bit for calibration routine
-##
+#
 # Set reset width & time past de-assert reset to de-assert cal_control
 print ('setting reset width = 10us')
 print ('setting de-assert cal_control from de-assert reset = 100ns')
