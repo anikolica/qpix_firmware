@@ -6,6 +6,7 @@ import os
 import sys
 import time
 import math 
+import csv
 
 #Defines the information in each channel 
 ch0 = [0, '0x43c001b4', '0x43c00108', '0x43c0010c']
@@ -46,6 +47,7 @@ ch15Counts = []
 
 #Define channelCounts which stores the number of resets in a given channel 
 channelCounts=[ch0Counts, ch1Counts, ch2Counts, ch3Counts, ch4Counts, ch5Counts, ch6Counts, ch7Counts, ch8Counts, ch9Counts, ch10Counts, ch11Counts, ch12Counts, ch13Counts, ch14Counts, ch15Counts]
+os.system('poke 0x43c00024 0x000001F4') # REG9[31]=0 to sample during deltaT; sample delay= 10us 
 
 
 def avgArr(ch):
@@ -142,8 +144,8 @@ if  (testNum == 0 or testNum == None):
 #notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 notWorking = [0,1,2,3,4,5,6,7,8] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-#winWidth = 64e-6
-winWidth = 1.8e-3
+winWidth = 64e-6
+#winWidth = 1.8e-3
 width_Hex = hex( int(winWidth/20e-9) )
 print("width_Hex = ", width_Hex)
 print("winWidth = ", winWidth)
@@ -187,21 +189,31 @@ f = open("dataBasket1.txt", "w+")
 # fix up output formatting -ncd
 print("\nChannel, Count Array,     Avg    Stdev")
 
-for k in range(16):
-    # skip certain channels
-    if k == k in notWorking:
-        nope = 0
-    # Return data at end of all runs
-    else:
-    #    print("Count Array, Avg Count, Std Dev for: " + str(k))
-    #    print(channelCounts[k], end =" ")
-    #    print(avgArr(channelCounts[k]), end =" ")
-    #    print(stdDev(channelCounts[k]))
-        use = ','.join(map(str,channelCounts[k]))
-        f.write(use + '\n')
-     #   
-        print( "%-9s %-15s %-6.2f %-6.2f"%(str(k),channelCounts[k],avgArr(channelCounts[k]),stdDev(channelCounts[k]) ) )
-    #   print(f"{str(k) : <20 }{ channelCounts[k] : <20} {avgArr(channelCounts[k]) : <10 } {stdDev(channelCounts[k]) : <10 }" )
+# WRITE TO Excel file csv
+with open('eggs.csv', 'w', newline='') as csvfile:
+    spamwriter = csv.writer(csvfile, delimiter=',' )
+                              
+#    spamwriter.writerow(['Spam'] * 5 + ['baked Beans'])
+#    spamwriter.writerow(['Spam', 'Lovely Spoam', 'Wonderful Spam'])
+#    spamwriter.writerow(['Spam', 'Lovely Spoam', 'Wonderfulfff Spamfff'])
+
+    spamwriter.writerow( ['Channel', 'Counts', 'Ave', 'Stdev' ] )
+
+    for k in range(16):
+        # skip certain channels
+          if k == k in notWorking:
+            nope = 0
+
+         # Return data at end of all runs
+          else:
+       #    print("Count Array, Avg Count, Std Dev for: " + str(k))
+       #    print(channelCounts[k], end =" ")
+       #    print(avgArr(channelCounts[k]), end =" ")
+       #    print(stdDev(channelCounts[k]))
+            use = ','.join(map(str,channelCounts[k]))
+            f.write(use + '\n')   
+            print( "%-9s %-15s %-6.2f %-6.2f"%(str(k),channelCounts[k],avgArr(channelCounts[k]),stdDev(channelCounts[k]) ) )
+            spamwriter.writerow( [ str(k), channelCounts[k], avgArr(channelCounts[k]), stdDev(channelCounts[k])  ] )  
 
 
 f.close
