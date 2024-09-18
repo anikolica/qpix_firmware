@@ -106,10 +106,18 @@ def sample(testNum):
 
     # Alternative excel writer method -ncd
     #Write to Excel file csv
-    f2 = csv.writer( open("my.csv","a"), delimiter = ',')   # open csv file handle "f2"
-    f2.writerow("applepie")    # write data to file
+    f2 = open("cumdata.txt", "a")
+#    f2 = csv.writer( open("my.csv","a"), delimiter = ',')   # open csv file handle "f2"
+#    f2 = csv.writer( open(f2, delimiter = ',')   # open csv file handle "f2"
+#    f2.writerow('applepie', "car")    # write data to file
     
-    f2.writerow( ['Channel', 'Counts', 'Ave', 'Stdev' ] )
+#    f2.writerow( ['Channel', 'Counts', 'Ave', 'Stdev' ] )
+
+#    f2.writer(f2, delimiter = ',')
+#    f2.writerow("carcarpear")
+
+
+
     for k in range(16):
         # skip certain channels
         if k == k in notWorking:
@@ -120,9 +128,11 @@ def sample(testNum):
             use = ','.join(map(str,channelCounts[k]))
             f.write(use + '\n')
             print( "%-9s %-15s %-6.2f %-6.2f"%(str(k),channelCounts[k],my.avgArr(channelCounts[k]),my.stdDev(channelCounts[k]) ) )
-            f2.writerow( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] )  
+            
+            #f2.writerow( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] )  
+            f2.write( str( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] ) + "\n" )  
 
-    #f2.close()
+    f2.close()
     f.close
 
     print("Done Writing")
