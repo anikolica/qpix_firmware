@@ -9,14 +9,40 @@ import time
 import math 
 import csv
 import myModules as my
+import statistics as s
 
-def sample(testNum):
+
+def sample(numTrials, DECIMAL_replen):
+
+    ## Set the sampling window Width and Delay
+    ## Set the Window Width in seconds
+        # AWG decending staircase freq: 14KHz --> 65us
+        #                               4KHz  --> 200us
+        #                               2KHz --> 400us
+
+    winWidth = 64e-6
+    #winWidth = 400e-6
+    #winWidth = 1.8e-3
+  
+    ## Set Window Delay in seconds
+    delay = 10e-6
+    #delay = 250e-6
+    ########################################
+
+    # If you don't want to check a channel, add to this list
+    #notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    #notWorking = [0,1,2,3,4,5,6,7,8,9,10,11,12,13] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    notWorking = [0,1,2,3,4,5,6,7,8,9] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
+
     #Defines the information in each channel 
     ch0 = [0, '0x43c001b4', '0x43c00108', '0x43c0010c']
     ch1 = [1, '0x43c001b8', '0x43c00110', '0x43c00114']
     ch2 = [2, '0x43c001bc', '0x43c00118', '0x43c0011c']
     ch3 = [3, '0x43c001c0', '0x43c00120', '0x43c00124']
     ch4 = [4, '0x43c001c4', '0x43c00128', '0x43c0012c']
+
     ch5 = [5, '0x43c001c8', '0x43c00130', '0x43c00134']
     ch6 = [6, '0x43c001cc', '0x43c00138', '0x43c0013c']
     ch7 = [7, '0x43c001d0', '0x43c00140', '0x43c00144']
@@ -27,6 +53,7 @@ def sample(testNum):
     ch12 = [12, '0x43c001e4', '0x43c00168', '0x43c0016c']
     ch13 = [13, '0x43c001e8', '0x43c00170', '0x43c00174']
     ch14 = [14, '0x43c001ec', '0x43c00178', '0x43c0017c']
+
     ch15 = [15, '0x43c001f0', '0x43c00180', '0x43c00184']
 
     channels=[ch0, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10, ch11, ch12, ch13, ch14, ch15]
@@ -42,6 +69,7 @@ def sample(testNum):
     ch8Counts = []
     ch9Counts = []
     ch10Counts = []
+
     ch11Counts = []
     ch12Counts = []
     ch13Counts = []
@@ -50,44 +78,50 @@ def sample(testNum):
 
     #Define channelCounts which stores the number of resets in a given channel 
     channelCounts=[ch0Counts, ch1Counts, ch2Counts, ch3Counts, ch4Counts, ch5Counts, ch6Counts, ch7Counts, ch8Counts, ch9Counts, ch10Counts, ch11Counts, ch12Counts, ch13Counts, ch14Counts, ch15Counts]
+    
+
 
     os.system('poke 0x43c00024 0x000001F4') # REG9[31]=0 to sample during deltaT; sample delay= 10us 
 
 
-    if  (testNum == 0 or testNum == None):
-        testNum = 1
-
-    # If you don't want to check a channel, add to this list
-    #notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    notWorking = [0,1,2,3,4,5,6,7,8] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-
-    # Set the Window width in seconds
-    winWidth = 64e-6
-    #winWidth = 1.8e-3
+    if  (numTrials == 0 or numTrials == None):
+        numTrials = 1
 
     width_Hex = hex( int(winWidth/20e-9) ) #change to 20ns clicks
-    print("width_Hex = ", width_Hex)
-    print("winWidth = ", winWidth)
+    #print("width_Hex = ", width_Hex)
+    #print("winWidth = ", winWidth)
+    #windowWidth = "poke 0x43c001c " + width_Hex
+    #print("windowWidth = ", windowWidth ) 
+
+    delay_Hex = hex( 2147483648 + int(delay/20e-9) ) #change to 20ns clicks & add 0x80000000 to set Reg9[31]
+    #print("delay_Hex and Reg9[31] set = ", delay_Hex)
+    #windowDelay = "poke 0x43c0000 " + delay_Hex
+    #print("windowDelay: ", windowDelay )
+
+
+
+
+    # Run 'numTrials' trials 
+    for j in range(numTrials):
  
-    # Run 'testNum' trials 
-    for j in range(testNum):
-        # AWG decending staircase freq: 14KHz --> 65us
-        #                               4KHz  --> 200us
-        #                               2KHz --> 400us
         #os.system('poke 0x43c0001c 0x00000CB2') # set window widths 65us
         #os.system('poke 0x43c0001c 0x00002710') # set window widths 200us
         os.system('poke 0x43c0001c "' + width_Hex + '" ') # set window widths 
 
-        os.system('poke 0x43c00024 0x800001F4') # REG9[31]=1 (Ignore detalT -ncd);  Set delays 10us 
+        #os.system('poke 0x43c00024 0x800001F4') # REG9[31]=1 (Ignore detalT -ncd);  Set delays 10us 
+        os.system('poke 0x43c00024 "' + delay_Hex + '" ') # REG9[31]=1 (Ignore detalT -ncd);  Set delays x usec 
+        
         print ('System Reset')
         os.system('poke 0x43c00000 0x00000001') #system reset
         os.system('poke 0x43c00000 0x00000000') #channel reset 
         os.system('poke 0x43c00000 0x00008000') # REG0[15]=1 Start sampling swquence
-        time.sleep(0.1)
+        time.sleep(1.1)
         os.system('poke 0x43c00000 0x00000000') # REG0[15]=0 Reset the bit for next time 
 
         print( "   Window width = ", winWidth, [width_Hex] )
-        print("Run: " , j+1 , " of " , testNum  )
+        print( "   Window delay = ", delay,    [delay_Hex] ) 
+
+        print("Run: " , j+1 , " of " , numTrials  )
         # Runs readout for each channel
         for i in range(16):
             if i == i in notWorking: 
@@ -105,14 +139,13 @@ def sample(testNum):
     print("\nChannel, Count Array,     Avg    Stdev")
 
     # Alternative excel writer method -ncd
-    #Write to Excel file csv
-    f2 = open("cumdata.txt", "a")
+    #Write to an Excel csv file in append mode -ncd
+    f2 = open("cumdata.csv", "a")
+#    This works but cannot ever close the file unless using "with as" method. -ncd
 #    f2 = csv.writer( open("my.csv","a"), delimiter = ',')   # open csv file handle "f2"
 #    f2 = csv.writer( open(f2, delimiter = ',')   # open csv file handle "f2"
 #    f2.writerow('applepie', "car")    # write data to file
-    
 #    f2.writerow( ['Channel', 'Counts', 'Ave', 'Stdev' ] )
-
 #    f2.writer(f2, delimiter = ',')
 #    f2.writerow("carcarpear")
 
@@ -122,15 +155,21 @@ def sample(testNum):
         # skip certain channels
         if k == k in notWorking:
             nope = 0
-
+        
         # Return data at end of all runs
         else:
             use = ','.join(map(str,channelCounts[k]))
             f.write(use + '\n')
             print( "%-9s %-15s %-6.2f %-6.2f"%(str(k),channelCounts[k],my.avgArr(channelCounts[k]),my.stdDev(channelCounts[k]) ) )
-            
-            #f2.writerow( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] )  
-            f2.write( str( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] ) + "\n" )  
+
+            apple = ','.join( map(str, channelCounts[k] ) )
+            #use2 = ','.join(map(str, (k, apple, my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k] )) ) ) 
+            use2 = ','.join(map(str, (k, DECIMAL_replen, apple, s.mean(channelCounts[k]), s.pstdev(channelCounts[k] )) ) ) 
+
+            #f2.write( str( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] ) + "\n" )  
+            f2.write( use2 + "\n" )  
+                
+
 
     f2.close()
     f.close
@@ -138,33 +177,10 @@ def sample(testNum):
     print("Done Writing")
 
 
-"""    # WRITE TO Excel file csv
-    with open('eggs.csv', 'w', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter=',' )
-        spamwriter.writerow( ['Channel', 'Counts', 'Ave', 'Stdev' ] )
-
-        for k in range(16):
-            # skip certain channels
-            if k == k in notWorking:
-                nope = 0
-
-            # Return data at end of all runs
-            else:
-                #    print("Count Array, Avg Count, Std Dev for: " + str(k))
-                #    print(channelCounts[k], end =" ")
-                #    print(avgArr(channelCounts[k]), end =" ")
-                #    print(stdDev(channelCounts[k]))
-                use = ','.join(map(str,channelCounts[k]))
-                f.write(use + '\n')   
-                print( "%-9s %-15s %-6.2f %-6.2f"%(str(k),channelCounts[k],my.avgArr(channelCounts[k]),my.stdDev(channelCounts[k]) ) )
-                spamwriter.writerow( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] )  
-
-
-    f.close
-    print("Done Writing!")
-"""
-
 ## Run this module -ncd
-testNum = 3
-sample(testNum)
+numTrials = 3
+DECIMAL_replen = 0  # THIS DOES NOT set Replenishment: only a marker! 
+sample(numTrials, DECIMAL_replen)
+
+
 
