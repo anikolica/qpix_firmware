@@ -15,8 +15,12 @@ import sample_ncd as s
 ##  DECIMAL_replen: replenishment value (Decimal 1 - 31)
 ## -ncd
 
-numTrials = 4
-"""
+numTrials = 3
+
+
+os.system('rm fch*')  # remove the 16 individual channel files -ncd
+
+
 # DECIMAL 31
 print("Running DECIMAL_replen: 31")
 # Programming the serial interface to a replenCur bit (this one is 31)
@@ -90,19 +94,19 @@ print("Running DECIMAL_replen: 20")
 os.system('python3 Serial_Interface.py  1  0x55B6FF46')
 os.system('python3 Serial_Interface.py  2  0x55B6FF46')
 s.sample(numTrials, 20)
-
+"""
 # DECIMAL 19
 print("Running DECIMAL_replen: 19")
 os.system('python3 Serial_Interface.py  1  0x95B6FFC6')
 os.system('python3 Serial_Interface.py  2  0x95B6FFC6')
 s.sample(numTrials, 19)
-"""
+
 # DECIMAL 18
 print("Running DECIMAL_replen: 18")
 os.system('python3 Serial_Interface.py  1  0x95B6FF46')
 os.system('python3 Serial_Interface.py  2  0x95B6FF46')
 s.sample(numTrials, 18)
-"""
+
 # DECIMAL 17
 print("Running DECIMAL_replen: 17")
 os.system('python3 Serial_Interface.py  1  0x15B6FFC6')
@@ -162,7 +166,7 @@ print("Running DECIMAL_replen: 8")
 os.system('python3 Serial_Interface.py  1  0x25B6FF46')
 os.system('python3 Serial_Interface.py  2  0x25B6FF46')
 s.sample(numTrials, 8)
-
 """
+
 
 

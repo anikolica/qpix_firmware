@@ -149,7 +149,23 @@ def sample(numTrials, DECIMAL_replen):
 #    f2.writer(f2, delimiter = ',')
 #    f2.writerow("carcarpear")
 
-
+    # write separate csv files for each channel -ncd
+    fch0 = open("fch0.csv", "a")
+    fch1 = open("fch1.csv", "a")
+    fch2 = open("fch2.csv", "a")
+    fch3 = open("fch3.csv", "a")
+    fch4 = open("fch4.csv", "a")
+    fch5 = open("fch5.csv", "a")
+    fch6 = open("fch6.csv", "a")
+    fch7 = open("fch7.csv", "a")
+    fch8 = open("fch8.csv", "a")
+    fch9 = open("fch9.csv", "a")
+    fch10 = open("fch10.csv", "a")
+    fch11 = open("fch11.csv", "a")
+    fch12 = open("fch12.csv", "a")
+    fch13 = open("fch13.csv", "a")
+    fch14 = open("fch14.csv", "a")
+    fch15 = open("fch15.csv", "a")
 
     for k in range(16):
         # skip certain channels
@@ -165,12 +181,36 @@ def sample(numTrials, DECIMAL_replen):
             apple = ','.join( map(str, channelCounts[k] ) )
             #use2 = ','.join(map(str, (k, apple, my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k] )) ) ) 
             use2 = ','.join(map(str, (k, DECIMAL_replen, apple, s.mean(channelCounts[k]), s.pstdev(channelCounts[k] )) ) ) 
+            
+            #print("s.mean =  ", s.mean(channelCounts[k]))
 
             #f2.write( str( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] ) + "\n" )  
             f2.write( use2 + "\n" )  
-                
+            # write to channel Matrix -ncd
+            #chanMatrix[k] =  k, s.mean(channelCounts[k] 
+            if (k == 0): fch0.write(use2 + "\n")  
+            if (k == 1): fch1.write(use2 + "\n")  
+            if (k == 2): fch2.write(use2 + "\n")  
+            if (k == 3): fch3.write(use2 + "\n")  
+            if (k == 4): fch4.write(use2 + "\n")  
+            if (k == 5): fch5.write(use2 + "\n")  
+            if (k == 6): fch6.write(use2 + "\n")  
+            if (k == 7): fch7.write(use2 + "\n")  
+            if (k == 8): fch8.write(use2 + "\n")  
+            if (k == 9): fch9.write(use2 + "\n")  
+            if (k == 10): fch10.write(use2 + "\n")  
+            if (k == 11): fch11.write(use2 + "\n")  
+            if (k == 12): fch12.write(use2 + "\n")  
+            if (k == 13): fch13.write(use2 + "\n")  
+            if (k == 14): fch14.write(use2 + "\n")  
+            if (k == 15): fch15.write(use2 + "\n")  
 
+    for m in range(16): 
+        closing = "fch" +  str(m) + ".close()"
+        print(closing)
+        closing
 
+    fch0.close()
     f2.close()
     f.close
 
@@ -178,9 +218,9 @@ def sample(numTrials, DECIMAL_replen):
 
 
 ## Run this module -ncd
-numTrials = 3
-DECIMAL_replen = 0  # THIS DOES NOT set Replenishment: only a marker! 
-sample(numTrials, DECIMAL_replen)
+#numTrials = 3
+#DECIMAL_replen = 0  # THIS DOES NOT set Replenishment: only a marker! 
+#sample(numTrials, DECIMAL_replen)
 
 
 
