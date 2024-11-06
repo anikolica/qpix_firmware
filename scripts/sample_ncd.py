@@ -11,8 +11,9 @@ import csv
 import myModules as my
 import statistics as s
 
+    
 
-def sample(numTrials, DECIMAL_replen):
+def sample(winWidth, delay, numTrials, DECIMAL_replen):
 
     ## Set the sampling window Width and Delay
     ## Set the Window Width in seconds
@@ -20,19 +21,23 @@ def sample(numTrials, DECIMAL_replen):
         #                               4KHz  --> 200us
         #                               2KHz --> 400us
 
-    winWidth = 64e-6
-    #winWidth = 400e-6
+    #winWidth = 64e-6
+   
+   #winWidth = 400e-6
     #winWidth = 1.8e-3
   
     ## Set Window Delay in seconds
-    delay = 10e-6
+    #delay = 10e-6
+    
     #delay = 250e-6
     ########################################
 
     # If you don't want to check a channel, add to this list
     #notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    #notWorking = [0,1,2,3,4,5,6,7,8,9,10,11,12,13] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    notWorking = [0,1,2,3,4,5,6,7,8,9] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    #notWorking = [8,9,10,11,12,13,14,15] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    
+    #notWorking = [0,8,9,10,11,12,13,14,15] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    notWorking = [0,1,2,4,5,6,7,8,9,10,11,12,13,14,15] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
@@ -108,10 +113,12 @@ def sample(numTrials, DECIMAL_replen):
         #os.system('poke 0x43c0001c 0x00002710') # set window widths 200us
         os.system('poke 0x43c0001c "' + width_Hex + '" ') # set window widths 
 
+        # -ncd
         #os.system('poke 0x43c00024 0x800001F4') # REG9[31]=1 (Ignore detalT -ncd);  Set delays 10us 
         os.system('poke 0x43c00024 "' + delay_Hex + '" ') # REG9[31]=1 (Ignore detalT -ncd);  Set delays x usec 
         
         print ('System Reset')
+        os.system('poke 0x43c00020 0x000509c4') # reset width 50us -ncd
         os.system('poke 0x43c00000 0x00000001') #system reset
         os.system('poke 0x43c00000 0x00000000') #channel reset 
         os.system('poke 0x43c00000 0x00008000') # REG0[15]=1 Start sampling swquence
@@ -183,6 +190,7 @@ def sample(numTrials, DECIMAL_replen):
             use2 = ','.join(map(str, (k, DECIMAL_replen, apple, s.mean(channelCounts[k]), s.pstdev(channelCounts[k] )) ) ) 
             
             #print("s.mean =  ", s.mean(channelCounts[k]))
+    
 
             #f2.write( str( [ str(k), channelCounts[k], my.avgArr(channelCounts[k]), my.stdDev(channelCounts[k])  ] ) + "\n" )  
             f2.write( use2 + "\n" )  
@@ -218,9 +226,13 @@ def sample(numTrials, DECIMAL_replen):
 
 
 ## Run this module -ncd
-#numTrials = 3
-#DECIMAL_replen = 0  # THIS DOES NOT set Replenishment: only a marker! 
-#sample(numTrials, DECIMAL_replen)
+###def sample(winWidth, delay, numTrials, DECIMAL_replen):
+numTrials = 1
+DECIMAL_replen = 22  # THIS DOES NOT set Replenishment: only a marker! 
+winWidth = 2000e-3    # Max Window width is 85.89 seconds! 
+delay = 10e-6        # Max Delay is 1.3ms!
+
+sample(winWidth, delay, numTrials, DECIMAL_replen)
 
 
 

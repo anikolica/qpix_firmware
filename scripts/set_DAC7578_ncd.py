@@ -5,8 +5,13 @@ import math
 
 #vref = 1.6
 #vset = 0.8
-vref=1.584
-vset = 0.761
+
+
+
+vref=0.800
+vset = 0.7540
+
+
 
 dac_addr = "0x48"
 

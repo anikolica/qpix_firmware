@@ -15,7 +15,7 @@ import sample_ncd as s
 ##  DECIMAL_replen: replenishment value (Decimal 1 - 31)
 ## -ncd
 
-numTrials = 3
+numTrials = 10
 
 
 os.system('rm fch*')  # remove the 16 individual channel files -ncd

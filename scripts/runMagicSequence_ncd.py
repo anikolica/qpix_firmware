@@ -21,8 +21,11 @@ os.system('python3 set_DAC7578_ncd.py')
 # Calibration mode, ring osc on slow, ALL channel enabled (decimal 17)
 print('All channels enabled, ring osc slow, replenishement: decimal 17')
 
-os.system('python3 Serial_Interface.py  1  0x55B6FFC6')
-os.system('python3 Serial_Interface.py  2  0x55B6FFC6')
+#os.system('python3 Serial_Interface.py  1  0xA5B6FF44')    # LVDdrv low; Replen = 10
+os.system('python3 Serial_Interface.py  1  0xA5B6FFC4')    # LVDdrv low; Replen = 11  (~117counts on chan0)
+#os.system('python3 Serial_Interface.py  1  0xA5B6FBC4')    # ch5 disabled; LVDdrv low; Replen = 11  (~117counts on chan0)
+
+os.system('python3 Serial_Interface.py  2  0x65B600C4')   # LVDSdrcv low; Replen = 13
 
 os.system('python3 Integrator_rst_fix.py 1')
 os.system('python3 Integrator_rst_fix.py 2')

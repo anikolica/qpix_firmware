@@ -8,6 +8,7 @@ def dac_command(channel, vset, vref):  # returns a DAC command -mcd
     #vref = 1.6
     #vset = 0.8
     #vref=1.584
+    #vref = 0.800
 
     # Choose voltage -ncd
     #vset = 0.761
@@ -28,6 +29,7 @@ def dac_command(channel, vset, vref):  # returns a DAC command -mcd
     #print("setting leakage cancelation for all channels: vset = ", vset )
     print("**** DAC vref = " , vref , "****")
     print(" ")
+    print("counts=  ", counts)
 
     # Generate DAC command
     counts_formatted = str.format('{:04X}', counts << 4)
@@ -42,30 +44,30 @@ def dac_command(channel, vset, vref):  # returns a DAC command -mcd
 
 ##   Program the DAC's -ncd
 #dac_command(channel, vset, vref) 
-command = dac_command(0, 0.762, 1.584) 
-#print("command = ", command)
+
+command = dac_command(0, 0.7590, 0.800)   # 0.7611v (3896)
 i2c_raw = os.popen(command).read()
 
-command = dac_command(1, 0.761, 1.584) 
+command = dac_command(1, 0.7595, 0.800)   #0.7583 (3881)
 i2c_raw = os.popen(command).read()
 
-command = dac_command(2, 0.762, 1.584) 
+command = dac_command(2, 0.7615, 0.800)  # 0.7599 (3890) 
 i2c_raw = os.popen(command).read()
 
-command = dac_command(3, 0.763, 1.584) 
+command = dac_command(3, 0.7598, 0.800)   # 0.7600 (3891) 
 i2c_raw = os.popen(command).read()
 
-command = dac_command(4, 0.764, 1.584) 
+command = dac_command(4, 0.7609, 0.800)  # 0.7604 (3893) 
 i2c_raw = os.popen(command).read()
 
-command = dac_command(5, 0.765, 1.584) 
+command = dac_command(5, 0.8799, 0.800) # 0.7589 (3885)
 i2c_raw = os.popen(command).read()
 
-command = dac_command(6, 0.766, 1.584) 
+command = dac_command(6, 0.7605, 0.800)  # 0.7584 (3883) 
 i2c_raw = os.popen(command).read()
 
-command = dac_command(7, 0.767, 1.584) 
-i2c_raw = os.popen(command).read()
+#command = dac_command(7, 0.7570, 0.800)  # 0.7560 (3870)  
+command = dac_command(7, 0.7355, 0.800)  # COLD 
 
 
 

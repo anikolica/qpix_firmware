@@ -34,28 +34,35 @@ print ('Running calibration_ncd')
 os.system('python3 Calibrate_ncd.py')
 time.sleep(0.1)
 
+fdata = open("checkTimeStamps.csv", "a")   # -ncd
+
 print('Attempting readout')
-for [ch, fifo_status_reg, ts_hi_reg, ts_lo_reg] in [[0, '0x43c001b4', '0x43c00108', '0x43c0010c'],
-                                                   [1, '0x43c001b8', '0x43c00110', '0x43c00114'],
-                                                   [2, '0x43c001bc', '0x43c00118', '0x43c0011c'],
-                                                   [3, '0x43c001c0', '0x43c00120', '0x43c00124'],
-                                                   [4, '0x43c001c4', '0x43c00128', '0x43c0012c'],
-                                                   [5, '0x43c001c8', '0x43c00130', '0x43c00134'],
-                                                   [6, '0x43c001cc', '0x43c00138', '0x43c0013c'],
-                                                   [7, '0x43c001d0', '0x43c00140', '0x43c00144'],
-                                                   [8, '0x43c001d4', '0x43c00148', '0x43c0014c'],
-                                                   [9, '0x43c001d8', '0x43c00150', '0x43c00154'],
-                                                   [10, '0x43c001dc', '0x43c00158', '0x43c0015c'],
-                                                   [11, '0x43c001e0', '0x43c00160', '0x43c00164'],
-                                                   [12, '0x43c001e4', '0x43c00168', '0x43c0016c'],
-                                                   [13, '0x43c001e8', '0x43c00170', '0x43c00174'],
-                                                   [14, '0x43c001ec', '0x43c00178', '0x43c0017c'],
-                                                   [15, '0x43c001f0', '0x43c00180', '0x43c00184']]:
+for [ch, fifo_status_reg, ts_hi_reg, ts_lo_reg] in [[0, '0x43c001b4', '0x43c00108', '0x43c0010c']]:
+#for [ch, fifo_status_reg, ts_hi_reg, ts_lo_reg] in [[0, '0x43c001b4', '0x43c00108', '0x43c0010c'],
+                                              #     [1, '0x43c001b8', '0x43c00110', '0x43c00114'],
+                                              #     [2, '0x43c001bc', '0x43c00118', '0x43c0011c'],
+                                              #     [3, '0x43c001c0', '0x43c00120', '0x43c00124'],
+                                              #     [4, '0x43c001c4', '0x43c00128', '0x43c0012c'],
+                                              #     [5, '0x43c001c8', '0x43c00130', '0x43c00134'],
+                                              #     [6, '0x43c001cc', '0x43c00138', '0x43c0013c'],
+                                              #     [7, '0x43c001d0', '0x43c00140', '0x43c00144'],
+                                              #     [8, '0x43c001d4', '0x43c00148', '0x43c0014c'],
+                                              #     [9, '0x43c001d8', '0x43c00150', '0x43c00154'],
+                                              #     [10, '0x43c001dc', '0x43c00158', '0x43c0015c'],
+                                              #     [11, '0x43c001e0', '0x43c00160', '0x43c00164'],
+                                              #     [12, '0x43c001e4', '0x43c00168', '0x43c0016c'],
+                                              #     [13, '0x43c001e8', '0x43c00170', '0x43c00174'],
+                                              #     [14, '0x43c001ec', '0x43c00178', '0x43c0017c'],
+                                              #     [15, '0x43c001f0', '0x43c00180', '0x43c00184']]:
         data = []
         counter = 0
         ch_wr_rst_busy, ch_almost_full, ch_full, ch_rd_rst_busy, ch_almost_empty, ch_empty = read_ch_status(fifo_status_reg)
         while (ch_empty != 1):
             current_ts = read_ch_fifo(ch, ts_hi_reg, ts_lo_reg)
+            
+            print("current_ts= ", current_ts)  # -ncd
+            fdata.write(str(current_ts) + "\n") # -ncd
+
             data.append(current_ts)
             ch_wr_rst_busy, ch_almost_full, ch_full, ch_rd_rst_busy, ch_almost_empty, ch_empty = read_ch_status(fifo_status_reg)
             counter = counter+1;
@@ -64,3 +71,5 @@ for [ch, fifo_status_reg, ts_hi_reg, ts_lo_reg] in [[0, '0x43c001b4', '0x43c0010
         #for i in range(0, len(data)):
         #   print(data[i])
 
+
+fdata.close()  # -ncd

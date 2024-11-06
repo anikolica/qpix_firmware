@@ -83,7 +83,7 @@ s.sample_cal(numTrials, 21)
 print("Running DECIMAL_replen: 20")
 os.system('python3 Serial_Interface.py  1  0x55B6FF44')
 s.sample_cal(numTrials, 20)
-"""
+
 # DECIMAL 19
 print("Running DECIMAL_replen: 19")
 os.system('python3 Serial_Interface.py  1  0x95B6FFC4')
@@ -109,6 +109,7 @@ print("Running DECIMAL_replen: 15")
 os.system('python3 Serial_Interface.py  1  0xE5B6FFC4')
 s.sample_cal(numTrials, 15)
 
+"""
 # DECIMAL 14
 print("Running DECIMAL_replen: 14")
 os.system('python3 Serial_Interface.py  1  0xE5B6FF44')

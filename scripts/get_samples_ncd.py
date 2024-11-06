@@ -3,6 +3,7 @@ import sys
 import time
 
 # Modified -ncd 8/20/2024
+# Can swap in Calibrate_ncd.py below to run and record calibration
 
 def read_ch_status(fifo_status_reg):
 	#print ('FIFO status is: ')
@@ -47,8 +48,10 @@ os.system('poke 0x43c00000 0x00000001') # Reset FPGA bit 0 on then off
 os.system('poke 0x43c00000 0x00000000')
 
 os.system('poke 0x43c00000 0x00008000') # REG0[15]=1  Start sampling sequence 
-#print ('Running calibration')
-#os.system('python3 Calibrate.py')
+
+print ('Running calibration')
+os.system('python3 Calibrate_ncd.py')
+
 time.sleep(0.1)
 os.system('poke 0x43c00000 0x00000000') # REG0[15]=0  Reset the bit for next time
 

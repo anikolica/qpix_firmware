@@ -1,4 +1,6 @@
 ## Make new module for Calibration 10/2/2024  -ncd
+##  Can run calibration sweep with: calibration_sweep_ncd.py
+
 # Written by PURM Students Summer 2024
 # Meant to run get_samples.py multiple times and provide basic data on the results
 # python3 samplesCollection.py [# of runs]
@@ -30,10 +32,8 @@ def sample_cal(numTrials, DECIMAL_replen):
     ########################################
 
     # If you don't want to check a channel, add to this list
-    #notWorking = [] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    notWorking = [5,8,9,10,11,12,13,14,15] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    #notWorking = [0,1,2,3,4,5,6,7,8,9] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    #notWorking = [0,1,2,3,4,5,6,7,8,9,10,13,14,15] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    notWorking = [0,5] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    #notWorking = [0,2,3,4,5,6,7,8,9,10,11,12,13,14,15] #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
@@ -73,6 +73,7 @@ def sample_cal(numTrials, DECIMAL_replen):
 
     ch11Counts = []
     ch12Counts = []
+
     ch13Counts = []
     ch14Counts = []
     ch15Counts = []
@@ -115,15 +116,15 @@ def sample_cal(numTrials, DECIMAL_replen):
         
         print ('System Reset')
         os.system('poke 0x43c00020 0x000509c4') # reset width 50us -ncd
+
         os.system('poke 0x43c00000 0x00000001') #system reset
-        os.system('poke 0x43c00000 0x00000000') #channel reset 
         
         
-        os.system('poke 0x43c00000 0x00000010') # REG0[4]=1 Start Calibration sequence
-        #os.system('poke 0x43c00000 0x00008000') # REG0[15]=1 Start sampling swquence
+        #os.system('poke 0x43c00000 0x00030010') # REG0[4]=1    ** Start Calibration sequence,But leave External clock ON -ncd
+        os.system('poke 0x43c00000 0x00000010') # REG0[4]=1     ** Start Calibration sequence, External Clock OFF -ncd 
         
         time.sleep(1.1)
-        os.system('poke 0x43c00000 0x00000000') # REG0[4]=0 Reset the bit for next time 
+        os.system('poke 0x43c00000 0x00000000') # REG0[4]=0 Reset the bit for next time; TURNS External Clock OFF -ncd 
 
         print( "   Window width = ", winWidth, [width_Hex] )
         print( "   Window delay = ", delay,    [delay_Hex] ) 
@@ -133,6 +134,7 @@ def sample_cal(numTrials, DECIMAL_replen):
         for i in range(16):
             if i == i in notWorking: 
                 channels[i] = 0
+                print("skipping i = ", i)
             else:
                 cht = channels[i]
                 my.channelSimulation(cht, i, channelCounts)
@@ -225,8 +227,8 @@ def sample_cal(numTrials, DECIMAL_replen):
 
 
 ## Run this module -ncd
-numTrials = 3
-DECIMAL_replen = 0  # THIS DOES NOT set Replenishment: only a marker! 
+numTrials = 10
+DECIMAL_replen = 22  # THIS DOES NOT set Replenishment: only a marker! 
 sample_cal(numTrials, DECIMAL_replen)
 
 
