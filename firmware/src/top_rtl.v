@@ -169,8 +169,8 @@ module top_rtl(
     wire cal_control_reg, cal_control_reg2;
     
     // Window sampling
-    wire [15:0] window_wait;
-    wire [32:0] window_width;
+    wire [30:0] window_wait;
+    wire [31:0] window_width;
     wire sample_valid;
     
     // Programmable reset
@@ -273,7 +273,7 @@ module top_rtl(
     
     // Reg 9 - Programmable sampling control #2
     assign sample_select =      reg_rw[ 9 * 32 +  31];
-    assign window_wait =        reg_rw[ 9 * 32 +  16 : 9 * 32 +   0];
+    assign window_wait =        reg_rw[ 9 * 32 +  30 : 9 * 32 +   0];
     
     // Reg 10 thru 31 not connected
     

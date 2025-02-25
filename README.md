@@ -125,7 +125,7 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | 8 | 0x43c00020 |  [15:0] | reset_width[15:0] | number of 50MHz clock ticks to set width of RST_EXT pulses |
 | 8 | 0x43c00020 |  [32:16] | rst_cal_gap[15:0] | number of 50MHz clock ticks to wait after RST_EXT falling edge to deassert cal_control (in calibrate routing, reg 0[4]) |
 | - | - | - | - | - |
-| 9 | 0x43c00024 |  [15:0] | window_wait[15:0] | number of 50MHz clock ticks to wait before sampling data (reg 0 [15]) |
+| 9 | 0x43c00024 |  [30:0] | window_wait[30:0] | number of 50MHz clock ticks to wait before sampling data (reg 0 [15]) |
 | 9 | 0x43c00024 |  [31] | sample_select | If this bit is clear, the FIFOs will sample data during the time that deltaT from QPix is high. If this bit is set, the FIFOs will sample data during the time that window_sample signal is high (reg 7) |
 
 2. Read only registers
