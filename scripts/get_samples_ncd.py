@@ -2,6 +2,9 @@ import os
 import sys
 import time
 
+# Modified -ncd 8/20/2024
+# Can swap in Calibrate_ncd.py below to run and record calibration
+
 def read_ch_status(fifo_status_reg):
 	#print ('FIFO status is: ')
 	ch_read = os.popen('peek ' + fifo_status_reg).read()
@@ -26,18 +29,31 @@ def read_ch_fifo(read_bit, ts_hi_reg, ts_lo_reg):
 	#print ('FIFO word (timestamp) is: ' + str(fifo_ts))
 	return fifo_ts
 
-os.system('poke 0x43c0001c 0x00000cb2') # no delay, sample for 65us
-os.system('poke 0x43c00024 0x80000000') # sample_selet high - ignores deltaT
+
+
+# Set RST width etc -ncd 
+#os.system('poke 0x43c00020 0x000003E8') # REG8[15:0] RST Width=20us
+os.system('poke 0x43c00020 0x000001F4') # REG8[15:0] RST Width=10us
+#os.system('poke 0x43c00020 0x000000FA') # REG8[15:0] RST Width=5us
+
+# Disable monitoring the calibration 'deltaT' ;And set window_wait=0 REG9[15:0]
+#os.system('poke 0x43c00024 0x80000000') # REG9[31]=1  Sample_selet high - ignores deltaT -ncd
+os.system('poke 0x43c00024 0x800001F4') # REG9[31]=1   delay=10us -ncd
+
+# set sample window width
+os.system('poke 0x43c0001C 0x00000CB2') # REG7[31:0] ; Sample window width 65us 
 
 print ('System Reset')
-os.system('poke 0x43c00000 0x00000001')
+os.system('poke 0x43c00000 0x00000001') # Reset FPGA bit 0 on then off
 os.system('poke 0x43c00000 0x00000000')
 
-os.system('poke 0x43c00000 0x00008000') # start sampling sequence 
-#print ('Running calibration')
-#os.system('python3 Calibrate.py')
+os.system('poke 0x43c00000 0x00008000') # REG0[15]=1  Start sampling sequence 
+
+print ('Running calibration')
+os.system('python3 Calibrate_ncd.py')
+
 time.sleep(0.1)
-os.system('poke 0x43c00000 0x00000000') # stop sampling sequence
+os.system('poke 0x43c00000 0x00000000') # REG0[15]=0  Reset the bit for next time
 
 print('Attempting readout')
 
@@ -61,7 +77,7 @@ for [ch, fifo_status_reg, ts_hi_reg, ts_lo_reg] in [[0, '0x43c001b4', '0x43c0010
     counter = 0
     ch_wr_rst_busy, ch_almost_full, ch_full, ch_rd_rst_busy, ch_almost_empty, ch_empty = read_ch_status(fifo_status_reg)
     hits = [] 
-    trials = 5 
+    trials = 1
     
     for i in range(trials): 
         while (ch_empty != 1):

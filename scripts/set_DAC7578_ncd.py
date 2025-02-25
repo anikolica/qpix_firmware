@@ -3,8 +3,15 @@ import os
 import time
 import math
 
-vref = 1.6
-vset = 0.0
+#vref = 1.6
+#vset = 0.8
+
+
+
+vref=0.800
+vset = 0.7540
+
+
 
 dac_addr = "0x48"
 
@@ -19,7 +26,10 @@ elif (vset >= vref):
 else:
 	counts = math.floor(vset/steps)
 
-# Set all 8 channels
+print("setting leakage cancelation for all channels: vset = ", vset )
+print("**** DAC vref = " , vref , "****")
+print(" ")
+# Set all 8 channels:
 counts_formatted = str.format('{:04X}', counts << 4)
 msn = counts_formatted[0:2] 
 lsn = counts_formatted[2:4]

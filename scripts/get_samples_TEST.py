@@ -61,7 +61,7 @@ for [ch, fifo_status_reg, ts_hi_reg, ts_lo_reg] in [[0, '0x43c001b4', '0x43c0010
     counter = 0
     ch_wr_rst_busy, ch_almost_full, ch_full, ch_rd_rst_busy, ch_almost_empty, ch_empty = read_ch_status(fifo_status_reg)
     hits = [] 
-    trials = 5 
+    trials = 1
     
     for i in range(trials): 
         while (ch_empty != 1):
