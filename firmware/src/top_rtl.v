@@ -172,6 +172,7 @@ module top_rtl(
     wire [30:0] window_wait;
     wire [31:0] window_width;
     wire sample_valid;
+    wire deltaT_select;
     
     // Programmable reset
     wire [15:0] reset_width, rst_cal_gap;
@@ -275,7 +276,10 @@ module top_rtl(
     assign sample_select =      reg_rw[ 9 * 32 +  31];
     assign window_wait =        reg_rw[ 9 * 32 +  30 : 9 * 32 +   0];
     
-    // Reg 10 thru 31 not connected
+    // Reg 10 - Programmable sampling control #3
+    assign deltaT_select =      reg_rw[ 10 * 32 +  0];
+    
+    // Reg 11 thru 31 not connected
     
     // ** R/O registers **
     // Reg 64,65 - trigger timestamp
@@ -864,17 +868,21 @@ module top_rtl(
     
     reg deltaT_synced_0;
     reg deltaT_synced;
+    reg deltaT2_synced_0;
+    reg deltaT2_synced;
     reg [15:0] oLVDS_synced;
     reg [15:0] oLVDS_synced_0;
     always @ (posedge clk200)
     begin
         deltaT_synced_0 <= opad_deltaT;
         deltaT_synced <= deltaT_synced_0;
+        deltaT2_synced_0 <= opad2_deltaT;
+        deltaT2_synced <= deltaT2_synced_0;
         oLVDS_synced_0 <= oLVDS;
         oLVDS_synced <= oLVDS_synced_0; // double FF sync into 200MHz domain
     end
     
-    assign sample_valid = sample_select ? sample_window_valid : deltaT_synced; 
+    assign sample_valid = sample_select ? sample_window_valid : (deltaT_select ? deltaT2_synced : deltaT_synced); 
     
     genvar i; 
     generate

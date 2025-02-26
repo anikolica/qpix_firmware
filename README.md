@@ -127,6 +127,8 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | - | - | - | - | - |
 | 9 | 0x43c00024 |  [30:0] | window_wait[30:0] | number of 50MHz clock ticks to wait before sampling data (reg 0 [15]) |
 | 9 | 0x43c00024 |  [31] | sample_select | If this bit is clear, the FIFOs will sample data during the time that deltaT from QPix is high. If this bit is set, the FIFOs will sample data during the time that window_sample signal is high (reg 7) |
+| - | - | - | - | - |
+| 10 | 0x43c00028 |  [0] | deltaT_select | if clear, will listen to deltaT pad when sample_select (reg 9 [31]) is clear, otherwise listens to deltaT2 |
 
 2. Read only registers
 
