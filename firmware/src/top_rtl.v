@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: University of Pennsylvania 
+// Engineer: A. Nikolica
 // 
 // Create Date: 11/09/2021 11:58:51 AM
 // Design Name: 
@@ -184,12 +184,13 @@ module top_rtl(
     wire pulse2_control;
     wire clk_repl_en; // replenishment clocks
     wire clk2_repl_en;
+    wire clk_r;
     
     // *** CLOCK BUFFERS ***
     BUFG bufg1 (.O(      ), .I(OSC_200MHz)); // not used 6/12/23
     ODDR repl_clk (
         .Q(opad_CLK), // Replenishment clock
-        .C(clk), // 50MHz
+        .C(clk_r), // 12.5MHz
         .CE(clk_repl_en),
         .D1(1'b1),
         .D2(1'b0),
@@ -198,7 +199,7 @@ module top_rtl(
     );
     ODDR repl_clk2 (
         .Q(opad2_CLK), 
-        .C(clk), 
+        .C(clk_r), 
         .CE(clk2_repl_en),
         .D1(1'b1),
         .D2(1'b0),
@@ -532,6 +533,12 @@ module top_rtl(
             resetclk (
        .clock_in(clk), 
        .clock_out(clk_intrst) // 5us pulse
+    );
+    clock_div 
+            #(.DIVISOR(4)) // 12.5MHz dedicated clock for opad_CLK
+            replclk (
+       .clock_in(clk), 
+       .clock_out(clk_r)
     );
     
     // Synchronize 50MHz register bits into 20kHz slow domain

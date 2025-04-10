@@ -80,7 +80,7 @@ At the root prompt, registers can be manually written using `poke [addr] [data]`
 | reg. no. | AXI addr. | bit(s) | name | description |
 | ------ | ------ | ------ | ------ | ------ |
 | 0 | 0x43c00000 | [25:24] | opad2_startup, opad_startup | asserts pads |
-| 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables |
+| 0 | 0x43c00000 |  [17:16] | clk2_repl_en, clk_repl_en | enables replenishment clocks on opad_CLK. This clock is separate from the system clock. |
 | 0 | 0x43c00000 |  [15] | window_trig | asserts reset pads for programmable time (in reg 8),  triggers arbitrary function generator, waits user-programmable time then samples data for user-programmable time (in reg 7). NOTE: only deassert after sampling finished. |
 | 0 | 0x43c00000 |  [14] | arb_trig | asserts reset pads for programmable time (in reg 8),  triggers arbitrary function generator, then releases resets 10us later |
 | 0 | 0x43c00000 |  [13:12] | pulse2_control, pulse_control | sends 5us pulse on pads |
