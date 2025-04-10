@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------
--- Company: 
+-- Company: http://www.microprocessor-design.com/web_notes/JustOne.htm
 -- Engineer: 
 -- 
 -- Create Date: 05/15/2017 03:25:26 PM
@@ -31,7 +31,6 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
---from http://www.microprocessor-design.com/web_notes/JustOne.htm
 entity oneshot is
     port(
         Trigger : in std_logic;

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
+// Company: https://www.fpga4student.com/2017/08/verilog-code-for-clock-divider-on-fpga.html
 // Engineer: 
 // 
 // Create Date: 06/08/2023 11:57:47 AM

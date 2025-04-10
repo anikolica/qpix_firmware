@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: University of Pennsylvania
+// Engineer: A. Nikolica
 // 
 // Create Date: 02/21/2023 03:03:33 PM
 // Design Name: 
@@ -20,7 +20,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-// Adapted from: https://www.edaplayground.com/x/MUdH
 module piso (
     input load, xmit, clk, rst,
     input [31:0] data_in,

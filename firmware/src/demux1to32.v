@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: University of Pennsylvania 
+// Engineer: A. Nikolica
 // 
 // Create Date: 05/24/2023 10:48:21 AM
 // Design Name: 
@@ -18,9 +18,6 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
-
-// https://verilogcodes.blogspot.com/2015/10/verilog-code-for-14-demux-using-case.html
 
 module demux1to32(
     input Data_in,
