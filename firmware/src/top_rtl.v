@@ -764,7 +764,7 @@ module top_rtl(
     reg sample_window_valid = 1'b0;
     reg rst_for_windowsample = 1'b0;
     reg trig_for_windowsample = 1'b0;
-    reg[63:0] counter50M_4 = 64'h0000000000000000; // 64 bits to account for 32-bit window_width
+    reg[79:0] counter50M_4 = 80'h00000000000000000000; // 80 bits to account for 32+31+16 width,wait
     always @ (posedge clk)
     begin
      if (window_trig && counter50M_4 == 0)
