@@ -1,0 +1,64 @@
+import os
+import math
+
+def dac_command(channel, vset, vref):
+    dac_addr = "0x48"
+
+    # 12-bit DAC
+    steps = vref / 4096
+    if vset <= 0:
+        counts = 0x000
+        print(f"Invalid voltage specified for channel {channel}! Value should be 0 - {vref} V")
+    elif vset >= vref:
+        counts = 0xfff
+        print(f"Invalid voltage specified for channel {channel}! Value should be 0 - {vref} V")
+    else:
+        counts = math.floor(vset / steps)
+
+    print("**** DAC vref = " , vref , "****")
+    print(" ")
+    print("counts=  ", counts)
+
+    # Generate DAC command
+    counts_formatted = str.format('{:04X}', counts << 4)
+    msn = counts_formatted[0:2]
+    lsn = counts_formatted[2:4]
+
+    command = f'i2cset -y 1 {dac_addr} 0x0{channel} 0x{msn} 0x{lsn} i'
+    print(f"Channel {channel}: Sending command: {command}")
+    return command
+
+# Program the DACs
+channels = {
+    
+    #Channel 15
+    7: 0.817,
+
+    #Channel 14
+    6: 0.74,
+
+    #Channel 13
+    5: 0.73,
+    
+    #Channel 12
+    4: 0.72,
+
+    #Channel 11
+    3: 0.71,
+
+    #Channel 10
+    2: 0.7,
+
+    #Channel 9
+    1: 0.89,
+
+    #Channel 8
+    0: 0.88
+}
+
+vref = 1.007
+for channel, vset in channels.items():
+    command = dac_command(channel, vset, vref)
+    result = os.system(command)
+    if result != 0:
+        print(f"Failed to execute command for channel {channel}: {command}")

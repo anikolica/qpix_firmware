@@ -1,0 +1,27 @@
+DAC setting: 32
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 31
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 30
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 29
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 28
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 27
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 26
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 25
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 24
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 23
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 22
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 21
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00DAC setting: 20
+Counts: [0, 0, 0]
+Mean: 0.00Stdev: 0.00
