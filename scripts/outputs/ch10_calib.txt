@@ -1,0 +1,27 @@
+DAC setting: 32
+Counts: [284, 280, 286]
+Mean: 283.33Stdev: 3.06DAC setting: 31
+Counts: [102, 104, 104]
+Mean: 103.33Stdev: 1.15DAC setting: 30
+Counts: [105, 108, 106]
+Mean: 106.33Stdev: 1.53DAC setting: 29
+Counts: [109, 110, 110]
+Mean: 109.67Stdev: 0.58DAC setting: 28
+Counts: [114, 113, 114]
+Mean: 113.67Stdev: 0.58DAC setting: 27
+Counts: [123, 122, 123]
+Mean: 122.67Stdev: 0.58DAC setting: 26
+Counts: [128, 128, 128]
+Mean: 128.00Stdev: 0.00DAC setting: 25
+Counts: [138, 138, 135]
+Mean: 137.00Stdev: 1.73DAC setting: 24
+Counts: [145, 144, 145]
+Mean: 144.67Stdev: 0.58DAC setting: 23
+Counts: [158, 156, 160]
+Mean: 158.00Stdev: 2.00DAC setting: 22
+Counts: [168, 165, 166]
+Mean: 166.33Stdev: 1.53DAC setting: 21
+Counts: [179, 183, 180]
+Mean: 180.67Stdev: 2.08DAC setting: 20
+Counts: [194, 191, 190]
+Mean: 191.67Stdev: 2.08
