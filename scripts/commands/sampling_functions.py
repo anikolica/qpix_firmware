@@ -18,16 +18,14 @@ def sample_channel(c): #sample one channel
 
 def sample_working_channels(): #for one trial, sample all working channels
     working_channels = get_channels_in_use()
-    trial_counts = [] #counts for each channel in this trial
-    trial_timestamps = [] #timestamps for each channel in this trial ([channel][timestamp number])
-    for c in range(16):
+    # index = channel number; fixed-length lists keep mapping consistent even if we loop in a different order
+    trial_counts = [0]*16
+    trial_timestamps = [[] for _ in range(16)] #timestamps for each channel in this trial ([channel][timestamp number])
+    for c in range(15, -1, -1):  # sample from channel 15 down to 0
         if c in working_channels:
             count, timestamps = sample_channel(c)
-            trial_counts.append(count)
-            trial_timestamps.append(timestamps)
-        else:
-            trial_counts.append(0)
-            trial_timestamps.append([])
+            trial_counts[c] = count
+            trial_timestamps[c] = timestamps
     return trial_counts, trial_timestamps
 
 def sample_n_trials(trials_num, win_width=64e-6, win_wait=10e-6, reset_width=50e-6,\
@@ -52,4 +50,3 @@ def sample_n_trials(trials_num, win_width=64e-6, win_wait=10e-6, reset_width=50e
         all_timestamps.append(trial_timestamps)
         startup() #important: this deasserts the calibration or sampling sequence
     return all_counts, all_timestamps
-

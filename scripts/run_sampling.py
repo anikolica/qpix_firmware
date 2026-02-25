@@ -12,15 +12,15 @@ from commands.helper_functions import *
 from commands.sampling_functions import *
 
 ### USER-DEFINED VALUES ###
-win_width = 64e-6
+win_width = 100e-3
 win_wait = 5e-6 
 reset_width = 5e-6
 rst_cal_gap = 100e-9
-trials_num = 3
+trials_num = 1
 interface = 2
 external_clock = True
-output_file = 'outputs/sampling_results.txt'
-overwrite_old_file = False
+output_file = 'outputs/DAC_sweep_alex.txt'
+overwrite_old_file = True
 ###########################
 
 if external_clock: set_ext_clock(1)
@@ -39,6 +39,7 @@ if overwrite_old_file:
 else: print("\nAppending to existing output file.")
 with open(output_file, 'a') as f:
     f.write(f'Sampling results below finished at: {datetime.datetime.now()}\n')
+    f.write(f'Window Width : {win_width}\n')
     print('\nRESULTS:')
     for c in range(16):
         if c not in get_channels_in_use(): continue
@@ -46,9 +47,12 @@ with open(output_file, 'a') as f:
         print(f'Channel {c} results')
         f.write(f'Counts: {[counts[c] for counts in all_counts]}\n')
         print(f'Counts: {[counts[c] for counts in all_counts]}')
+        counts = [counts[c] for counts in all_counts]
+        print(f'Avg Count: {sum(counts) / len(counts)}')
+        f.write(f'Avg Count: {sum(counts) / len(counts)}\n')
         for trial in range(trials_num):
             f.write(f'Trial {trial} timestamps: {all_timestamps[trial][c]}\n')
-            print(f'Trial {trial} timestamps: {all_timestamps[trial][c]}')
+        #    print(f'Trial {trial} timestamps: {all_timestamps[trial][c]}')
         f.write('\n')
         print()
     f.write('******************************************************\n')
