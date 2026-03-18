@@ -128,6 +128,8 @@ set_property PACKAGE_PIN L20 [get_ports {oLVDS[8]}]
 
 #set_property PULLUP true [get_ports i2c0_scl_io]
 #set_property PULLUP true [get_ports i2c0_sda_io]
+
+
 #set_property PACKAGE_PIN F16 [get_ports ExternalClkEnable]
 #set_property PACKAGE_PIN F17 [get_ports SCK]
 #set_property PACKAGE_PIN M17 [get_ports SDI]
