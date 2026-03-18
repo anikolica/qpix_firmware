@@ -131,16 +131,22 @@ set_property PACKAGE_PIN L20 [get_ports {oLVDS[8]}]
 
 
 #set_property PACKAGE_PIN F16 [get_ports ExternalClkEnable]
+
 #set_property PACKAGE_PIN F17 [get_ports SCK]
 #set_property PACKAGE_PIN M17 [get_ports SDI]
-#set_property PACKAGE_PIN E18 [get_ports {FPGA_ID[0]}]
-#set_property PACKAGE_PIN E19 [get_ports {FPGA_ID[1]}]
 #set_property PACKAGE_PIN A20 [get_ports {bCS[0]}]
 #set_property PACKAGE_PIN D19 [get_ports {bCS[1]}]
 #set_property PACKAGE_PIN D20 [get_ports bLDAC]
+
+
+#set_property PACKAGE_PIN E18 [get_ports {FPGA_ID[0]}]
+#set_property PACKAGE_PIN E19 [get_ports {FPGA_ID[1]}]
+
 #set_property PACKAGE_PIN T15 [get_ports opad_Ext_POR]
 #set_property PACKAGE_PIN Y7 [get_ports ClkSyncOut]
 #set_property PACKAGE_PIN Y6 [get_ports ClkSyncIn]
+
+
 #set_property PACKAGE_PIN L14 [get_ports {SHDN[0]}]
 #set_property PACKAGE_PIN M15 [get_ports {SHDN[1]}]
 #set_property PACKAGE_PIN K16 [get_ports {SHDN[2]}]
