@@ -13,7 +13,7 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_Ext_POR]
 set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_sda_io]
 set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_scl_io]
-set_property IOSTANDARD LVCMOS33 [get_ports OSC_200MHz]
+#set_property IOSTANDARD LVCMOS33 [get_ports OSC_200MHz]# i also could not find the 200MHz RO in uta schematic
 
 set_property IOSTANDARD LVCMOS33 [get_ports opad_CLKin]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_CLKin2]
@@ -66,12 +66,24 @@ set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[11]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[10]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[9]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[8]}]
+#spi pins
+set_property IOSTANDARD LVCMOS33 [get_ports SCK]
+set_property IOSTANDARD LVCMOS33 [get_ports SDI]
+set_property IOSTANDARD LVCMOS33 [get_ports CS1_BAR]
+set_property IOSTANDARD LVCMOS33 [get_ports CS2_BAR]
+set_property IOSTANDARD LVCMOS33 [get_ports LDAC_BAR]
+# these pins are in uta board but not in upenn
+set_property IOSTANDARD LVCMOS33 [get_ports {FPGA_ID[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {FPGA_ID[1]}]
+
+set_property IOSTANDARD LVCMOS33 [get_ports ClkSyncOut]
+set_property IOSTANDARD LVCMOS33 [get_ports ClkSyncIn]
 
 # From Nandor's schematic 18-Feb-2023
 set_property PACKAGE_PIN T15 [get_ports opad_Ext_POR]
-#set_property PACKAGE_PIN T10 [get_ports FPGA_I2C_sda_io]
-#set_property PACKAGE_PIN U13 [get_ports FPGA_I2C_scl_io]
-#set_property PACKAGE_PIN V13 [get_ports TRIGGER]
+set_property PACKAGE_PIN P15 [get_ports FPGA_I2C_sda_io]
+set_property PACKAGE_PIN P16 [get_ports FPGA_I2C_scl_io]
+set_property PACKAGE_PIN V13 [get_ports TRIGGER]#did not found  in uta board
 set_property PACKAGE_PIN E17 [get_ports opad2_RST_EXT]
 set_property PACKAGE_PIN C20 [get_ports opad_RST_EXT]
 
@@ -87,7 +99,7 @@ set_property PACKAGE_PIN V11 [get_ports opad_cal_control]
 set_property PACKAGE_PIN V13 [get_ports opad_DataOut1]
 set_property PACKAGE_PIN T11 [get_ports opad_DataOut2]
 set_property PACKAGE_PIN U14 [get_ports opad2_cal_control]
-#set_property PACKAGE_PIN H16 [get_ports OSC_200MHz]
+#set_property PACKAGE_PIN H16 [get_ports OSC_200MHz]#could not find in uta board
 #set_property PACKAGE_PIN H17 [get_ports ]
 set_property PACKAGE_PIN Y16 [get_ports opad_deltaT]
 set_property PACKAGE_PIN V12 [get_ports opad2_deltaT]
@@ -132,19 +144,20 @@ set_property PACKAGE_PIN L20 [get_ports {oLVDS[8]}]
 
 #set_property PACKAGE_PIN F16 [get_ports ExternalClkEnable]
 
-#set_property PACKAGE_PIN F17 [get_ports SCK]
-#set_property PACKAGE_PIN M17 [get_ports SDI]
-#set_property PACKAGE_PIN A20 [get_ports {bCS[0]}]
-#set_property PACKAGE_PIN D19 [get_ports {bCS[1]}]
-#set_property PACKAGE_PIN D20 [get_ports bLDAC]
+# --- SPI DAC UTA board, provisional mapping---
+set_property PACKAGE_PIN F17 [get_ports SCK]
+set_property PACKAGE_PIN M17 [get_ports SDI]
+set_property PACKAGE_PIN A20 [get_ports {bCS[0]}]
+set_property PACKAGE_PIN D19 [get_ports {bCS[1]}]
+set_property PACKAGE_PIN D20 [get_ports bLDAC]
 
 
-#set_property PACKAGE_PIN E18 [get_ports {FPGA_ID[0]}]
-#set_property PACKAGE_PIN E19 [get_ports {FPGA_ID[1]}]
+#these pins are in uta board not in upenn
+set_property PACKAGE_PIN E18 [get_ports {FPGA_ID[0]}]
+set_property PACKAGE_PIN E19 [get_ports {FPGA_ID[1]}]
 
-#set_property PACKAGE_PIN T15 [get_ports opad_Ext_POR]
-#set_property PACKAGE_PIN Y7 [get_ports ClkSyncOut]
-#set_property PACKAGE_PIN Y6 [get_ports ClkSyncIn]
+set_property PACKAGE_PIN Y7 [get_ports ClkSyncOut]
+set_property PACKAGE_PIN Y6 [get_ports ClkSyncIn]
 
 
 #set_property PACKAGE_PIN L14 [get_ports {SHDN[0]}]
