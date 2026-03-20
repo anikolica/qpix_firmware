@@ -67,11 +67,11 @@ set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[10]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[9]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[8]}]
 #spi pins
-set_property IOSTANDARD LVCMOS33 [get_ports SCK]
-set_property IOSTANDARD LVCMOS33 [get_ports SDI]
-set_property IOSTANDARD LVCMOS33 [get_ports CS1_BAR]
-set_property IOSTANDARD LVCMOS33 [get_ports CS2_BAR]
-set_property IOSTANDARD LVCMOS33 [get_ports LDAC_BAR]
+set_property IOSTANDARD LVCMOS33 [get_ports SPI_0_sck_io]#SCK
+set_property IOSTANDARD LVCMOS33 [get_ports SPI_0_io0_io]#SDI
+set_property IOSTANDARD LVCMOS33 [get_ports SPI_0_ss_io]#{bCS[0]}
+set_property IOSTANDARD LVCMOS33 [get_ports SPI_0_ss1_o]#{bCS[1]}
+set_property IOSTANDARD LVCMOS33 [get_ports bLDAC]#IDK WHICH NAME I SHOULD USE FOR THIS
 # these pins are in uta board but not in upenn
 set_property IOSTANDARD LVCMOS33 [get_ports {FPGA_ID[0]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {FPGA_ID[1]}]
@@ -145,11 +145,11 @@ set_property PACKAGE_PIN L20 [get_ports {oLVDS[8]}]
 #set_property PACKAGE_PIN F16 [get_ports ExternalClkEnable]
 
 # --- SPI DAC UTA board mapping---
-set_property PACKAGE_PIN F17 [get_ports SCK]
-set_property PACKAGE_PIN M17 [get_ports SDI]
-set_property PACKAGE_PIN A20 [get_ports {bCS[0]}]
-set_property PACKAGE_PIN D19 [get_ports {bCS[1]}]
-set_property PACKAGE_PIN D20 [get_ports bLDAC]
+set_property PACKAGE_PIN F17 [get_ports SPI_0_sck_io]#SCK
+set_property PACKAGE_PIN M17 [get_ports SPI_0_io0_io]#SDI
+set_property PACKAGE_PIN A20 [get_ports SPI_0_ss_io]#{bCS[0]}
+set_property PACKAGE_PIN D19 [get_ports SPI_0_ss1_o]#{bCS[1]}
+set_property PACKAGE_PIN D20 [get_ports bLDAC]#IDK WHICH NAME I SHOULD USE FOR THIS
 
 
 #these pins are in uta board not in upenn
