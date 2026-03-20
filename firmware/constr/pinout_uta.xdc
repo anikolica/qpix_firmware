@@ -144,7 +144,7 @@ set_property PACKAGE_PIN L20 [get_ports {oLVDS[8]}]
 
 #set_property PACKAGE_PIN F16 [get_ports ExternalClkEnable]
 
-# --- SPI DAC UTA board, provisional mapping---
+# --- SPI DAC UTA board mapping---
 set_property PACKAGE_PIN F17 [get_ports SCK]
 set_property PACKAGE_PIN M17 [get_ports SDI]
 set_property PACKAGE_PIN A20 [get_ports {bCS[0]}]
