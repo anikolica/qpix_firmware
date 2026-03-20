@@ -33,6 +33,12 @@ module design_1_wrapper
     FIXED_IO_ps_srstb,
     FPGA_I2C_scl_io,
     FPGA_I2C_sda_io,
+    SPI_0_io0_io,
+    SPI_0_io1_io,
+    SPI_0_sck_io,
+    SPI_0_ss_io,
+    SPI_0_ss1_o,
+    SPI_0_ss2_o,
     OSC_200MHz,
     TRIGGER,
     oLVDS,
@@ -94,6 +100,12 @@ module design_1_wrapper
   inout FIXED_IO_ps_srstb;
   inout FPGA_I2C_scl_io;
   inout FPGA_I2C_sda_io;
+  inout SPI_0_io0_io;
+  inout SPI_0_io1_io;
+  inout SPI_0_sck_io;
+  inout SPI_0_ss_io;
+  output SPI_0_ss1_o;
+  output SPI_0_ss2_o;
   input OSC_200MHz;
   output TRIGGER;
   input [15:0]oLVDS;
@@ -162,6 +174,20 @@ module design_1_wrapper
   wire FPGA_I2C_sda_io;
   wire FPGA_I2C_sda_o;
   wire FPGA_I2C_sda_t;
+  wire SPI_0_io0_i;
+  wire SPI_0_io0_o;
+  wire SPI_0_io0_t;
+  wire SPI_0_io1_i;
+  wire SPI_0_io1_o;
+  wire SPI_0_io1_t;
+  wire SPI_0_sck_i;
+  wire SPI_0_sck_o;
+  wire SPI_0_sck_t;
+  wire SPI_0_ss1_o;
+  wire SPI_0_ss2_o;
+  wire SPI_0_ss_i;
+  wire SPI_0_ss_o;
+  wire SPI_0_ss_t;
   wire i2c0_scl_i;
   wire i2c0_scl_io;
   wire i2c0_scl_o;
@@ -226,7 +252,29 @@ module design_1_wrapper
        (.I(i2c0_sda_o),
         .IO(i2c0_sda_io),
         .O(i2c0_sda_i),
-        .T(i2c0_sda_t));      
+        .T(i2c0_sda_t)); 
+   
+  IOBUF spi0_sck_iobuf
+       (.I(SPI_0_sck_o),
+        .IO(SPI_0_sck_io),
+        .O(SPI_0_sck_i),
+        .T(SPI_0_sck_t));  
+  IOBUF spi0_ss_iobuf
+       (.I(SPI_0_ss_o),
+        .IO(SPI_0_ss_io),
+        .O(SPI_0_ss_i),
+        .T(SPI_0_ss_t)); 
+  IOBUF spi0_mosi_iobuf
+       (.I(SPI_0_io0_o),
+        .IO(SPI_0_io0_io),
+        .O(SPI_0_io0_i),
+        .T(SPI_0_io0_t)); 
+  IOBUF spi0_miso_iobuf
+       (.I(SPI_0_io1_o),
+        .IO(SPI_0_io1_io),
+        .O(SPI_0_io1_i),
+        .T(SPI_0_io1_t));
+              
   design_1 design_1_i
        (.DDR_addr(DDR_addr),
         .DDR_ba(DDR_ba),
@@ -255,6 +303,20 @@ module design_1_wrapper
         .FPGA_I2C_sda_i(FPGA_I2C_sda_i),
         .FPGA_I2C_sda_o(FPGA_I2C_sda_o),
         .FPGA_I2C_sda_t(FPGA_I2C_sda_t),
+        .SPI_0_io0_i(SPI_0_io0_i),
+        .SPI_0_io0_o(SPI_0_io0_o),
+        .SPI_0_io0_t(SPI_0_io0_t),
+        .SPI_0_io1_i(SPI_0_io1_i),
+        .SPI_0_io1_o(SPI_0_io1_o),
+        .SPI_0_io1_t(SPI_0_io1_t),
+        .SPI_0_sck_i(SPI_0_sck_i),
+        .SPI_0_sck_o(SPI_0_sck_o),
+        .SPI_0_sck_t(SPI_0_sck_t),
+        .SPI_0_ss1_o(SPI_0_ss1_o),
+        .SPI_0_ss2_o(SPI_0_ss2_o),
+        .SPI_0_ss_i(SPI_0_ss_i),
+        .SPI_0_ss_o(SPI_0_ss_o),
+        .SPI_0_ss_t(SPI_0_ss_t),
         .OSC_200MHz(OSC_200MHz),
         .TRIGGER(TRIGGER),
         .oLVDS(oLVDS),
