@@ -13,7 +13,7 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_Ext_POR]
 set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_sda_io]
 set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_scl_io]
-#set_property IOSTANDARD LVCMOS33 [get_ports OSC_200MHz]# i also could not find the 200MHz RO in uta schematic
+set_property IOSTANDARD LVCMOS33 [get_ports OSC_200MHz]# ClkSyncin in uta board
 
 set_property IOSTANDARD LVCMOS33 [get_ports opad_CLKin]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_CLKin2]
@@ -83,7 +83,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports ClkSyncIn]
 set_property PACKAGE_PIN T15 [get_ports opad_Ext_POR]
 set_property PACKAGE_PIN P15 [get_ports FPGA_I2C_sda_io]
 set_property PACKAGE_PIN P16 [get_ports FPGA_I2C_scl_io]
-set_property PACKAGE_PIN V13 [get_ports TRIGGER]#did not found  in uta board
+set_property PACKAGE_PIN Y7 [get_ports TRIGGER]#ClkSyncOut in uta board is connected to Trigger 
 set_property PACKAGE_PIN E17 [get_ports opad2_RST_EXT]
 set_property PACKAGE_PIN C20 [get_ports opad_RST_EXT]
 
@@ -99,7 +99,7 @@ set_property PACKAGE_PIN V11 [get_ports opad_cal_control]
 set_property PACKAGE_PIN V13 [get_ports opad_DataOut1]
 set_property PACKAGE_PIN T11 [get_ports opad_DataOut2]
 set_property PACKAGE_PIN U14 [get_ports opad2_cal_control]
-#set_property PACKAGE_PIN H16 [get_ports OSC_200MHz]#could not find in uta board
+#set_property PACKAGE_PIN Y6 [get_ports OSC_200MHz]#ClkSyncIn in uta board is connected to OSC_200MHz
 #set_property PACKAGE_PIN H17 [get_ports ]
 set_property PACKAGE_PIN Y16 [get_ports opad_deltaT]
 set_property PACKAGE_PIN V12 [get_ports opad2_deltaT]
@@ -156,8 +156,8 @@ set_property PACKAGE_PIN D20 [get_ports bLDAC]#IDK WHICH NAME I SHOULD USE FOR T
 set_property PACKAGE_PIN E18 [get_ports {FPGA_ID[0]}]
 set_property PACKAGE_PIN E19 [get_ports {FPGA_ID[1]}]
 
-set_property PACKAGE_PIN Y7 [get_ports ClkSyncOut]
-set_property PACKAGE_PIN Y6 [get_ports ClkSyncIn]
+#set_property PACKAGE_PIN Y7 [get_ports ClkSyncOut]
+#set_property PACKAGE_PIN Y6 [get_ports ClkSyncIn]
 
 
 #set_property PACKAGE_PIN L14 [get_ports {SHDN[0]}]
