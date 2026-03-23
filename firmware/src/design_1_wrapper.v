@@ -39,6 +39,7 @@ module design_1_wrapper
     SPI_0_ss_io,
     SPI_0_ss1_o,
     SPI_0_ss2_o,
+    bLDAC,
     OSC_200MHz,
     TRIGGER,
     oLVDS,
@@ -106,6 +107,7 @@ module design_1_wrapper
   inout SPI_0_ss_io;
   output SPI_0_ss1_o;
   output SPI_0_ss2_o;
+  output bLDAC;
   input OSC_200MHz;
   output TRIGGER;
   input [15:0]oLVDS;
@@ -188,6 +190,7 @@ module design_1_wrapper
   wire SPI_0_ss_i;
   wire SPI_0_ss_o;
   wire SPI_0_ss_t;
+  wire bLDAC;
   wire i2c0_scl_i;
   wire i2c0_scl_io;
   wire i2c0_scl_o;
@@ -317,6 +320,7 @@ module design_1_wrapper
         .SPI_0_ss_i(SPI_0_ss_i),
         .SPI_0_ss_o(SPI_0_ss_o),
         .SPI_0_ss_t(SPI_0_ss_t),
+        .bLDAC(bLDAC),
         .OSC_200MHz(OSC_200MHz),
         .TRIGGER(TRIGGER),
         .oLVDS(oLVDS),

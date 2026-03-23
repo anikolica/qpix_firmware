@@ -27,6 +27,7 @@ module top_rtl(
     input  clk200,
     input  OSC_200MHz,
     output TRIGGER,
+    output bLDAC,
     
     // QPix pins
     output opad_Ext_POR,
@@ -280,7 +281,10 @@ module top_rtl(
     // Reg 10 - Programmable sampling control #3
     assign deltaT_select =      reg_rw[ 10 * 32 +  0];
     
-    // Reg 11 thru 31 not connected
+    // Reg 11 -- test LDAC_bar for MCP4911 on 64-ch board
+   assign bLDAC =               reg_rw[ 11 * 32 +  0];
+    
+    // Reg 12 thru 31 not connected
     
     // ** R/O registers **
     // Reg 64,65 - trigger timestamp
