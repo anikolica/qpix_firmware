@@ -91,8 +91,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports ClkSyncIn]
 # From Nandor's schematic 18-Feb-2023
 set_property PACKAGE_PIN T15 [get_ports opad_Ext_POR]
 # Use default "i2c0" name for P15/16 -- the PS side conn. to unused pins
-set_property PACKAGE_PIN K17 [get_ports FPGA_I2C_sda_io]
-set_property PACKAGE_PIN H17 [get_ports FPGA_I2C_scl_io]
+set_property PACKAGE_PIN P15 [get_ports FPGA_I2C_sda_io]
+set_property PACKAGE_PIN P16 [get_ports FPGA_I2C_scl_io]
 #ClkSyncOut in uta board is connected to Trigger 
 set_property PACKAGE_PIN Y7 [get_ports TRIGGER]
 set_property PACKAGE_PIN E17 [get_ports opad2_RST_EXT]
