@@ -11,10 +11,10 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 
 # All IO on Z-turn are 3.3V fixed
 set_property IOSTANDARD LVCMOS33 [get_ports opad_Ext_POR]
-set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_sda_io]
-set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_scl_io]
+#set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_sda_io]
+#set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_scl_io]
 # ClkSyncin in uta board
-set_property IOSTANDARD LVCMOS33 [get_ports OSC_200MHz]
+#set_property IOSTANDARD LVCMOS33 [get_ports OSC_200MHz]
 
 set_property IOSTANDARD LVCMOS33 [get_ports opad_CLKin]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_CLKin2]
@@ -28,7 +28,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports opad_cal_control]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_DataOut1]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_DataOut2]
 set_property IOSTANDARD LVCMOS33 [get_ports opad2_cal_control]
-set_property IOSTANDARD LVCMOS33 [get_ports TRIGGER]
+#set_property IOSTANDARD LVCMOS33 [get_ports TRIGGER]
 set_property IOSTANDARD LVCMOS33 [get_ports opad2_RST_EXT]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_RST_EXT]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_deltaT]
@@ -67,6 +67,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[11]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[10]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[9]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {oLVDS[8]}]
+set_property IOSTANDARD LVCMOS33 [get_ports ExternalClkEnable]
 #spi pins
 #SCK
 set_property IOSTANDARD LVCMOS33 [get_ports SPI_0_sck_io]
@@ -91,10 +92,15 @@ set_property IOSTANDARD LVCMOS33 [get_ports ClkSyncIn]
 # From Nandor's schematic 18-Feb-2023
 set_property PACKAGE_PIN T15 [get_ports opad_Ext_POR]
 # Use default "i2c0" name for P15/16 -- the PS side conn. to unused pins
+<<<<<<< Updated upstream
 set_property PACKAGE_PIN P15 [get_ports FPGA_I2C_sda_io]
 set_property PACKAGE_PIN P16 [get_ports FPGA_I2C_scl_io]
+=======
+#set_property PACKAGE_PIN P15 [get_ports FPGA_I2C_sda_io]
+#set_property PACKAGE_PIN P16 [get_ports FPGA_I2C_scl_io]
+>>>>>>> Stashed changes
 #ClkSyncOut in uta board is connected to Trigger 
-set_property PACKAGE_PIN Y7 [get_ports TRIGGER]
+#set_property PACKAGE_PIN Y7 [get_ports TRIGGER]
 set_property PACKAGE_PIN E17 [get_ports opad2_RST_EXT]
 set_property PACKAGE_PIN C20 [get_ports opad_RST_EXT]
 
@@ -136,8 +142,8 @@ set_property PACKAGE_PIN U7 [get_ports opad_CLK]
 set_property PACKAGE_PIN T9 [get_ports opad2_CLK]
 # set_property PACKAGE_PIN J18 [get_ports oTP1]
 # set_property PACKAGE_PIN H18 [get_ports oTP2]
-#set_property PACKAGE_PIN J18 [get_ports i2c0_sda_io]
-#set_property PACKAGE_PIN H18 [get_ports i2c0_scl_io]
+set_property PACKAGE_PIN P15 [get_ports i2c0_sda_io]
+set_property PACKAGE_PIN P16 [get_ports i2c0_scl_io]
 set_property PACKAGE_PIN G17 [get_ports oTP3]
 set_property PACKAGE_PIN G19 [get_ports oTP4]
 set_property PACKAGE_PIN F19 [get_ports {oLVDS[15]}]
@@ -153,7 +159,7 @@ set_property PACKAGE_PIN L20 [get_ports {oLVDS[8]}]
 #set_property PULLUP true [get_ports i2c0_sda_io]
 
 
-#set_property PACKAGE_PIN F16 [get_ports ExternalClkEnable]
+set_property PACKAGE_PIN F16 [get_ports ExternalClkEnable]
 
 # --- SPI DAC UTA board mapping---
 set_property PACKAGE_PIN F17 [get_ports SPI_0_sck_io]
@@ -169,8 +175,8 @@ set_property PACKAGE_PIN D20 [get_ports bLDAC]
 set_property PACKAGE_PIN E18 [get_ports {FPGA_ID[0]}]
 set_property PACKAGE_PIN E19 [get_ports {FPGA_ID[1]}]
 
-#set_property PACKAGE_PIN Y7 [get_ports ClkSyncOut]
-#set_property PACKAGE_PIN Y6 [get_ports ClkSyncIn]
+set_property PACKAGE_PIN Y7 [get_ports ClkSyncOut]
+set_property PACKAGE_PIN Y6 [get_ports ClkSyncIn]
 
 
 #set_property PACKAGE_PIN L14 [get_ports {SHDN[0]}]
