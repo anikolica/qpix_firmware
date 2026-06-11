@@ -11,8 +11,8 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 
 # All IO on Z-turn are 3.3V fixed
 set_property IOSTANDARD LVCMOS33 [get_ports opad_Ext_POR]
-#set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_sda_io]
-#set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_scl_io]
+set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_sda_io]
+set_property IOSTANDARD LVCMOS33 [get_ports FPGA_I2C_scl_io]
 # ClkSyncin in uta board
 #set_property IOSTANDARD LVCMOS33 [get_ports OSC_200MHz]
 
@@ -28,7 +28,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports opad_cal_control]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_DataOut1]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_DataOut2]
 set_property IOSTANDARD LVCMOS33 [get_ports opad2_cal_control]
-#set_property IOSTANDARD LVCMOS33 [get_ports TRIGGER]
+set_property IOSTANDARD LVCMOS33 [get_ports TRIGGER]
 set_property IOSTANDARD LVCMOS33 [get_ports opad2_RST_EXT]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_RST_EXT]
 set_property IOSTANDARD LVCMOS33 [get_ports opad_deltaT]
@@ -93,11 +93,11 @@ set_property IOSTANDARD LVCMOS33 [get_ports ClkSyncIn]
 set_property PACKAGE_PIN T15 [get_ports opad_Ext_POR]
 # Use default "i2c0" name for P15/16 -- the PS side conn. to unused pins
 
-#set_property PACKAGE_PIN P15 [get_ports FPGA_I2C_sda_io]
-#set_property PACKAGE_PIN P16 [get_ports FPGA_I2C_scl_io]
+set_property PACKAGE_PIN M18 [get_ports FPGA_I2C_sda_io]
+set_property PACKAGE_PIN K19 [get_ports FPGA_I2C_scl_io]
 
 #ClkSyncOut in uta board is connected to Trigger 
-#set_property PACKAGE_PIN Y7 [get_ports TRIGGER]
+set_property PACKAGE_PIN W13 [get_ports TRIGGER]
 set_property PACKAGE_PIN E17 [get_ports opad2_RST_EXT]
 set_property PACKAGE_PIN C20 [get_ports opad_RST_EXT]
 
