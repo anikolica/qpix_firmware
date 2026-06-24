@@ -10,16 +10,30 @@
 
 // Compile: make setVcm
 // Usage: ./setVcm <wanted Vcm> <channel>
-// Usage example (1.8 V in Vcm2): ./setVcm 1.8 0x01
+// Usage example (1.8 V in Vcm2): ./setVcm 1.8 1
 
 const float V_REF = 1.8f;
 const int DAC_MAX = 4095;
 
+// Map user input (0, 1, 2) to channel commands
+// 0 -> 0x02 (Vcm), 1 -> 0x01 (Vcm2), 2 -> 0x03 (both)
+uint8_t map_channel(int channel)
+{
+    switch(channel) {
+        case 0: return 0x02;  // Vcm
+        case 1: return 0x01;  // Vcm2
+        case 2: return 0x03;  // Both
+        default: return 0x02; // Default to Vcm
+    }
+}
+
 int main(int argc, char* argv[])
 {
     if (argc != 3) {
-       //Yes, 0x01 is Vcm2
-       printf("Error: 2 and only 2 arguments accepted: Vcm [0 to 1.8 V], Channel [0x01 (Vcm2), 0x02 (Vcm), 0x03 (both)]\n");
+       printf("Error: 2 and only 2 arguments accepted: Vcm [0 to 1.8 V], Channel [0, 1, 2]\n");
+       printf("  Channel 0 = Vcm (0x02)\n");
+       printf("  Channel 1 = Vcm2 (0x01)\n");
+       printf("  Channel 2 = Both (0x03)\n");
        return 1;
     }
 
@@ -36,20 +50,19 @@ int main(int argc, char* argv[])
     }
 
     char* endptr2;
-    long channelHex = strtol(argv[2], &endptr2, 0);
+    long channelInt = strtol(argv[2], &endptr2, 10);
     
     if (endptr2 == argv[2] || *endptr2 != '\0') {
-       printf("Invalid hex format for channel: %s\n", argv[2]);
+       printf("Invalid channel format: %s\n", argv[2]);
        return 1;
     }
     
-    if (channelHex != 0x01 && channelHex != 0x02 && channelHex != 0x03) {
-       //Yes, 0x01 is Vcm2
-       printf("Error: Wrong channel (0x%02lX). Accepted: 0x01 (Vcm2), 0x02 (Vcm), 0x03 (both)\n", channelHex); 
+    if (channelInt < 0 || channelInt > 2) {
+       printf("Error: Wrong channel (%ld). Accepted: 0 (Vcm), 1 (Vcm2), 2 (both)\n", channelInt); 
        return 1;
     }
     
-    uint8_t channelCmd = (uint8_t)channelHex;
+    uint8_t channelCmd = map_channel((int)channelInt);
 
     // Open I2C device
     int file = open("/dev/i2c-1", O_RDWR);
@@ -106,8 +119,9 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    printf("Successfully wrote DAC value %u (0x%03X) for %.3f V\n", 
-           dacValue, dacValue, targetVcm);
+    const char* channel_names[] = {"Vcm (0x02)", "Vcm2 (0x01)", "Both (0x03)"};
+    printf("Successfully wrote DAC value %u (0x%03X) for %.3f V to %s\n", 
+           dacValue, dacValue, targetVcm, channel_names[(int)channelInt]);
 
     close(file);
     return 0;
