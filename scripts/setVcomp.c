@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     }
 
     if (targetVcomp < 0.0f || targetVcomp > 1.0f) {
-       printf("Error: Wrong Vcomp value (%f). Accepted values: 0 to 1.8 V\n", targetVcomp);
+       printf("Error: Wrong Vcomp value (%f). Accepted values: 0 to 1.0 V\n", targetVcomp);
        return 1;
     }
     uint16_t dacValue = (uint16_t)(DAC_MAX*(targetVcomp/V_REF));
