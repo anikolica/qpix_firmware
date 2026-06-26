@@ -101,7 +101,7 @@ void i2c_write(int channel, uint16_t dacValue)
    // Close the file
    close(i2c_fd);
    
-   const char* channel_names[] = {"", "Vcm1", "Vcm2", "both"};
+   const char* channel_names[] = {"", "Vcm1", "Vcm2", "Vcm1 and Vcm2"};
    printf("Wrote %d to %s\n", dacValue, channel_names[channel]);
 }
 

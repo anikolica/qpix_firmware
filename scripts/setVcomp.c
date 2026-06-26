@@ -26,9 +26,9 @@ void spi_write(int device, uint16_t dacValue)
    const char* dev_path;
    // Select device path
    if (device == 1) {
-      dev_path = "/dev/spidev1.0";
+      dev_path = "/dev/spidev1.1"; //spidev1.1 is Vcomp1
    } else if (device == 2) {
-      dev_path = "/dev/spidev1.1";
+      dev_path = "/dev/spidev1.0"; //spidev1.0 is Vcomp2
    } else {
       fprintf(stderr, "Error: Invalid device %d\n", device);
       return;
@@ -82,9 +82,9 @@ void spi_write(int device, uint16_t dacValue)
    close(spi_fd);
 
    if (device == 1)
-       printf("Wrote %d to spidev1.0\n", dacValue);
+       printf("Wrote %d to Vcomp1 (spidev1.1)\n", dacValue);
    else if (device == 2)
-       printf("Wrote %d to spidev1.1\n", dacValue);
+       printf("Wrote %d to Vcomp2 (spidev1.0)\n", dacValue);
 }
 
 int main(int argc, char *argv[])
